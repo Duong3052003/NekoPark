@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class PlayerMove : NetworkBehaviour
 {
-    [SerializeField] private float speed = 5f;
-    [SerializeField] private float jumpPower = 10f;
+    [SerializeField] private float speed = 7f;
+    [SerializeField] private float jumpPower = 18f;
     private bool rightCheck = true;
     private PlayerCtrl playerCtrl;
     [SerializeField] private float gravitymin = 5f;
-    [SerializeField] private float gravitymax = 10f;
+    [SerializeField] private float gravitymax = 7f;
 
     private void Awake()
     {
