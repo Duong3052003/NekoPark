@@ -7,7 +7,7 @@ public interface ICollisionGroundChecker
     bool IsGrounded();
 }
 
-public interface ICollisionWallChecker
+public interface ICollisionChecker
 {
-    bool IsTouchingWall();
+    bool IsTouching();
 }

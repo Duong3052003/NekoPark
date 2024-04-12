@@ -9,6 +9,7 @@ public class PlayerCtrl : MonoBehaviour
     public CheckGroundColiision checkGroundColiision { get; private set; }
     public Rigidbody2D rb { get; private set; }
     public Animator animator { get; private set; }
+    public PlayerMove playerMove { get; private set; }
 
     private void Awake()
     {
@@ -20,5 +21,6 @@ public class PlayerCtrl : MonoBehaviour
         checkGroundColiision = checkGroundColiisionObj.GetComponent<CheckGroundColiision>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        playerMove = GetComponent<PlayerMove>();
     }
 }

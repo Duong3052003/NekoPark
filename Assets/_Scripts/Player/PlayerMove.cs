@@ -1,15 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerMove : NetworkBehaviour
 {
+    private PlayerCtrl playerCtrl;
+
     [SerializeField] private float speed = 7f;
     [SerializeField] private float jumpPower = 18f;
     private bool rightCheck = true;
-    private PlayerCtrl playerCtrl;
     [SerializeField] private float gravitymin = 5f;
     [SerializeField] private float gravitymax = 7f;
 
@@ -20,13 +22,13 @@ public class PlayerMove : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (!IsOwner) return;
+        if (!IsLocalPlayer) return;
         Jump();
         Move();
         GravityChanged();
     }
 
-    private void Move()
+    public void Move()
     {
         int keyMoveDown = InputManager.Instance.InputDownHorizon();
         
@@ -36,7 +38,6 @@ public class PlayerMove : NetworkBehaviour
         }
 
         playerCtrl.rb.velocity = new Vector2(keyMoveDown * speed, playerCtrl.rb.velocity.y);
-        playerCtrl.animator.SetFloat("velocityX", Mathf.Abs(keyMoveDown));
     }
 
     private void Jump()
@@ -50,16 +51,12 @@ public class PlayerMove : NetworkBehaviour
             {
                 playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, jumpPower);
             }
-            
         }
 
         if (keyJumpUp == 1)
         {
             playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, playerCtrl.rb.velocity.y * 0.5f);
         }
-
-        playerCtrl.animator.SetFloat("velocityY", playerCtrl.rb.velocity.y);
-        playerCtrl.animator.SetBool("isJumping", !playerCtrl.checkGroundColiision.IsGrounded());
     }
 
     private void Flip()
