@@ -11,10 +11,19 @@ public class PlayerSetting : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        transform.GetComponent<SpriteRenderer>().sprite = skins[(int)OwnerClientId];
-        transform.GetComponent<Animator>().runtimeAnimatorController = controllers[(int)OwnerClientId];
-
+        GetModel();
         if (!IsOwner) return;
         playerHUDImg.SetActive(true);
+    }
+
+    private void GetModel()
+    {
+        int modelValue = PlayerPrefs.GetInt("Model", 1);
+        int colorValue = PlayerPrefs.GetInt("Color", 0);
+
+        int skin = modelValue + colorValue;
+
+        transform.GetComponent<SpriteRenderer>().sprite = skins[skin];
+        transform.GetComponent<Animator>().runtimeAnimatorController = controllers[skin];
     }
 }

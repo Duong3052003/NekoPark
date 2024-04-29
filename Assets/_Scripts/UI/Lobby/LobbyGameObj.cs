@@ -7,18 +7,21 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class LobbyGameObj : MonoBehaviour
+public class LobbyGameObj : BaseButton
 {
-    private TextMeshPro textLobby;
+    [SerializeField] private TextMeshProUGUI textLobby;
+    public int index;
 
-    private void Awake()
+    public void SetInformation(string nameLobby, int currentPlayers, int maxPlayers, string gameMode)
     {
-        textLobby = GetComponent<TextMeshPro>();
+        textLobby.text = nameLobby + " - " + currentPlayers.ToString() + "/" + maxPlayers.ToString()+ " - " +gameMode;
     }
 
-    public void SetInformation(string nameLobby, int currentPlayers, int maxPlayers)
+    protected override void OnClick()
     {
-        textLobby.text = nameLobby + " - MaxPlayers: " + currentPlayers.ToString() + "/" + maxPlayers.ToString();
+        Debug.Log("Pressed");
+        UIManager.Instance.JoinLobby(index);
     }
 }
