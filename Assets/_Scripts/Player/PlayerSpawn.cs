@@ -7,15 +7,18 @@ using UnityEngine;
 public class PlayerSpawn : NetworkBehaviour
 {
     [SerializeField] private float posRanged = 5f;
-    private CinemachineTargetGroup targetGroup;
+    public CinemachineTargetGroup targetGroup;
+    private bool checkAddPlayersToTargetGroup=false;
 
     private void Awake()
     {
+        if (targetGroup != null) return;
         targetGroup = GameObject.Find("TargetGroupPlayer").GetComponent<CinemachineTargetGroup>();
     }
 
-    private void Start()
+    private void Update()
     {
+        if (targetGroup == null || checkAddPlayersToTargetGroup) return;
         AddPlayersToTargetGroup();
     }
 
@@ -39,5 +42,6 @@ public class PlayerSpawn : NetworkBehaviour
         {
             targetGroup.AddMember(player.transform, 5f, 5f);
         }
+        checkAddPlayersToTargetGroup=true;
     }
 }

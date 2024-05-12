@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class PlayerSetting : NetworkBehaviour
@@ -18,12 +19,20 @@ public class PlayerSetting : NetworkBehaviour
 
     private void GetModel()
     {
-        int modelValue = PlayerPrefs.GetInt("Model", 1);
-        int colorValue = PlayerPrefs.GetInt("Color", 0);
+        foreach (Player player in UIManager.Instance.joinedLobby.Players)
+        {
+            int color = UIManager.Instance.GetIndexColor(player.Data["PlayerColor"].Value);
+            int model = 0;
+            int skin = color + model;
+            transform.GetComponent<SpriteRenderer>().sprite = skins[skin];
+            transform.GetComponent<Animator>().runtimeAnimatorController = controllers[skin];
+        }
 
+   /*     int modelValue = PlayerPrefs.GetInt("Model", 0);
+        int colorValue = PlayerPrefs.GetInt("Color", 0);
         int skin = modelValue + colorValue;
 
         transform.GetComponent<SpriteRenderer>().sprite = skins[skin];
-        transform.GetComponent<Animator>().runtimeAnimatorController = controllers[skin];
+        transform.GetComponent<Animator>().runtimeAnimatorController = controllers[skin];*/
     }
 }
