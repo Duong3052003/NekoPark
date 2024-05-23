@@ -6,6 +6,7 @@ using UnityEngine;
 public class BoxCollision : CheckCollision
 {
     [SerializeField] private ulong ownerClientId=1;
+    [SerializeField] private Rigidbody2D rb;
 
     protected override void OnCollisionEnter2D(Collision2D collision)
     {

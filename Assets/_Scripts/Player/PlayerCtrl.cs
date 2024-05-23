@@ -10,6 +10,8 @@ public class PlayerCtrl : MonoBehaviour
     public Rigidbody2D rb { get; private set; }
     public Animator animator { get; private set; }
     public PlayerMove playerMove { get; private set; }
+    public PlayerSpawn playerSpawn { get; private set; }
+
 
     private void Awake()
     {
@@ -22,5 +24,6 @@ public class PlayerCtrl : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         playerMove = GetComponent<PlayerMove>();
+        playerSpawn = GetComponent<PlayerSpawn>();
     }
 }

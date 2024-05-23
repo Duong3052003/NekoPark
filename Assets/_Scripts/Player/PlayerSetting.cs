@@ -1,38 +1,156 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class PlayerSetting : NetworkBehaviour
 {
-    [SerializeField] private Sprite[] skins;
-    [SerializeField] private RuntimeAnimatorController[] controllers;
+    private Sprite[] skins;
+    private RuntimeAnimatorController[] controllers;
     [SerializeField] private GameObject playerHUDImg;
+
+    [SerializeField] private Button startBtn;
+    [SerializeField] private Button changedColorBtn;
+
+    private int color;
+
+    private NetworkVariable<int> nCharacter = new NetworkVariable<int>(0);
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     public override void OnNetworkSpawn()
     {
-        GetModel();
-        if (!IsOwner) return;
-        playerHUDImg.SetActive(true);
+        PlayerManager.Instance.players.Add(this.gameObject);
+        SetUpPlayer();
+        nCharacter.OnValueChanged += (oldValue, newValue) => UpdateModel(newValue);
     }
 
-    private void GetModel()
+    private void SetUpPlayer()
+    {
+        skins = GameObject.Find("=====SkinStorage=====").GetComponent<SkinStorage>().skins;
+        controllers = GameObject.Find("=====SkinStorage=====").GetComponent<SkinStorage>().controllers;
+
+        if (IsOwner)
+        {
+            GetDataPlayer();
+            GetButton();
+
+            UpdateModelServerRpc(color);
+            playerHUDImg.SetActive(true);
+
+        }
+    }
+
+    private void GetDataPlayer()
     {
         foreach (Player player in UIManager.Instance.joinedLobby.Players)
         {
-            int color = UIManager.Instance.GetIndexColor(player.Data["PlayerColor"].Value);
-            int model = 0;
-            int skin = color + model;
+            if (player.Id == AuthenticationService.Instance.PlayerId)
+            {
+                color = UIManager.Instance.GetIndexColor(player.Data["PlayerColor"].Value);
+            }
+        }
+    }
+
+    private void GetButton()
+    {
+        if (IsHost)
+        {
+            startBtn.gameObject.SetActive(true);
+
+            startBtn.onClick.AddListener(() =>
+            {
+                UIManager.Instance.StartLevel();
+            });
+        }
+        else
+        {
+            startBtn.gameObject.SetActive(false);
+        }
+
+        changedColorBtn.onClick.AddListener(() =>
+        {
+            ChangedSkinBtn();
+        });
+    }
+
+    private void UpdateModel(int _color)
+    {
+        transform.GetComponent<SpriteRenderer>().sprite = skins[_color];
+        transform.GetComponent<Animator>().runtimeAnimatorController = controllers[_color];
+    }
+
+    [ServerRpc]
+    private void UpdateModelServerRpc(int _color)
+    {
+        nCharacter.Value = _color;
+
+        if (IsOwner)
+        {
+            UpdateModel(_color);
+        }
+    }
+
+    public void ChangedSkinBtn()
+    {
+        if (!IsOwner) return;
+        color += 1;
+
+        if (color > 3)
+        {
+            color = 0;
+        }
+
+        UIManager.Instance.UpdateColorPlayer(color);
+
+        UpdateModelServerRpc(color);
+    }
+
+    /* public override void OnNetworkSpawn()
+     {
+         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+         foreach (GameObject player in players)
+         {
+             if (!IsOwner) return;
+             if (OwnerClientId == 0) Debug.Log("HOST ne");
+             GetDataPlayer();
+             int skin = color + model;
+             UpdateModelServerRpc(skin);
+             playerHUDImg.SetActive(true);
+         }
+     }
+
+    private void GetModel()
+     {
+         *//*   transform.GetComponent<SpriteRenderer>().sprite = skins[(int)OwnerClientId];
+            transform.GetComponent<Animator>().runtimeAnimatorController = controllers[(int)OwnerClientId];*//*
+         int skin = color + model;
+         transform.GetComponent<SpriteRenderer>().sprite = skins[skin];
+         transform.GetComponent<Animator>().runtimeAnimatorController = controllers[skin];
+     }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdateModelServerRpc(int skin)
+    {
+        UpdateModelClientRpc(skin, OwnerClientId);
+    }
+
+    [ClientRpc]
+    private void UpdateModelClientRpc(int skin, ulong clientId)
+    {
+        if (clientId == OwnerClientId)
+        {
             transform.GetComponent<SpriteRenderer>().sprite = skins[skin];
             transform.GetComponent<Animator>().runtimeAnimatorController = controllers[skin];
         }
-
-   /*     int modelValue = PlayerPrefs.GetInt("Model", 0);
-        int colorValue = PlayerPrefs.GetInt("Color", 0);
-        int skin = modelValue + colorValue;
-
-        transform.GetComponent<SpriteRenderer>().sprite = skins[skin];
-        transform.GetComponent<Animator>().runtimeAnimatorController = controllers[skin];*/
     }
+     */
 }

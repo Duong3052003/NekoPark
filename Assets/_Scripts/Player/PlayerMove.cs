@@ -22,7 +22,7 @@ public class PlayerMove : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (!IsLocalPlayer) return;
+        if (!IsOwner) return;
         Jump();
         Move();
         GravityChanged();

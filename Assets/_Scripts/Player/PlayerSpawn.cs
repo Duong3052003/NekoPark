@@ -6,20 +6,34 @@ using UnityEngine;
 
 public class PlayerSpawn : NetworkBehaviour
 {
+    public GameObject cameraFocus;
     [SerializeField] private float posRanged = 5f;
     public CinemachineTargetGroup targetGroup;
-    private bool checkAddPlayersToTargetGroup=false;
 
     private void Awake()
     {
-        if (targetGroup != null) return;
-        targetGroup = GameObject.Find("TargetGroupPlayer").GetComponent<CinemachineTargetGroup>();
+        try
+        {
+            targetGroup = GameObject.Find("TargetGroupPlayer").GetComponent<CinemachineTargetGroup>();
+        }
+        catch
+        {
+            Debug.Log("Khong co targetGroupPlayer trong Scene nay");
+        }
+
+        if (targetGroup == null) return;
+        AddPlayersToTargetGroup();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (targetGroup == null || checkAddPlayersToTargetGroup) return;
+        if (targetGroup == null) return;
         AddPlayersToTargetGroup();
+    }
+
+    private void OnDisable()
+    {
+        targetGroup=null;
     }
 
     public override void OnNetworkSpawn()
@@ -31,17 +45,15 @@ public class PlayerSpawn : NetworkBehaviour
     private void UpdatePosServerRpc()
     {
         transform.position = new Vector2(Random.Range(-posRanged, posRanged), 1);
-        transform.rotation = new Quaternion(0, 180, 0, 0);
+        transform.rotation = new Quaternion(0, 0, 0, 0);
     }
 
     void AddPlayersToTargetGroup()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-
-        foreach (GameObject player in players)
+        foreach (GameObject player in PlayerManager.Instance.players)
         {
-            targetGroup.AddMember(player.transform, 5f, 5f);
+            GameObject _cameraFocus = player.GetComponent<PlayerCtrl>().playerSpawn.cameraFocus;
+            targetGroup.AddMember(_cameraFocus.transform, 5f, 5f);
         }
-        checkAddPlayersToTargetGroup=true;
     }
 }
