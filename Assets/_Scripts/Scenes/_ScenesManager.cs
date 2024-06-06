@@ -32,6 +32,7 @@ public class _ScenesManager : NetworkBehaviour
     {
         if (IsHost)
         {
+            Debug.Log("dang ki su kien network");
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnLoadEventCompleted;
         }
     }
@@ -58,12 +59,12 @@ public class _ScenesManager : NetworkBehaviour
         List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
         Debug.Log("LoadSceneCompleted");
-
-        if (IsHost && SceneManager.GetActiveScene().name == sceneName)
-        {
-            PlayerManager.Instance.SetActiveAllPlayers(true);
-            PlayerManager.Instance.SetPositionAllPlayers(new Vector3(0,2,0));
-        }
+        PlayerManager.Instance.SetActiveAllPlayers(true);
+        /* if (IsHost && SceneManager.GetActiveScene().name == sceneName)
+         {
+             PlayerManager.Instance.SetActiveAllPlayers(true);
+             PlayerManager.Instance.SetPositionAllPlayers(new Vector3(0,2,0));
+         }*/
     }
 
     public override void OnDestroy()

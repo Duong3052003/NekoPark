@@ -1,47 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class Spawner : MonoBehaviour
+public class Spawner : NetworkBehaviour
 {
     [SerializeField] protected Transform holder;
-    [SerializeField] protected List<Transform> prefabs;
-    [SerializeField] protected List<Transform> poolObjs;
+    [SerializeField] protected GameObject prefab;
+    protected GameObject clone;
+    [SerializeField] protected List<GameObject> poolObjs;
 
+    protected virtual void Start()
+    {
+    }
 
-    public virtual Transform SpawnObj(Transform prefab, Vector3 spawnPos, Quaternion rotation)
+    public virtual GameObject ObjIsSpawned()
     {
         if (prefab == null) {
             Debug.Log("Miss prefab");
             return null;
         }
 
-        Transform newPrefab = this.GetObjFromPool(prefab);
-        newPrefab.SetPositionAndRotation(spawnPos, rotation);
-        newPrefab.parent = this.holder;
+        GameObject newPrefab = this.GetObjFromPool(prefab);
 
         return newPrefab;
     }
 
-    protected virtual Transform GetObjFromPool(Transform prefab)
+    protected virtual GameObject GetObjFromPool(GameObject _prefab)
     {
-        foreach (Transform obj in poolObjs)
+        foreach (GameObject obj in poolObjs)
         {
-            if (obj.name == prefab.name)
+            if (obj.name == _prefab.name)
             {
                 this.poolObjs.Remove(obj);
+                obj.gameObject.SetActive(true);
                 return obj;
             }
         }
 
-        Transform newPrefab = Instantiate(prefab);
-        newPrefab.name = prefab.name;
+        GameObject newPrefab = Instantiate(prefab);
+        newPrefab.name = _prefab.name;
+
         return newPrefab;
     }
 
-    protected virtual void DeSpawn(Transform prefab)
+    [ServerRpc]
+    protected virtual void InstantiateServerRpc()
+    {
+        GameObject newPrefab = Instantiate(clone);
+        
+        newPrefab.GetComponent<NetworkObject>().Spawn();
+    }
+
+    protected virtual void DeSpawn(GameObject prefab)
     {
         this.poolObjs.Add(prefab);
         prefab.gameObject.SetActive(false);

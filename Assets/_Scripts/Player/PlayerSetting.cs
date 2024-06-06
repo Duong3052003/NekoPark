@@ -34,8 +34,8 @@ public class PlayerSetting : NetworkBehaviour
 
     private void SetUpPlayer()
     {
-        skins = GameObject.Find("=====SkinStorage=====").GetComponent<SkinStorage>().skins;
-        controllers = GameObject.Find("=====SkinStorage=====").GetComponent<SkinStorage>().controllers;
+        skins = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().skins;
+        controllers = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().controllers;
 
         if (IsOwner)
         {
@@ -50,11 +50,18 @@ public class PlayerSetting : NetworkBehaviour
 
     private void GetDataPlayer()
     {
-        foreach (Player player in UIManager.Instance.joinedLobby.Players)
+        if (UIManager.Instance.joinedLobby == null)
         {
-            if (player.Id == AuthenticationService.Instance.PlayerId)
+            Debug.Log("Not found Lobby");
+        }
+        else
+        {
+            foreach (Player player in UIManager.Instance.joinedLobby.Players)
             {
-                color = UIManager.Instance.GetIndexColor(player.Data["PlayerColor"].Value);
+                if (player.Id == AuthenticationService.Instance.PlayerId)
+                {
+                    color = UIManager.Instance.GetIndexColor(player.Data["PlayerColor"].Value);
+                }
             }
         }
     }

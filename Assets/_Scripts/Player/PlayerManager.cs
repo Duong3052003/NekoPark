@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : NetworkBehaviour
 {
     public static PlayerManager Instance { get; private set; }
     public List<GameObject> players;
@@ -29,11 +30,19 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void SetPositionAllPlayers(Vector3 pos)
+    public void ResetPositionAllPlayers(Vector3 pos)
     {
         foreach (GameObject player in players)
         {
             player.transform.position = pos;
+        }
+    }
+
+    public void SetPositionAllPlayers(List<Transform> transforms)
+    {
+        for(int i = 0; i < players.Count; i++)
+        {
+            players[i].transform.position = transforms[i].position;
         }
     }
 }

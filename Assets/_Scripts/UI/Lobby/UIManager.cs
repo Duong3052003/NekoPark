@@ -369,7 +369,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private Player GetPlayer()
+    public Player GetPlayer()
     {
         return new Player
         {
@@ -509,6 +509,7 @@ public class UIManager : MonoBehaviour
 
     private void StartSceneLobby()
     {
+        if (nameScene.Equals("test")) return;
         _ScenesManager.Instance.LoadSceneLocal("Scenes/SampleScene");
 
         listLobbyScreen.SetActive(false);

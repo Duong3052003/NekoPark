@@ -23,7 +23,7 @@ public class PlayerTakeDameCollision : NetworkBehaviour
 
     private void BeingDead()
     {
-        GameManager.Instance.ResetPlayerPositiveServerRpc();
+        //Death
     }
 
 }

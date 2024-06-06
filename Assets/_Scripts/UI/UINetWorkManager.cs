@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
+using Unity.Services.Lobbies;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +20,7 @@ public class UINetWorkManager : NetworkBehaviour
     {
         hostbtn.onClick.AddListener(() =>
         {
+            UIManager.Instance.CreateLobby("test");
             NetworkManager.Singleton.StartHost();
         });
         clientbtn.onClick.AddListener(() =>
@@ -32,8 +35,6 @@ public class UINetWorkManager : NetworkBehaviour
         if (!IsServer) return;
         numberPlayers.Value = NetworkManager.Singleton.ConnectedClients.Count;
     }
-
-
 
 
 

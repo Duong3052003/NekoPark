@@ -19,14 +19,4 @@ public class GameManager : NetworkBehaviour
             Destroy(Instance);
         }
     }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void ResetPlayerPositiveServerRpc()
-    {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-
-        foreach (GameObject player in players)
-        {
-            player.transform.position = Vector3.zero;       }
-    }
 }
