@@ -46,12 +46,15 @@ public class Spawner : NetworkBehaviour
         return newPrefab;
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership =false)]
     protected virtual void InstantiateServerRpc()
     {
-        GameObject newPrefab = Instantiate(clone);
-        
-        newPrefab.GetComponent<NetworkObject>().Spawn();
+        NetworkObject networkObject = clone.GetComponent<NetworkObject>();
+
+        if (networkObject != null && !networkObject.IsSpawned)
+        {
+            clone.GetComponent<NetworkObject>().Spawn();
+        }
     }
 
     protected virtual void DeSpawn(GameObject prefab)
@@ -59,5 +62,4 @@ public class Spawner : NetworkBehaviour
         this.poolObjs.Add(prefab);
         prefab.gameObject.SetActive(false);
     }
-
 }

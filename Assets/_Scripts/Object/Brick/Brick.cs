@@ -20,15 +20,25 @@ public class Brick : NetworkBehaviour,ITakeDamaged
 
     public void TakeDamaged(int damage)
     {
-        if (!IsSpawned) return;
-        hpCurrent.Value = hpCurrent.Value - damage;
-        hpText.text = hpCurrent.Value.ToString();
+        if(IsHost || IsServer)
+        {
+            if (!IsSpawned) return;
+            hpCurrent.Value = hpCurrent.Value - damage;
+            hpText.text = hpCurrent.Value.ToString();
+        }
     }
 
     private void Breaked(int _hpCurrent)
     {
         if (_hpCurrent > 0) return;
         Debug.Log("Breaked");
-        gameObject.SetActive(false);
+        DestroyServerRpc();
+    }
+
+    [ServerRpc]
+    protected virtual void DestroyServerRpc()
+    {
+        this.GetComponent<NetworkObject>().Despawn();
+        Destroy(gameObject);
     }
 }

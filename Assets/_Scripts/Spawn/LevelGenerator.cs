@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,11 +31,14 @@ public class LevelGenerator : Spawner
 
     protected override void Start()
     {
-        //GenerateMap();
-
+        if(IsOwner)
+        {
+            GenerateMapServerRpc();
+        }
+        Debug.Log(1);
         generateMapBtn.onClick.AddListener(() =>
         {
-            GenerateMap();
+            GenerateMapServerRpc();
         });
     }
 
@@ -45,8 +49,8 @@ public class LevelGenerator : Spawner
             for (int j = 0; j < size.y; j++)
             {
                 clone = ObjIsSpawned();
-                //newBrick.transform.position = transform.position + new Vector3((float)((size.x - 1) * 0.5f - i) * offset.x, j * offset.y, 0);
-                /* newBrick.GetComponent<SpriteRenderer>().color = gradient.Evaluate((float)j / (size.y - 1));*/
+                clone.transform.position = transform.position + new Vector3((float)((size.x - 1) * 0.5f - i) * offset.x, j * offset.y, 0);
+                clone.GetComponent<SpriteRenderer>().color = gradient.Evaluate((float)j / (size.y - 1));
                 InstantiateServerRpc();
             }
         }
@@ -65,12 +69,14 @@ public class LevelGenerator : Spawner
             if (newItems[k] == null) return;
             GameObject newItem = Instantiate(newItems[k]);
             newItem.transform.position = new Vector2(transformPlayers[k].position.x + newItemsTransformX[k], transformPlayers[k].position.y + newItemsTransformY[k]);
+            newItem.GetComponent<NetworkObject>().Spawn();
         }
         PlayerManager.Instance.SetActiveAllPlayers(true);
         PlayerManager.Instance.SetPositionAllPlayers(transformPlayers);
     }
 
-    public void GenerateMap()
+    [ServerRpc]
+    public void GenerateMapServerRpc()
     {
         SetActivePlayers();
         GenerateBrick();
