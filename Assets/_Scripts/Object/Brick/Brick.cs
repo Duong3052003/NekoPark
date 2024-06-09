@@ -24,7 +24,8 @@ public class Brick : NetworkBehaviour,ITakeDamaged
         {
             if (!IsSpawned) return;
             hpCurrent.Value = hpCurrent.Value - damage;
-            hpText.text = hpCurrent.Value.ToString();
+            if (!this.GetComponent<NetworkObject>().IsSpawned) return;
+            TakeDamageServerRpc();
         }
     }
 
@@ -33,6 +34,12 @@ public class Brick : NetworkBehaviour,ITakeDamaged
         if (_hpCurrent > 0) return;
         Debug.Log("Breaked");
         DestroyServerRpc();
+    }
+
+    [ServerRpc]
+    protected virtual void TakeDamageServerRpc()
+    {
+        hpText.text = hpCurrent.Value.ToString();
     }
 
     [ServerRpc]
