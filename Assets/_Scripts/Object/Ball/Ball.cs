@@ -34,7 +34,7 @@ public class Ball : NetworkBehaviour
         ITakeDamaged objTakeDamaged = collision.gameObject.GetComponent<ITakeDamaged>();
         if (objTakeDamaged != null )
         {
-            objTakeDamaged.TakeDamaged(damage);
+            objTakeDamaged.TakeDamagedServerRpc(damage);
             Debug.Log(objTakeDamaged + "take "+ damage + " damage");
         }
     }

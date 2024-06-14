@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ITakeDamaged
 {
-    void TakeDamaged(int damage);
+    void TakeDamagedServerRpc(int damage);
 }

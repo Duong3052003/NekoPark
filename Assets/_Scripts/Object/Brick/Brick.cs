@@ -18,28 +18,18 @@ public class Brick : NetworkBehaviour,ITakeDamaged
         hpCurrent.OnValueChanged += (oldValue, newValue) => Breaked(newValue);
     }
 
-    public void TakeDamaged(int damage)
+    [ServerRpc(RequireOwnership = false)]
+    public void TakeDamagedServerRpc(int damage)
     {
-        if(IsHost || IsServer)
-        {
-            if (!IsSpawned) return;
-            hpCurrent.Value = hpCurrent.Value - damage;
-            if (!this.GetComponent<NetworkObject>().IsSpawned) return;
-            TakeDamageServerRpc();
-        }
+        hpCurrent.Value = hpCurrent.Value - damage;
     }
 
     private void Breaked(int _hpCurrent)
     {
+        hpText.text = hpCurrent.Value.ToString();
         if (_hpCurrent > 0) return;
         Debug.Log("Breaked");
         DestroyServerRpc();
-    }
-
-    [ServerRpc]
-    protected virtual void TakeDamageServerRpc()
-    {
-        hpText.text = hpCurrent.Value.ToString();
     }
 
     [ServerRpc]

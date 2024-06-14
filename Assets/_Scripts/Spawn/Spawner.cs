@@ -53,7 +53,6 @@ public class Spawner : NetworkBehaviour
 
         if (networkObject != null && !networkObject.IsSpawned)
         {
-            Debug.Log(1);
             clone.GetComponent<NetworkObject>().Spawn();
         }
     }

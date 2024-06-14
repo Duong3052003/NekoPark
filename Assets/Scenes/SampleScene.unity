@@ -4152,6 +4152,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IronBox
       objectReference: {fileID: 0}
+    - target: {fileID: 4592139370530284229, guid: 6c675f0142834074ab93a5fd9ee8b25b, type: 3}
+      propertyPath: ownerClientId
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

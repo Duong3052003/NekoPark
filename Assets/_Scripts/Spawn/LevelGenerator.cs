@@ -31,18 +31,18 @@ public class LevelGenerator : Spawner
 
     protected override void Start()
     {
-        if(IsOwner)
+        if (!IsHost) return;
+        SetActivePlayersServerRPC();
+        GenerateBrickServerRPC();
+
+        /*generateMapBtn.onClick.AddListener(() =>
         {
             GenerateMapServerRpc();
-        }
-        Debug.Log(1);
-        generateMapBtn.onClick.AddListener(() =>
-        {
-            GenerateMapServerRpc();
-        });
+        });*/
     }
 
-    private void GenerateBrick()
+    [ServerRpc(RequireOwnership =false)]
+    private void GenerateBrickServerRPC()
     {
         for (int i = 0; i < size.x; i++)
         {
@@ -56,7 +56,8 @@ public class LevelGenerator : Spawner
         }
     }
 
-    private void SetActivePlayers()
+    [ServerRpc(RequireOwnership = false)]
+    private void SetActivePlayersServerRPC()
     {
         GameObject[] newItems = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().items;
         float[] newItemsTransformX = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().itemsTransformX;
@@ -65,6 +66,7 @@ public class LevelGenerator : Spawner
         for (int k = 0; k < PlayerManager.Instance.players.Count; k++)
         {
             transformPlayers[k].gameObject.SetActive(true);
+            PlayerManager.Instance.SetPositionPlayersClientRpc(k, transformPlayers[k].position);
 
             if (newItems[k] == null) return;
             GameObject newItem = Instantiate(newItems[k]);
@@ -72,13 +74,12 @@ public class LevelGenerator : Spawner
             newItem.GetComponent<NetworkObject>().Spawn();
         }
         PlayerManager.Instance.SetActiveAllPlayers(true);
-        PlayerManager.Instance.SetPositionAllPlayers(transformPlayers);
     }
 
     [ServerRpc]
     public void GenerateMapServerRpc()
     {
-        SetActivePlayers();
-        GenerateBrick();
+        SetActivePlayersServerRPC();
+        GenerateBrickServerRPC();
     }
 }

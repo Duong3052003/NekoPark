@@ -38,11 +38,9 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
-    public void SetPositionAllPlayers(List<Transform> transforms)
+    [ClientRpc]
+    public void SetPositionPlayersClientRpc(int numberPlayer,Vector3 pos)
     {
-        for(int i = 0; i < players.Count; i++)
-        {
-            players[i].transform.position = transforms[i].position;
-        }
+        players[numberPlayer].transform.position = pos;
     }
 }
