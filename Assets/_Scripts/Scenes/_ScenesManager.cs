@@ -40,10 +40,12 @@ public class _ScenesManager : NetworkBehaviour
     public void LoadScene(string sceneName)
     {
         Debug.Log("LoadScene");
-        PlayerManager.Instance.SetActiveAllPlayers(false);
         StartCoroutine(LoadLevel(sceneName));
-        
+
+        //SetPlayersStatic
+        PlayerManager.Instance.SetBodyTypeAllPlayersServerRpc(2);
     }
+
     private IEnumerator LoadLevel(string sceneName)
     {
         //transition
@@ -53,18 +55,17 @@ public class _ScenesManager : NetworkBehaviour
             NetworkManager.Singleton.SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
         //transition
+
+        PlayerManager.Instance.SetBodyTypeAllPlayersServerRpc(0);
+
     }
 
     public void OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode,
         List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
         Debug.Log("LoadSceneCompleted");
-        PlayerManager.Instance.SetActiveAllPlayers(true);
-        /* if (IsHost && SceneManager.GetActiveScene().name == sceneName)
-         {
-             PlayerManager.Instance.SetActiveAllPlayers(true);
-             PlayerManager.Instance.SetPositionAllPlayers(new Vector3(0,2,0));
-         }*/
+
+        //Do something
     }
 
     public override void OnDestroy()

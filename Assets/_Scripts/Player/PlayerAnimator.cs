@@ -28,7 +28,7 @@ public class PlayerAnimator : NetworkBehaviour
 
     void Move()
     {
-        playerCtrl.animator.SetFloat("velocityX", Mathf.Abs(InputManager.Instance.InputDownHorizon()));
+        playerCtrl.animator.SetFloat("velocityX", Mathf.Abs(InputManager.Instance.InputHorizon()));
     }
 
 

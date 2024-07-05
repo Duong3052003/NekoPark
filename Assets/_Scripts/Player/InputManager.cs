@@ -13,14 +13,7 @@ public class InputManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Update()
-    {
-        InputDownHorizon();
-        InputDownVertical();
-        InputUpVertical();
-    }
-
-    public int InputDownHorizon()
+    public float InputHorizon()
     {
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKey(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKey(KeyCode.RightArrow))
         {
@@ -36,7 +29,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    public int InputDownVertical()
+    public float InputVertical()
     {
         if (Input.GetKeyDown("w") || Input.GetKey("w") || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetButtonDown("Jump") || Input.GetButton("Jump"))
         {
@@ -46,21 +39,14 @@ public class InputManager : MonoBehaviour
         {
             return -1;
         }
-        else
-        {
-            return 0;
-        }
-    }
 
-    public int InputUpVertical()
-    {
-        if (Input.GetButtonUp("Jump") || Input.GetKeyUp(KeyCode.UpArrow))
+        else if (Input.GetButtonUp("Jump") || Input.GetKeyUp(KeyCode.UpArrow))
         {
-            return 1;
+            return 1.5f;
         }
         else if (Input.GetKeyUp("s") || Input.GetKeyUp(KeyCode.DownArrow))
         {
-            return -1;
+            return -1.5f;
         }
         else
         {

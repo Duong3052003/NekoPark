@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class LevelGenerator : Spawner
@@ -12,7 +13,6 @@ public class LevelGenerator : Spawner
     [SerializeField] private Vector2Int size;
     [SerializeField] private Vector2 offset;
     [SerializeField] private Gradient gradient;
-
 
     [SerializeField] private List<Transform> transformPlayers;
     [SerializeField] private Button generateMapBtn;
@@ -29,9 +29,10 @@ public class LevelGenerator : Spawner
         }
     }
 
-    protected override void Start()
+    public override void OnNetworkSpawn()
     {
         if (!IsHost) return;
+
         SetActivePlayersServerRPC();
         GenerateBrickServerRPC();
 
@@ -48,10 +49,19 @@ public class LevelGenerator : Spawner
         {
             for (int j = 0; j < size.y; j++)
             {
-                clone = ObjIsSpawned();
-                clone.transform.position = transform.position + new Vector3((float)((size.x - 1) * 0.5f - i) * offset.x, j * offset.y, 0);
-                clone.GetComponent<SpriteRenderer>().color = gradient.Evaluate((float)j / (size.y - 1));
-                InstantiateServerRpc();
+                GameObject brick = ObjIsSpawned();
+                
+                if (brick.GetComponent<NetworkObject>() != null && !brick.GetComponent<NetworkObject>().IsSpawned)
+                {
+                    brick.GetComponent<NetworkObject>().Spawn();
+                }
+                else
+                {
+                    brick.SetActive(true);
+                }
+
+                brick.transform.position = transform.position + new Vector3((float)((size.x - 1) * 0.5f - i) * offset.x, j * offset.y, 0);
+                brick.GetComponent<SpriteRenderer>().color = gradient.Evaluate((float)j / (size.y - 1));
             }
         }
     }
@@ -60,20 +70,28 @@ public class LevelGenerator : Spawner
     private void SetActivePlayersServerRPC()
     {
         GameObject[] newItems = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().items;
+        GameObject[] newItems2 = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().items2;
         float[] newItemsTransformX = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().itemsTransformX;
         float[] newItemsTransformY = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().itemsTransformY;
+        ulong indexId=0;
 
-        for (int k = 0; k < PlayerManager.Instance.players.Count; k++)
+        for (int i = 0; i < PlayerManager.Instance.players.Count; i++)
         {
-            transformPlayers[k].gameObject.SetActive(true);
-            PlayerManager.Instance.SetPositionPlayersClientRpc(k, transformPlayers[k].position);
+            indexId++;
+            PlayerManager.Instance.SetPositionPlayersServerRpc(i, transformPlayers[i].position);
 
-            if (newItems[k] == null) return;
-            GameObject newItem = Instantiate(newItems[k]);
-            newItem.transform.position = new Vector2(transformPlayers[k].position.x + newItemsTransformX[k], transformPlayers[k].position.y + newItemsTransformY[k]);
-            newItem.GetComponent<NetworkObject>().Spawn();
+            if (newItems[i] == null) return;
+            GameObject newItem = Instantiate(newItems[i]);
+            newItem.transform.position = new Vector2(transformPlayers[i].position.x + newItemsTransformX[i], transformPlayers[i].position.y + newItemsTransformY[i]);
+            newItem.GetComponent<NetworkObject>().SpawnWithOwnership(indexId);
+            Debug.Log("Quyen so huu ball " + newItem.GetComponent<NetworkObject>().OwnerClientId);
+
+            if (newItems2[i] == null) return;
+            GameObject newItem2 = Instantiate(newItems2[i]);
+            newItem2.transform.position = new Vector2(transformPlayers[i].position.x, transformPlayers[i].position.y + 1);
+            newItem2.GetComponent<NetworkObject>().SpawnWithOwnership(indexId);
+            newItem2.transform.SetParent(PlayerManager.Instance.players[i].transform);
         }
-        PlayerManager.Instance.SetActiveAllPlayers(true);
     }
 
     [ServerRpc]

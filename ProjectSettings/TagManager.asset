@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - GameStarted
+  - Breakout
   layers:
   - Default
   - TransparentFX

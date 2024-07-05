@@ -20,11 +20,6 @@ public class PlayerSetting : NetworkBehaviour
 
     private NetworkVariable<int> nCharacter = new NetworkVariable<int>(0);
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
     public override void OnNetworkSpawn()
     {
         PlayerManager.Instance.players.Add(this.gameObject);

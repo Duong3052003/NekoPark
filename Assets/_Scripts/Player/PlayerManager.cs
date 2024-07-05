@@ -38,8 +38,35 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void SetBodyTypeAllPlayersServerRpc(int index)
+    {
+        foreach (GameObject player in players)
+        {
+            switch (index)
+            {
+                case 0:
+                    player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+                    break;
+                case 1:
+                    player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+                    break;
+                case 2:
+                    player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                    break ;
+                default: break;
+            }
+        }
+    }
+
     [ClientRpc]
     public void SetPositionPlayersClientRpc(int numberPlayer,Vector3 pos)
+    {
+        players[numberPlayer].transform.position = pos;
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    public void SetPositionPlayersServerRpc(int numberPlayer, Vector3 pos)
     {
         players[numberPlayer].transform.position = pos;
     }

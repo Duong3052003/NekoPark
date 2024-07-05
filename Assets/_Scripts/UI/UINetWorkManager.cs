@@ -20,7 +20,6 @@ public class UINetWorkManager : NetworkBehaviour
     {
         hostbtn.onClick.AddListener(() =>
         {
-            UIManager.Instance.CreateLobby("test");
             NetworkManager.Singleton.StartHost();
         });
         clientbtn.onClick.AddListener(() =>
