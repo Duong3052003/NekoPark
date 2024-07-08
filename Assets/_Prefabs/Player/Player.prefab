@@ -550,10 +550,6 @@ MonoBehaviour:
   jumpPower: 18
   gravitymin: 5
   gravitymax: 7
-  reconciliationCooldownTime: 1
-  reconciliationThreshold: 50
-  extrapolationLimit: 0.5
-  extrapolationMultiplier: 1.2
   nPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
   nRotation:

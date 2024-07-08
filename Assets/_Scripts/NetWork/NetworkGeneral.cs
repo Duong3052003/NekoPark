@@ -1,30 +1,54 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
-public class NetworkTimer
+public class NetworkTimer : NetworkBehaviour
 {
-    float timer;
-    public float MinTimeBetweenTicks { get; }
-    public int CurrentTick { get; private set; }
+    public static NetworkTimer Instance { get; private set; }
 
-    public NetworkTimer(float serverTickRate)
+    float timer;
+    public float MinTimeBetweenTicks { get; private set; }
+    public NetworkVariable<int> CurrentTick = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    public override void OnNetworkSpawn()
     {
-        MinTimeBetweenTicks = 1f / serverTickRate;
+        base.OnNetworkSpawn();
     }
 
-    public void Update(float deltaTime)
+    private void Awake()
     {
-        timer += deltaTime;
+        Instance = this;
+        DontDestroyOnLoad(this);
+    }
+
+    private void Start()
+    {
+        MinTimeBetweenTicks = 1f / 60f;
+    }
+
+    /*public NetworkTimer(float serverTickRate)
+    {
+        MinTimeBetweenTicks = 1f / serverTickRate;
+    }*/
+
+    public void Update()
+    {
+        if (this.IsSpawned && IsHost)
+        {
+            timer += Time.deltaTime;
+            ShouldTick();
+        }
     }
 
     public bool ShouldTick()
     {
         if (timer >= MinTimeBetweenTicks)
         {
-            //timer -= MinTimeBetweenTicks;
-            CurrentTick++;
+            timer -= MinTimeBetweenTicks;
+            CurrentTick.Value ++;
             return true;
         }
 

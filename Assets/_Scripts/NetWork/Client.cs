@@ -12,7 +12,6 @@ public struct InputPayLoad : INetworkSerializable
     public ulong networkObjID;
     public Vector3 inputVector;
     public Vector3 position;
-    public IPlayerMovement iPlayerMovement;
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
@@ -45,10 +44,6 @@ public struct StatePayLoad : INetworkSerializable
 
 public class Client : MonoBehaviour
 {
-
-
-
-
    /* public static Client Instance { get; private set; }
 
     private float timer;

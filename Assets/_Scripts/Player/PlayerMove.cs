@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Windows;
 
@@ -21,17 +22,16 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
     [Header("Others")]
     private bool rightCheck = true;
     
-    [Header("Netcode")]
+    /*[Header("Netcode")]
     [SerializeField] float reconciliationCooldownTime = 1f;
     [SerializeField] float reconciliationThreshold = 50f;
     [SerializeField] float extrapolationLimit = 0.5f;
     [SerializeField] float extrapolationMultiplier = 1.2f;
     CountdownTimer reconciliationTimer;
     CountdownTimer extrapolationTimer;
-    StatePayLoad extrapolationState;
+    StatePayLoad extrapolationState;*/
 
     // Netcode general
-    NetworkTimer networkTimer;
     const float k_serverTickRate = 60f; // 60 FPS
     const int k_bufferSize = 1024;
 
@@ -48,6 +48,7 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
     //network variable
     public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(new Quaternion(0,0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    [SerializeField] float reconciliationThreshold = 50f;
 
     private void Awake()
     {
@@ -93,22 +94,18 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
         clientNetworkTransformCus.SyncPositionZ = shouldSync;
     }*/
 
+    private void Start()
+    {
+        NetworkTimer.Instance.CurrentTick.OnValueChanged += (oldValue, newValue) => HandleClientTick();
+    }
+
     private void Update()
     {
-        if (IsLocalPlayer)
-        {
-            if (playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
-            MoveInput();
-            /*Move(new Vector2(InputManager.Instance.InputHorizon(),playerCtrl.rb.velocity.y));
-            Jump(new Vector2(playerCtrl.rb.velocity.x,InputManager.Instance.InputVertical()));*/
-        }
+        if (!IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
+        MoveInput();
 
-        while (Server.Instance.networkTimer.ShouldTick())
-        {
-            Debug.Log(5);
-            HandleClientTick();
-            //HandleServerTick();
-        }
+        /*Move(new Vector2(MoveInput().x, playerCtrl.rb.velocity.y));
+        Jump(new Vector2(playerCtrl.rb.velocity.x, MoveInput().y));*/
     }
 
     private Vector2 MoveInput()
@@ -118,9 +115,10 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
 
     void HandleClientTick()
     {
-        /*if (!IsClient || !IsOwner) return;*/
+        UpdateNetworkVariables();
 
-        var currentTick = networkTimer.CurrentTick;
+        if (!IsOwner) return;
+        var currentTick = NetworkTimer.Instance.CurrentTick.Value;
         var bufferIndex = currentTick % k_bufferSize;
 
         InputPayLoad inputPayload = new InputPayLoad()
@@ -129,15 +127,13 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
             timestamp = DateTime.Now,
             networkObjID = NetworkObjectId,
             inputVector = MoveInput(),
-            position = transform.position,
-            iPlayerMovement = this
+            position = transform.position
         };
 
-        clientInputBuffer.Add(inputPayload, bufferIndex);
+        //clientInputBuffer.Add(inputPayload, bufferIndex);
         Server.Instance.OnClientInput(inputPayload);
-        Debug.Log(4);
-        StatePayLoad statePayload = ProcessMovement(inputPayload);
-        clientStateBuffer.Add(statePayload, bufferIndex);
+        //StatePayLoad statePayload = ProcessMovement(inputPayload);
+        //clientStateBuffer.Add(statePayload, bufferIndex);
 
         //HandleServerReconciliation();
     }
@@ -158,7 +154,74 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
         };
     }
 
+    public void Move(Vector2 inputVector)
+    {
+        if ((rightCheck == true && inputVector.x < 0f || rightCheck == false && inputVector.x > 0f))
+        {
+            Flip();
+        }
 
+        playerCtrl.rb.velocity = new Vector2(inputVector.x * speed, playerCtrl.rb.velocity.y);
+    }
+
+    public void Jump(Vector2 inputVector)
+    {
+        if (playerCtrl.checkGroundColiision.IsGrounded())
+        {
+            if (inputVector.y == 1)
+            {
+                playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, jumpPower);
+            }
+        }
+
+        if (inputVector.y == 1.5)
+        {
+            playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, playerCtrl.rb.velocity.y * 0.5f);
+        }
+    }
+
+    private void Flip()
+    {
+        rightCheck = !rightCheck;
+
+        if (rightCheck == true)
+        {
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0f, -180f, 0f);
+        }
+    }
+
+    private void GravityChanged()
+    {
+        if (playerCtrl.rb.velocity.y < 0)
+        {
+            playerCtrl.rb.gravityScale = gravitymax;
+        }
+        else
+        {
+            playerCtrl.rb.gravityScale = gravitymin;
+        }
+    }
+
+    private void UpdateNetworkVariables()
+    {
+        if (IsOwner)
+        {
+            nPosition.Value = transform.position;
+            nRotation.Value = transform.rotation;
+        }
+        else
+        {
+            float positionError = Vector3.Distance(nPosition.Value, transform.position);
+            if (positionError < reconciliationThreshold) return;
+
+            transform.position = nPosition.Value;
+            transform.rotation = nRotation.Value;
+        }
+    }
 
 
 
@@ -328,64 +391,5 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
              angularVelocity = playerCtrl.rb.angularVelocity
          };
      }*/
-
-    public void Move(Vector2 inputVector)
-    {
-        Debug.Log(1);
-        if ((rightCheck == true && inputVector.x < 0f || rightCheck == false && inputVector.x > 0f))
-        {
-            Flip();
-        }
-
-        playerCtrl.rb.velocity = new Vector2(inputVector.x * speed, playerCtrl.rb.velocity.y);
-    }
-
-    public void Jump(Vector2 inputVector)
-    {
-        if (playerCtrl.checkGroundColiision.IsGrounded())
-        {
-            if (inputVector.y == 1)
-            {
-                playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, jumpPower);
-            }
-        }
-
-        if (inputVector.y == 1.5)
-        {
-            playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, playerCtrl.rb.velocity.y * 0.5f);
-        }
-    }
-
-    private void Flip()
-    {
-        rightCheck = !rightCheck;
-
-        if (rightCheck == true)
-        {
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(0f, -180f, 0f);
-        }
-    }
-
-    private void GravityChanged()
-    {
-        if (playerCtrl.rb.velocity.y < 0)
-        {
-            playerCtrl.rb.gravityScale=gravitymax;
-        }
-        else
-        {
-            playerCtrl.rb.gravityScale = gravitymin;
-        }
-    }
-
-    private void UpdateNetworkVariables()
-    {
-        nPosition.Value = transform.position;
-        nRotation.Value = transform.rotation;
-    }
 }
 

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2440254394877795585}
   - component: {fileID: 8870279052952092}
+  - component: {fileID: 5395581935132290449}
   m_Layer: 0
   m_Name: =====LevelStorage=====
   m_TagString: Untagged
@@ -59,6 +60,7 @@ MonoBehaviour:
   - {fileID: 1971811299125603045, guid: 4d940481c22ec0e49bd0b8898c3829e3, type: 3}
   - {fileID: 1971811299125603045, guid: 4d940481c22ec0e49bd0b8898c3829e3, type: 3}
   - {fileID: 1971811299125603045, guid: 4d940481c22ec0e49bd0b8898c3829e3, type: 3}
+  items2: []
   itemsTransformX:
   - 0
   - 0
@@ -69,3 +71,23 @@ MonoBehaviour:
   - 2
   - 2
   - 2
+--- !u!114 &5395581935132290449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6729989215879453731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

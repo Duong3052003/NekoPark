@@ -31,8 +31,6 @@ public class UINetWorkManager : NetworkBehaviour
     private void Update()
     {
         numberPlayerText.text = "Player :" + numberPlayers.Value.ToString();
-        if (!IsServer) return;
-        numberPlayers.Value = NetworkManager.Singleton.ConnectedClients.Count;
     }
 
 

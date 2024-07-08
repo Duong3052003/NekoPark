@@ -8,8 +8,6 @@ public class Server : NetworkBehaviour
     public static Server Instance { get; private set; }
 
     // Netcode general
-    public NetworkTimer networkTimer { get; private set; }
-    const float k_serverTickRate = 60f; // 60 FPS
     const int k_bufferSize = 1024;
 
     //Netcode Server
@@ -23,22 +21,18 @@ public class Server : NetworkBehaviour
 
         serverStateBuffer = new CircularBuffer<StatePayLoad>(k_bufferSize);
         serverInputQueue = new Queue<InputPayLoad>();
-        networkTimer = new NetworkTimer(k_serverTickRate);
     }
 
-    private void Update()
+    private void Start()
     {
-        networkTimer.Update(Time.deltaTime);
-
-        while (networkTimer.ShouldTick())
-        {
-            HandleTick();
-        }
+        if(this==null) return;
+        NetworkTimer.Instance.CurrentTick.OnValueChanged += (oldValue, newValue) => HandleTick();
     }
 
     public void OnClientInput(InputPayLoad inputPayLoad)
     {
         serverInputQueue.Enqueue(inputPayLoad);
+        Debug.Log("id gui" +inputPayLoad.networkObjID);
     }
 
     void HandleTick()
@@ -47,11 +41,19 @@ public class Server : NetworkBehaviour
         InputPayLoad inputPayload = default;
         while (serverInputQueue.Count > 0)
         {
-            Debug.Log(3);
-
             inputPayload = serverInputQueue.Dequeue();
+            Debug.Log("id gui2" +inputPayload.networkObjID);
+
+            if (IsHost)
+            {
+                SimulateInputClientRpc(inputPayload);
+            }
+            else
+            {
+                SimulateInputServerRpc(inputPayload);
+            }
+
             //PlayerManager.Instance.players[0].GetComponent<PlayerMove>().SimulateInputClientRpc(inputPayload);
-            SimulateInputClientRpc(inputPayload);
 
             //bufferIndex = inputPayload.tick % k_bufferSize;
 
@@ -64,15 +66,33 @@ public class Server : NetworkBehaviour
         //HandleExtrapolation(serverStateBuffer.Get(bufferIndex), CalculateLatencyInMillis(inputPayload));
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void SimulateInputServerRpc(InputPayLoad inputPayLoad)
+    {
+        SimulateInputClientRpc(inputPayLoad);
+    }
+
     [ClientRpc]
     public void SimulateInputClientRpc(InputPayLoad inputPayLoad)
     {
-        Debug.Log(0);
-        /*if (!IsLocalPlayer || !IsHost) return;
-        if (inputPayLoad.networkObjID != NetworkObjectId) return;*/
+        //if (!IsHost || inputPayLoad.networkObjID != NetworkObjectId) return;
+        Debug.Log("id gui3" + inputPayLoad.networkObjID);
+        var networkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[inputPayLoad.networkObjID];
+        if (networkObject != null)
+        {
+            var playerMovement = networkObject.GetComponent<IPlayerMovement>();
 
-        inputPayLoad.iPlayerMovement.Move(inputPayLoad.inputVector);
-        inputPayLoad.iPlayerMovement.Jump(inputPayLoad.inputVector);
+            if (playerMovement != null)
+            {
+                playerMovement.Move(inputPayLoad.inputVector);
+                playerMovement.Jump(inputPayLoad.inputVector);
+
+               /* if (inputPayLoad.inputVector.y > 0)
+                {
+                    playerMovement.Jump(inputPayLoad.inputVector);
+                }*/
+            }
+        }
     }
 
 
