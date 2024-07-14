@@ -42,7 +42,6 @@ public class Server : NetworkBehaviour
         while (serverInputQueue.Count > 0)
         {
             inputPayload = serverInputQueue.Dequeue();
-            Debug.Log("id gui2" +inputPayload.networkObjID);
 
             if (IsHost)
             {
@@ -77,6 +76,7 @@ public class Server : NetworkBehaviour
     {
         //if (!IsHost || inputPayLoad.networkObjID != NetworkObjectId) return;
         Debug.Log("id gui3" + inputPayLoad.networkObjID);
+
         var networkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[inputPayLoad.networkObjID];
         if (networkObject != null)
         {
@@ -91,6 +91,13 @@ public class Server : NetworkBehaviour
                 {
                     playerMovement.Jump(inputPayLoad.inputVector);
                 }*/
+            }
+
+            var objectMovement = networkObject.GetComponent<IObjectMovement>();
+
+            if (objectMovement != null)
+            {
+                objectMovement.Movement(inputPayLoad.inputVector);
             }
         }
     }

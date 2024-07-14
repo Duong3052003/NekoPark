@@ -36,14 +36,14 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
     const int k_bufferSize = 1024;
 
     //Netcode Client
-    CircularBuffer<StatePayLoad> clientStateBuffer;
-    CircularBuffer<InputPayLoad> clientInputBuffer;
-    StatePayLoad lastServerState;
-    StatePayLoad lastProcessState;
+    /*CircularBuffer<StatePayLoad> clientStateBuffer;
+    CircularBuffer<InputPayLoad> clientInputBuffer;*/
+    /*StatePayLoad lastServerState;
+    StatePayLoad lastProcessState;*/
 
     //Netcode Server
-    CircularBuffer<StatePayLoad> serverStateBuffer;
-    Queue<InputPayLoad> serverInputQueue;
+   /* CircularBuffer<StatePayLoad> serverStateBuffer;
+    Queue<InputPayLoad> serverInputQueue;*/
 
     //network variable
     public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
