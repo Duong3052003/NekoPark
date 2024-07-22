@@ -46,9 +46,9 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
     Queue<InputPayLoad> serverInputQueue;*/
 
     //network variable
-    public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-    public NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(new Quaternion(0,0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-    [SerializeField] float reconciliationThreshold = 50f;
+    private NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    private NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(new Quaternion(0,0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    private float reconciliationThreshold = 2.5f;
 
     private void Awake()
     {
@@ -101,8 +101,31 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
 
     private void Update()
     {
+        //UpdateNetworkVariables();
+
         if (!IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
+
         MoveInput();
+
+        if ((rightCheck == true && MoveInput().x < 0f || rightCheck == false && MoveInput().x > 0f))
+        {
+            Flip();
+        }
+
+        playerCtrl.rb.velocity = new Vector2(MoveInput().x * speed, playerCtrl.rb.velocity.y);
+
+        if (playerCtrl.checkGroundColiision.IsGrounded())
+        {
+            if (MoveInput().y == 1)
+            {
+                playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, jumpPower);
+            }
+        }
+
+        if (MoveInput().y == 1.5)
+        {
+            playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, playerCtrl.rb.velocity.y * 0.5f);
+        }
 
         /*Move(new Vector2(MoveInput().x, playerCtrl.rb.velocity.y));
         Jump(new Vector2(playerCtrl.rb.velocity.x, MoveInput().y));*/
@@ -156,6 +179,8 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
 
     public void Move(Vector2 inputVector)
     {
+        if (IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
+
         if ((rightCheck == true && inputVector.x < 0f || rightCheck == false && inputVector.x > 0f))
         {
             Flip();
@@ -166,17 +191,14 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
 
     public void Jump(Vector2 inputVector)
     {
+        if (IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
+
         if (playerCtrl.checkGroundColiision.IsGrounded())
         {
             if (inputVector.y == 1)
             {
                 playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, jumpPower);
             }
-        }
-
-        if (inputVector.y == 1.5)
-        {
-            playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, playerCtrl.rb.velocity.y * 0.5f);
         }
     }
 
@@ -216,8 +238,9 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
         else
         {
             float positionError = Vector3.Distance(nPosition.Value, transform.position);
-            if (positionError < reconciliationThreshold) return;
 
+            if (positionError < reconciliationThreshold) return;
+            Debug.Log("Reconcile ne");
             transform.position = nPosition.Value;
             transform.rotation = nRotation.Value;
         }

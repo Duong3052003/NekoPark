@@ -39,15 +39,6 @@ public class InputManager : MonoBehaviour
         {
             return -1;
         }
-
-        else if (Input.GetButtonUp("Jump") || Input.GetKeyUp(KeyCode.UpArrow))
-        {
-            return 1.5f;
-        }
-        else if (Input.GetKeyUp("s") || Input.GetKeyUp(KeyCode.DownArrow))
-        {
-            return -1.5f;
-        }
         else
         {
             return 0;

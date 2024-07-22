@@ -77,20 +77,20 @@ public class LevelGenerator : Spawner
 
         for (int i = 0; i < PlayerManager.Instance.players.Count; i++)
         {
-            indexId++;
             PlayerManager.Instance.SetPositionPlayersServerRpc(i, transformPlayers[i].position);
 
             if (newItems[i] == null) return;
             GameObject newItem = Instantiate(newItems[i]);
             newItem.transform.position = new Vector2(transformPlayers[i].position.x + newItemsTransformX[i], transformPlayers[i].position.y + newItemsTransformY[i]);
             newItem.GetComponent<NetworkObject>().SpawnWithOwnership(indexId);
-            Debug.Log("Quyen so huu ball " + newItem.GetComponent<NetworkObject>().OwnerClientId);
 
             if (newItems2[i] == null) return;
             GameObject newItem2 = Instantiate(newItems2[i]);
             newItem2.transform.position = new Vector2(transformPlayers[i].position.x, transformPlayers[i].position.y + 1);
             newItem2.GetComponent<NetworkObject>().SpawnWithOwnership(indexId);
             newItem2.transform.SetParent(PlayerManager.Instance.players[i].transform);
+
+            indexId++;
         }
     }
 

@@ -5,16 +5,17 @@ using UnityEngine;
 
 public class Ball : NetworkBehaviour,IObjectMovement
 {
-    public int damage = 1;
-    public float maxVelocity = 15f;
+    private int damage = 1;
     private Rigidbody2D rb;
-    private float forceMagnitude = 15f;
+    private float forceMagnitude = 10f;
+    private float velocityX=0;
+    private float velocityY=-0.5f;
 
     // Netcode general
     const float k_serverTickRate = 60f; // 60 FPS
     const int k_bufferSize = 1024;
     public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0, 0, 0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-    [SerializeField] float reconciliationThreshold = 50f;
+    private float reconciliationThreshold = 2.5f;
 
     private void Awake()
     {
@@ -23,25 +24,27 @@ public class Ball : NetworkBehaviour,IObjectMovement
 
     public override void OnNetworkSpawn()
     {
-        UpdateNetworkVariables();
+        ReconcileTransform();
+    }
+
+    private void Update()
+    {
+        Move(velocityX, velocityY);
+        Debug.Log(rb.velocity);
     }
 
     private void FixedUpdate()
     {
-        VelocityIsMax();
+        ReconcileTransform();
     }
 
-    private void VelocityIsMax()
+    private void Move(float _x,float _y)
     {
-        if(rb.velocity.magnitude > maxVelocity)
-        {
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
-        }
+        rb.velocity = new Vector2(_x,_y);
     }
 
     private void SendMovementToServer(Vector3 _inputVector)
     {
-        if (!IsOwner) return;
         var currentTick = NetworkTimer.Instance.CurrentTick.Value;
         var bufferIndex = currentTick % k_bufferSize;
 
@@ -59,50 +62,24 @@ public class Ball : NetworkBehaviour,IObjectMovement
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        ChangedGravity();
-        UpdateNetworkVariables();
+        if (!IsOwner) return;
+        AddForceToServer(collision);
 
         ITakeDamaged objTakeDamaged = collision.gameObject.GetComponent<ITakeDamaged>();
         if (objTakeDamaged != null)
         {
             objTakeDamaged.TakeDamagedServerRpc(damage);
-            Debug.Log(objTakeDamaged + "take " + damage + " damage");
-        }
-
-        if (collision.gameObject.CompareTag("Breakout"))
-        {
-            Debug.Log("Va cham dung");
-
-            Vector3 forceDirection = collision.contacts[0].normal.normalized;
-            forceDirection.z = 0;
-            Debug.Log(forceDirection);
-
-            SendMovementToServer(forceDirection);
         }
     }
 
-    /*[ClientRpc(RequireOwnership = false)]
-    void HandleCollisionServerRpc(Vector3 forceDirection, float forceMagnitude)
+    private void AddForceToServer(Collision2D collision)
     {
-        rb.AddForce(forceDirection * forceMagnitude, ForceMode2D.Impulse);
-        Debug.Log(3);
+        Vector2 normal = collision.contacts[0].normal;
 
+        Vector2 reflectDirection = Vector2.Reflect(new Vector2(velocityX,velocityY), normal);
 
-        if (IsServer)
-        {
-            ApplyForceClientRpc(forceDirection, forceMagnitude);
-        }
-    }*/
-/*
-    [ClientRpc]
-    void ApplyForceClientRpc(Vector3 forceDirection)
-    {
-        if (rb != null)
-        {
-            
-
-        }
-    }*/
+        SendMovementToServer(reflectDirection);
+    }
 
     private void ChangedGravity()
     {
@@ -112,10 +89,12 @@ public class Ball : NetworkBehaviour,IObjectMovement
 
     public void Movement(Vector3 direction)
     {
-        rb.AddForce(direction * forceMagnitude, ForceMode2D.Impulse);
+        Vector3 newVelocity = direction.normalized * forceMagnitude;
+        velocityX = newVelocity.x;
+        velocityY = newVelocity.y;
     }
 
-    private void UpdateNetworkVariables()
+    private void ReconcileTransform()
     {
         if (IsOwner)
         {
@@ -125,7 +104,6 @@ public class Ball : NetworkBehaviour,IObjectMovement
         {
             float positionError = Vector3.Distance(nPosition.Value, transform.position);
             if (positionError < reconciliationThreshold) return;
-
             transform.position = nPosition.Value;
         }
     }

@@ -550,10 +550,6 @@ MonoBehaviour:
   jumpPower: 18
   gravitymin: 5
   gravitymax: 7
-  nPosition:
-    m_InternalValue: {x: 0, y: 0, z: 0}
-  nRotation:
-    m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &5520547233377292942
 MonoBehaviour:
   m_ObjectHideFlags: 0
