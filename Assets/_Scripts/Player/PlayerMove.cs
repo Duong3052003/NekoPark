@@ -126,9 +126,6 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
         {
             playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, playerCtrl.rb.velocity.y * 0.5f);
         }
-
-        /*Move(new Vector2(MoveInput().x, playerCtrl.rb.velocity.y));
-        Jump(new Vector2(playerCtrl.rb.velocity.x, MoveInput().y));*/
     }
 
     private Vector2 MoveInput()
@@ -153,12 +150,7 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
             position = transform.position
         };
 
-        //clientInputBuffer.Add(inputPayload, bufferIndex);
         Server.Instance.OnClientInput(inputPayload);
-        //StatePayLoad statePayload = ProcessMovement(inputPayload);
-        //clientStateBuffer.Add(statePayload, bufferIndex);
-
-        //HandleServerReconciliation();
     }
 
     StatePayLoad ProcessMovement(InputPayLoad inputPayLoad)
@@ -240,7 +232,6 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
             float positionError = Vector3.Distance(nPosition.Value, transform.position);
 
             if (positionError < reconciliationThreshold) return;
-            Debug.Log("Reconcile ne");
             transform.position = nPosition.Value;
             transform.rotation = nRotation.Value;
         }

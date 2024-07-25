@@ -30,7 +30,6 @@ public class Ball : NetworkBehaviour,IObjectMovement
     private void Update()
     {
         Move(velocityX, velocityY);
-        Debug.Log(rb.velocity);
     }
 
     private void FixedUpdate()

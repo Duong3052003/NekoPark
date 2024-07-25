@@ -69,26 +69,35 @@ public class LevelGenerator : Spawner
     [ServerRpc(RequireOwnership = false)]
     private void SetActivePlayersServerRPC()
     {
-        GameObject[] newItems = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().items;
-        GameObject[] newItems2 = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().items2;
-        float[] newItemsTransformX = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().itemsTransformX;
-        float[] newItemsTransformY = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().itemsTransformY;
+        LevelStorage levelStorage = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>();
+
         ulong indexId=0;
 
         for (int i = 0; i < PlayerManager.Instance.players.Count; i++)
         {
-            PlayerManager.Instance.SetPositionPlayersServerRpc(i, transformPlayers[i].position);
+            PlayerManager.Instance.SetPositionPlayersClientRpc(i, transformPlayers[i].position);
+            for (int j = 0; j < levelStorage.items.Length; j++)
+            {
+                if (levelStorage.items[j] == null) return;
+                GameObject newItem = Instantiate(levelStorage.items[j].gameObject);
 
-            if (newItems[i] == null) return;
-            GameObject newItem = Instantiate(newItems[i]);
-            newItem.transform.position = new Vector2(transformPlayers[i].position.x + newItemsTransformX[i], transformPlayers[i].position.y + newItemsTransformY[i]);
-            newItem.GetComponent<NetworkObject>().SpawnWithOwnership(indexId);
+                if (levelStorage.isHost[j] == true)
+                {
+                    newItem.GetComponent<NetworkObject>().SpawnWithOwnership(0);
+                }
+                else
+                {
+                    newItem.GetComponent<NetworkObject>().SpawnWithOwnership(indexId);
+                }
 
-            if (newItems2[i] == null) return;
-            GameObject newItem2 = Instantiate(newItems2[i]);
-            newItem2.transform.position = new Vector2(transformPlayers[i].position.x, transformPlayers[i].position.y + 1);
-            newItem2.GetComponent<NetworkObject>().SpawnWithOwnership(indexId);
-            newItem2.transform.SetParent(PlayerManager.Instance.players[i].transform);
+                if (levelStorage.isParent[j] == true)
+                {
+                    newItem.transform.SetParent(PlayerManager.Instance.players[i].transform);
+                }
+
+                newItem.transform.position = new Vector2(transformPlayers[i].position.x + levelStorage.itemsTransformX[j], transformPlayers[i].position.y + levelStorage.itemsTransformY[j]);
+
+            }
 
             indexId++;
         }
