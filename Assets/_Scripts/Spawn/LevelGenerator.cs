@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class LevelGenerator : Spawner
 {
     public static LevelGenerator Instance { get; private set; }
+    
+    [SerializeField] private GameObject[] brickHolders;
 
     [SerializeField] private Vector2Int size;
     [SerializeField] private Vector2 offset;
@@ -45,23 +47,19 @@ public class LevelGenerator : Spawner
     [ServerRpc(RequireOwnership =false)]
     private void GenerateBrickServerRPC()
     {
-        for (int i = 0; i < size.x; i++)
+        for (int k = 0;k  < brickHolders.Length; k++)
         {
-            for (int j = 0; j < size.y; j++)
+            for (int i = 0; i < size.x; i++)
             {
-                GameObject brick = ObjIsSpawned();
-                
-                if (brick.GetComponent<NetworkObject>() != null && !brick.GetComponent<NetworkObject>().IsSpawned)
+                for (int j = 0; j < size.y; j++)
                 {
-                    brick.GetComponent<NetworkObject>().Spawn();
-                }
-                else
-                {
-                    brick.SetActive(true);
-                }
+                    GameObject brick = ObjIsSpawned();
 
-                brick.transform.position = transform.position + new Vector3((float)((size.x - 1) * 0.5f - i) * offset.x, j * offset.y, 0);
-                brick.GetComponent<SpriteRenderer>().color = gradient.Evaluate((float)j / (size.y - 1));
+                    brick.transform.position = brickHolders[k].transform.position + new Vector3((float)((size.x - 1) * 0.5f - i) * offset.x, j * offset.y, 0);
+                    brick.GetComponent<SpriteRenderer>().color = gradient.Evaluate((float)j / (size.y - 1));
+
+                    brick.transform.SetParent(brickHolders[k].transform);
+                }
             }
         }
     }

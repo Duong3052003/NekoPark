@@ -5,11 +5,10 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
-public class Brick : NetworkBehaviour,ITakeDamaged
+public class BrickDespawn : DeSpawnByHp, ITakeDamaged
 {
     [SerializeField] private int hpMax=5;
     [SerializeField] private TextMeshProUGUI hpText;
-    private NetworkVariable<int> hpCurrent = new NetworkVariable<int>(0);
 
     public override void OnNetworkSpawn()
     {
@@ -27,15 +26,19 @@ public class Brick : NetworkBehaviour,ITakeDamaged
     private void Breaked(int _hpCurrent)
     {
         hpText.text = hpCurrent.Value.ToString();
-        if (_hpCurrent > 0) return;
+        if (!CanDespawn()) return;
         Debug.Log("Breaked");
-        DestroyServerRpc();
+        Despawn();
+    }
+
+    protected override void Despawn()
+    {
+        DespawnServerRpc();
     }
 
     [ServerRpc]
-    protected virtual void DestroyServerRpc()
+    protected virtual void DespawnServerRpc()
     {
-        this.GetComponent<NetworkObject>().Despawn();
-        Destroy(gameObject);
+        LevelGenerator.Instance.DeSpawn(this.gameObject);
     }
 }

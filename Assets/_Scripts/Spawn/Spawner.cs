@@ -12,10 +12,6 @@ public class Spawner : NetworkBehaviour
     /*protected GameObject clone;*/
     [SerializeField] protected List<GameObject> poolObjs;
 
-    protected virtual void Start()
-    {
-    }
-
     public virtual GameObject ObjIsSpawned()
     {
         if (prefab == null) {
@@ -24,6 +20,15 @@ public class Spawner : NetworkBehaviour
         }
 
         GameObject newPrefab = this.GetObjFromPool(prefab);
+
+        if (newPrefab.GetComponent<NetworkObject>() != null && !newPrefab.GetComponent<NetworkObject>().IsSpawned)
+        {
+            newPrefab.GetComponent<NetworkObject>().Spawn();
+        }
+        else
+        {
+            newPrefab.SetActive(true);
+        }
 
         return newPrefab;
     }
@@ -57,7 +62,7 @@ public class Spawner : NetworkBehaviour
         }
     }*/
 
-    protected virtual void DeSpawn(GameObject prefab)
+    public virtual void DeSpawn(GameObject prefab)
     {
         this.poolObjs.Add(prefab);
         prefab.gameObject.SetActive(false);
