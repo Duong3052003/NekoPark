@@ -30,6 +30,15 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    public void SetupPlayersClientRPC()
+    {
+        foreach (GameObject player in players)
+        {
+            player.GetComponent<PlayerSetting>().SetUpPlayer();
+        }
+    }
+
     public void ResetPositionAllPlayers(Vector3 pos)
     {
         foreach (GameObject player in players)

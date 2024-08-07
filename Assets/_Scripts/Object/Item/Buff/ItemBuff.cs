@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class ItemBuff : ItemTrigger
 {
-    public override void OnNetworkSpawn()
+    protected virtual void Update()
     {
-
+        Move(velocityX, velocityY);
     }
 
-    protected virtual void Start()
+    protected override void Move(float _x, float _y)
     {
-
+        rb.velocity = new Vector2(_x, _y);
     }
 
     public  override void Effect(GameObject _gameObject)
@@ -22,19 +22,6 @@ public class ItemBuff : ItemTrigger
 
     public override GameObject Target(Collider2D _collision)
     {
-        List<GameObject> validTargets = PlayerManager.Instance.players
-        .Where(player => player != _collision.gameObject)
-        .ToList();
-
-        if (validTargets.Count == 0)
-        {
-            Debug.LogWarning("Khong co muc tieu.");
-            return null;
-        }
-
-        int randomIndex = Random.Range(0, validTargets.Count);
-        GameObject target = validTargets[randomIndex];
-
-        return target;
+        return _collision.gameObject;
     }
 }

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Ball : NetworkBehaviour,IObjectMovement
+public class Ball : NetworkBehaviour,IObjectMovement,IObserver
 {
     private int damage = 1;
     private Rigidbody2D rb;
     private float forceMagnitude = 10f;
     private float velocityX=0;
     private float velocityY=-0.5f;
+
+    private bool canMove=true;
 
     // Netcode general
     const float k_serverTickRate = 60f; // 60 FPS
@@ -29,6 +31,7 @@ public class Ball : NetworkBehaviour,IObjectMovement
 
     private void Update()
     {
+        if (!canMove) return;
         Move(velocityX, velocityY);
     }
 
@@ -105,5 +108,41 @@ public class Ball : NetworkBehaviour,IObjectMovement
             if (positionError < reconciliationThreshold) return;
             transform.position = nPosition.Value;
         }
+    }
+
+    private void OnEnable()
+    {
+        AddListObserver(this);
+    }
+
+    private void OnDisable()
+    {
+        RemoveListObserver(this);
+    }
+
+    public void AddListObserver(IObserver observer)
+    {
+        NetworkTimer.Instance.AddListObserver(observer);
+    }
+
+    public void RemoveListObserver(IObserver observer)
+    {
+        NetworkTimer.Instance.RemoveListObserver(observer);
+    }
+
+    public void OnPause(int time)
+    {
+        SetCanMoveClientRpc(false);
+    }
+
+    public void OnResume()
+    {
+        SetCanMoveClientRpc(true);
+    }
+
+    [ClientRpc]
+    private void SetCanMoveClientRpc(bool boolen)
+    {
+        canMove = boolen;
     }
 }

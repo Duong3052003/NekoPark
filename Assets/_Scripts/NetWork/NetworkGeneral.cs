@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -10,8 +11,11 @@ public class NetworkTimer : NetworkBehaviour
     public static NetworkTimer Instance { get; private set; }
 
     float timer;
+
     public float MinTimeBetweenTicks { get; private set; }
     public NetworkVariable<int> CurrentTick = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    private List<IObserver> listObserver = new List<IObserver>();
 
     public override void OnNetworkSpawn()
     {
@@ -28,11 +32,6 @@ public class NetworkTimer : NetworkBehaviour
     {
         MinTimeBetweenTicks = 1f / 60f;
     }
-
-    /*public NetworkTimer(float serverTickRate)
-    {
-        MinTimeBetweenTicks = 1f / serverTickRate;
-    }*/
 
     public void Update()
     {
@@ -54,7 +53,38 @@ public class NetworkTimer : NetworkBehaviour
 
         return false;
     }
+
+    public void AddListObserver(IObserver observer)
+    {
+        listObserver.Add(observer);
+    }
+
+    public void RemoveListObserver(IObserver observer)
+    {
+        listObserver.Remove(observer);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void OnPauseServerRpc(int time)
+    {
+        listObserver.ForEach(observer => observer.OnPause(time));
+
+        Invoke(nameof(OnResumeServerRpc), time);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void OnResumeServerRpc()
+    {
+        CancelInvoke();
+        for (int i = 0; i < listObserver.Count; i++)
+        {
+            listObserver[i].OnResume();
+        }
+    }
 }
+
+
+
 
 public class CircularBuffer<T>
 {

@@ -55,9 +55,6 @@ public class _ScenesManager : NetworkBehaviour
             NetworkManager.Singleton.SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
         //transition
-
-        PlayerManager.Instance.SetBodyTypeAllPlayersServerRpc(0);
-
     }
 
     public void OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode,
@@ -65,7 +62,10 @@ public class _ScenesManager : NetworkBehaviour
     {
         Debug.Log("LoadSceneCompleted");
 
-        //Do something
+        PlayerManager.Instance.SetBodyTypeAllPlayersServerRpc(0);
+        PlayerManager.Instance.SetupPlayersClientRPC();
+
+        NetworkTimer.Instance.OnPauseServerRpc(5);
     }
 
     public override void OnDestroy()

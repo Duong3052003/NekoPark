@@ -9,10 +9,10 @@ public class Spawner : NetworkBehaviour
 {
     [SerializeField] protected Transform holder;
     [SerializeField] protected GameObject prefab;
-    /*protected GameObject clone;*/
+
     [SerializeField] protected List<GameObject> poolObjs;
 
-    public virtual GameObject ObjIsSpawned()
+    protected virtual GameObject ObjIsSpawned()
     {
         if (prefab == null) {
             Debug.Log("Miss prefab");
@@ -50,17 +50,6 @@ public class Spawner : NetworkBehaviour
 
         return newPrefab;
     }
-
-   /* [ServerRpc(RequireOwnership =false)]
-    protected virtual void InstantiateServerRpc()
-    {
-        NetworkObject networkObject = clone.GetComponent<NetworkObject>();
-
-        if (networkObject != null && !networkObject.IsSpawned)
-        {
-            clone.GetComponent<NetworkObject>().Spawn();
-        }
-    }*/
 
     public virtual void DeSpawn(GameObject prefab)
     {

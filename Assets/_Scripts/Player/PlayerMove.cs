@@ -8,10 +8,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Windows;
 
-public class PlayerMove : NetworkBehaviour,IPlayerMovement
+public class PlayerMove : NetworkBehaviour,IPlayerMovement,IObserver
 {
     private PlayerCtrl playerCtrl;
-    private ClientNetworkTransformCus clientNetworkTransformCus;
 
     [Header("Physics")]
     [SerializeField] private float speed = 7f;
@@ -21,116 +20,59 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
 
     [Header("Others")]
     private bool rightCheck = true;
-    
-    /*[Header("Netcode")]
-    [SerializeField] float reconciliationCooldownTime = 1f;
-    [SerializeField] float reconciliationThreshold = 50f;
-    [SerializeField] float extrapolationLimit = 0.5f;
-    [SerializeField] float extrapolationMultiplier = 1.2f;
-    CountdownTimer reconciliationTimer;
-    CountdownTimer extrapolationTimer;
-    StatePayLoad extrapolationState;*/
+    private bool CanMove = true;
 
     // Netcode general
     const float k_serverTickRate = 60f; // 60 FPS
     const int k_bufferSize = 1024;
 
-    //Netcode Client
-    /*CircularBuffer<StatePayLoad> clientStateBuffer;
-    CircularBuffer<InputPayLoad> clientInputBuffer;*/
-    /*StatePayLoad lastServerState;
-    StatePayLoad lastProcessState;*/
-
-    //Netcode Server
-   /* CircularBuffer<StatePayLoad> serverStateBuffer;
-    Queue<InputPayLoad> serverInputQueue;*/
-
     //network variable
-    private NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-    private NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(new Quaternion(0,0,0,0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-    private float reconciliationThreshold = 2.5f;
+    private NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(
+        Vector3.zero,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Owner);
+
+    private NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(
+        Quaternion.identity,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Owner);
+
+    private readonly float reconciliationThreshold = 100f;
 
     private void Awake()
     {
         playerCtrl = GetComponent<PlayerCtrl>();
-
-       /* clientNetworkTransformCus = GetComponent<ClientNetworkTransformCus>();
-
-        networkTimer = new NetworkTimer(k_serverTickRate);
-        clientStateBuffer = new CircularBuffer<StatePayLoad>(k_bufferSize);
-        clientInputBuffer = new CircularBuffer<InputPayLoad>(k_bufferSize);
-
-        serverStateBuffer = new CircularBuffer<StatePayLoad>(k_bufferSize);
-        serverInputQueue = new Queue<InputPayLoad>();
-
-        reconciliationTimer = new CountdownTimer(reconciliationCooldownTime);
-        extrapolationTimer = new CountdownTimer(extrapolationLimit);
-
-        reconciliationTimer.OnTimerStart += () => {
-            extrapolationTimer.Stop();
-        };
-
-        extrapolationTimer.OnTimerStart += () => {
-            reconciliationTimer.Stop();
-            SwitchAuthorityMode(AuthorityMode.Server);
-        };
-        extrapolationTimer.OnTimerStop += () => {
-            extrapolationState = default;
-            SwitchAuthorityMode(AuthorityMode.Client);
-        };*/
     }
 
     public override void OnNetworkSpawn()
     {
         UpdateNetworkVariables();
-    }
-
-    /*void SwitchAuthorityMode(AuthorityMode mode)
-    {
-        clientNetworkTransformCus.authorityMode = mode;
-        bool shouldSync = mode == AuthorityMode.Client;
-        clientNetworkTransformCus.SyncPositionX = shouldSync;
-        clientNetworkTransformCus.SyncPositionY = shouldSync;
-        clientNetworkTransformCus.SyncPositionZ = shouldSync;
-    }*/
-
-    private void Start()
-    {
         NetworkTimer.Instance.CurrentTick.OnValueChanged += (oldValue, newValue) => HandleClientTick();
     }
 
     private void Update()
     {
-        //UpdateNetworkVariables();
-
-        if (!IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
+        if (!IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static || !CanMove) return;
 
         MoveInput();
-
-        if ((rightCheck == true && MoveInput().x < 0f || rightCheck == false && MoveInput().x > 0f))
-        {
-            Flip();
-        }
-
-        playerCtrl.rb.velocity = new Vector2(MoveInput().x * speed, playerCtrl.rb.velocity.y);
-
-        if (playerCtrl.checkGroundColiision.IsGrounded())
-        {
-            if (MoveInput().y == 1)
-            {
-                playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, jumpPower);
-            }
-        }
-
-        if (MoveInput().y == 1.5)
-        {
-            playerCtrl.rb.velocity = new Vector2(playerCtrl.rb.velocity.x, playerCtrl.rb.velocity.y * 0.5f);
-        }
+        //Movement(MoveInput());
     }
 
+    private void OnEnable()
+    {
+        AddListObserver(this);
+    }
+
+    private void OnDisable()
+    {
+        RemoveListObserver(this);
+    }
+
+
+    #region Movement
     private Vector2 MoveInput()
     {
-        return new Vector2(InputManager.Instance.InputHorizon(), InputManager.Instance.InputVertical());
+        return new Vector2(InputManager.InputHorizon(), InputManager.InputVertical());
     }
 
     void HandleClientTick()
@@ -153,26 +95,15 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
         Server.Instance.OnClientInput(inputPayload);
     }
 
-    StatePayLoad ProcessMovement(InputPayLoad inputPayLoad)
+    public void Movement(Vector2 inputVector)
     {
-        Move(inputPayLoad.inputVector);
-        Jump(inputPayLoad.inputVector);
-
-        return new StatePayLoad()
-        {
-            tick = inputPayLoad.tick,
-            networkObjID = inputPayLoad.networkObjID,
-            position = inputPayLoad.position,
-            rotation = transform.rotation,
-            velocity = playerCtrl.rb.velocity,
-            angularVelocity = playerCtrl.rb.angularVelocity
-        };
+        if (playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
+        Move(inputVector);
+        Jump(inputVector);
     }
 
     public void Move(Vector2 inputVector)
     {
-        if (IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
-
         if ((rightCheck == true && inputVector.x < 0f || rightCheck == false && inputVector.x > 0f))
         {
             Flip();
@@ -183,8 +114,6 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
 
     public void Jump(Vector2 inputVector)
     {
-        if (IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
-
         if (playerCtrl.checkGroundColiision.IsGrounded())
         {
             if (inputVector.y == 1)
@@ -196,7 +125,7 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
 
     private void Flip()
     {
-        rightCheck = !rightCheck;
+        /*rightCheck = !rightCheck;
 
         if (rightCheck == true)
         {
@@ -205,19 +134,24 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
         else
         {
             transform.rotation = Quaternion.Euler(0f, -180f, 0f);
-        }
+        }*/
+        rightCheck = !rightCheck;
+
+        transform.rotation = rightCheck ? Quaternion.Euler(0f, 0f, 0f) : Quaternion.Euler(0f, -180f, 0f);
     }
 
     private void GravityChanged()
     {
-        if (playerCtrl.rb.velocity.y < 0)
+        /*if (playerCtrl.rb.velocity.y < 0)
         {
             playerCtrl.rb.gravityScale = gravitymax;
         }
         else
         {
             playerCtrl.rb.gravityScale = gravitymin;
-        }
+        }*/
+
+        playerCtrl.rb.gravityScale = playerCtrl.rb.velocity.y < 0 ? gravitymax : gravitymin;
     }
 
     private void UpdateNetworkVariables()
@@ -236,174 +170,39 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement
             transform.rotation = nRotation.Value;
         }
     }
+    #endregion
 
+    public void SetSpeed(float multiplier)
+    {
+        this.speed *= multiplier;
+    }
 
+    public void AddListObserver(IObserver observer)
+    {
+        NetworkTimer.Instance.AddListObserver(observer);
+    }
 
-    /* static float CalculateLatencyInMillis(InputPayLoad inputPayLoad)
-     {
-         return (DateTime.Now - inputPayLoad.timestamp).Milliseconds / 1000f;
-     }
+    public void RemoveListObserver(IObserver observer)
+    {
+        NetworkTimer.Instance.RemoveListObserver(observer);
+    }
 
-     bool ShouldReconcile()
-     {
-         bool isNewServerState = !lastServerState.Equals(default);
-         bool isLastStateUndefinedOrDifferent = lastProcessState.Equals(default)
-                                                || !lastProcessState.Equals(lastServerState);
+    public void OnPause(int time)
+    {
+        if (!IsServer) return;
+        SetCanMoveClientRpc(false);
+    }
 
-         return isNewServerState && isLastStateUndefinedOrDifferent && !reconciliationTimer.IsRunning && !extrapolationTimer.IsRunning;
-     }
+    public void OnResume()
+    {
+        if (!IsServer) return;
+        SetCanMoveClientRpc(true);
+    }
 
-     void HandleServerReconciliation()
-     {
-         if (!ShouldReconcile()) return;
-
-         float positionError;
-         int bufferIndex;
-
-         bufferIndex = lastServerState.tick % k_bufferSize;
-         if (bufferIndex - 1 < 0) return; // Not enough information to reconcile
-
-         StatePayLoad rewindState = IsHost ? serverStateBuffer.Get(bufferIndex - 1) : lastServerState; // Host RPCs execute immediately, so we can use the last server state
-         StatePayLoad clientState = IsHost ? clientStateBuffer.Get(bufferIndex - 1) : clientStateBuffer.Get(bufferIndex);
-         positionError = Vector3.Distance(rewindState.position, clientState.position);
-
-         if (positionError > reconciliationThreshold)
-         {
-             ReconcileState(rewindState);
-         }
-
-         lastProcessState = rewindState;
-     }
-
-     void ReconcileState(StatePayLoad rewindState)
-     {
-         transform.position = rewindState.position;
-         transform.rotation = rewindState.rotation;
-         playerCtrl.rb.velocity = rewindState.velocity;
-
-         if (!rewindState.Equals(lastServerState)) return;
-
-         clientStateBuffer.Add(rewindState, rewindState.tick % k_bufferSize);
-
-         // Replay all inputs from the rewind state to the current state
-         int tickToReplay = lastServerState.tick;
-
-         while (tickToReplay < networkTimer.CurrentTick)
-         {
-             int bufferIndex = tickToReplay % k_bufferSize;
-             StatePayLoad statePayload = ProcessMovement(clientInputBuffer.Get(bufferIndex));
-             clientStateBuffer.Add(statePayload, bufferIndex);
-             tickToReplay++;
-         }
-     }
-
-     void Extraplolate()
-     {
-         if (IsServer && extrapolationTimer.IsRunning)
-         {
-             transform.position += extrapolationState.position.With(y: 0);
-         }
-     }
-
-     void HandleExtrapolation(StatePayLoad latest, float latency)
-     {
-         if (ShouldExtrapolate(latency))
-         {
-             if (extrapolationState.position != default)
-             {
-                 latest = extrapolationState;
-             }
-
-             // Update position and rotation based on extrapolation
-             var posAdjustment = latest.velocity * (1 + latency * extrapolationMultiplier);
-             extrapolationState.position = posAdjustment;
-             extrapolationState.rotation = transform.rotation;
-             extrapolationState.velocity = latest.velocity;
-             extrapolationTimer.Start();
-         }
-         else
-         {
-             extrapolationTimer.Stop();
-         }
-     }
-
-     bool ShouldExtrapolate(float latency) => latency < extrapolationLimit && latency > Time.fixedDeltaTime;
-
-
-     [ServerRpc]
-     void SendToServerRPC(InputPayLoad input)
-     {
-         serverInputQueue.Enqueue(input);
-     }
-
-     void HandleServerTick()
-     {
-         if (!IsServer) return;
-
-         var bufferIndex = -1;
-         InputPayLoad inputPayload = default;
-         while (serverInputQueue.Count > 0)
-         {
-             inputPayload = serverInputQueue.Dequeue();
-
-             bufferIndex = inputPayload.tick % k_bufferSize;
-
-             StatePayLoad statePayload = ProcessMovement(inputPayload);
-             serverStateBuffer.Add(statePayload, bufferIndex);
-         }
-
-         if (bufferIndex == -1) return;
-         SendToClientRpc(serverStateBuffer.Get(bufferIndex));
-         HandleExtrapolation(serverStateBuffer.Get(bufferIndex), CalculateLatencyInMillis(inputPayload));
-     }
-
-     [ClientRpc]
-     void SendToClientRpc(StatePayLoad statePayload)
-     {
-         transform.position = statePayload.position;
-         if (!IsOwner) return;
-         lastServerState = statePayload;
-     }
-
-     void HandleClientTick()
-     {
-         if (!IsClient || !IsOwner) return;
-
-         var currentTick = networkTimer.CurrentTick;
-         var bufferIndex = currentTick % k_bufferSize;
-
-         InputPayLoad inputPayload = new InputPayLoad()
-         {
-             tick = currentTick,
-             timestamp = DateTime.Now,
-             networkObjID = NetworkObjectId,
-             inputVector = MoveInput(),
-             position = transform.position
-         };
-
-         clientInputBuffer.Add(inputPayload, bufferIndex);
-         SendToServerRPC(inputPayload);
-
-         StatePayLoad statePayload = ProcessMovement(inputPayload);
-         clientStateBuffer.Add(statePayload, bufferIndex);
-
-         HandleServerReconciliation();
-     }
-
-     StatePayLoad ProcessMovement(InputPayLoad inputPayLoad)
-     {
-         Move(inputPayLoad.inputVector);
-         Jump(inputPayLoad.inputVector);
-
-         return new StatePayLoad()
-         {
-             tick = inputPayLoad.tick,
-             networkObjID = inputPayLoad.networkObjID,
-             position = inputPayLoad.position,
-             rotation = transform.rotation,
-             velocity = playerCtrl.rb.velocity,
-             angularVelocity = playerCtrl.rb.angularVelocity
-         };
-     }*/
+    [ClientRpc]
+    private void SetCanMoveClientRpc(bool boolen)
+    {
+        CanMove = boolen;
+    }
 }
 

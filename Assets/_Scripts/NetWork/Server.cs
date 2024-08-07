@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using System.Linq;
 using UnityEngine;
 
 public class Server : NetworkBehaviour
@@ -11,21 +12,24 @@ public class Server : NetworkBehaviour
     const int k_bufferSize = 1024;
 
     //Netcode Server
-    CircularBuffer<StatePayLoad> serverStateBuffer;
     Queue<InputPayLoad> serverInputQueue;
 
     private void Awake()
     {
-        Instance = this;
-        DontDestroyOnLoad(this);
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-        serverStateBuffer = new CircularBuffer<StatePayLoad>(k_bufferSize);
-        serverInputQueue = new Queue<InputPayLoad>();
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        serverInputQueue = new Queue<InputPayLoad>(k_bufferSize);
     }
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        if(this==null) return;
         NetworkTimer.Instance.CurrentTick.OnValueChanged += (oldValue, newValue) => HandleTick();
     }
 
@@ -36,49 +40,44 @@ public class Server : NetworkBehaviour
 
     void HandleTick()
     {
-        InputPayLoad inputPayload = default;
-        while (serverInputQueue.Count > 0)
+        while (serverInputQueue.TryDequeue(out var inputPayload))
         {
-            inputPayload = serverInputQueue.Dequeue();
-
-            if (IsHost)
-            {
-                SimulateInputClientRpc(inputPayload);
-            }
-            else
-            {
-                SimulateInputServerRpc(inputPayload);
-            }
+            SimulateInputServerRpc(inputPayload, inputPayload.networkObjID);
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void SimulateInputServerRpc(InputPayLoad inputPayLoad)
+    public void SimulateInputServerRpc(InputPayLoad inputPayLoad, ulong excepClientID)
     {
-        SimulateInputClientRpc(inputPayLoad);
+        Debug.Log(excepClientID);
+        Debug.Log(OwnerClientId);
+        
+        List<ulong> targetClients = NetworkManager.Singleton.ConnectedClientsList
+            .Where(client => client.ClientId != excepClientID)
+            .Select(client => client.ClientId)
+            .ToList();
+
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = targetClients
+            }
+        };
+
+        SimulateInputClientRpc(inputPayLoad, clientRpcParams);
     }
 
     [ClientRpc]
-    public void SimulateInputClientRpc(InputPayLoad inputPayLoad)
+    public void SimulateInputClientRpc(InputPayLoad inputPayLoad, ClientRpcParams clientRpcParams = default)
     {
-        var networkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[inputPayLoad.networkObjID];
-
-        if (networkObject != null)
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(inputPayLoad.networkObjID, out var networkObject))
         {
-            var playerMovement = networkObject.GetComponent<IPlayerMovement>();
-
-            if (playerMovement != null)
-            {
-                playerMovement.Move(inputPayLoad.inputVector);
-                playerMovement.Jump(inputPayLoad.inputVector);
-            }
-
-            var objectMovement = networkObject.GetComponent<IObjectMovement>();
-
-            if (objectMovement != null)
-            {
-                objectMovement.Movement(inputPayLoad.inputVector);
-            }
+            Debug.LogWarning($"NetworkObject with ID {inputPayLoad.networkObjID} not found.");
+            return;
         }
+
+        networkObject.GetComponent<IPlayerMovement>()?.Movement(inputPayLoad.inputVector);
+        networkObject.GetComponent<IObjectMovement>()?.Movement(inputPayLoad.inputVector);
     }
 }

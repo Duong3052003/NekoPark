@@ -27,7 +27,7 @@ public class PlayerSetting : NetworkBehaviour
         nCharacter.OnValueChanged += (oldValue, newValue) => UpdateModel(newValue);
     }
 
-    private void SetUpPlayer()
+    public void SetUpPlayer()
     {
         skins = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().skins;
         controllers = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().controllers;

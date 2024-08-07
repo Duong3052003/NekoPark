@@ -4,7 +4,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class ItemTrigger : NetworkBehaviour, IItemTrigger
+public abstract class ItemTrigger : DeSpawn, IItemTrigger
 {
     [SerializeField] protected float velocityX;
     [SerializeField] protected float velocityY;
@@ -15,21 +15,25 @@ public abstract class ItemTrigger : NetworkBehaviour, IItemTrigger
         rb = GetComponent<Rigidbody2D>();
     }
 
-    protected virtual void Update()
-    {
-        Move(velocityX, velocityY);
-    }
-
-    protected virtual void Move(float _x, float _y)
-    {
-        rb.velocity = new Vector2(_x, _y);
-    }
-
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!collision.gameObject.CompareTag("Player") || !IsHost) return;
         Effect(Target(collision));
+        Despawn();
     }
 
+    protected override bool CanDespawn()
+    {
+        return true;
+    }
+
+    protected override void Despawn()
+    {
+        this.gameObject.GetComponent<NetworkObject>().Despawn();
+        Destroy(this.gameObject);
+    }
+
+    protected abstract void Move(float _x, float _y);
     public abstract void Effect(GameObject _gameObject);
     public abstract GameObject Target(Collider2D _collision);
 }

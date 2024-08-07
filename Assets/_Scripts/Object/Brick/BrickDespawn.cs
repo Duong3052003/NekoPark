@@ -27,17 +27,24 @@ public class BrickDespawn : DeSpawnByHp, ITakeDamaged
     {
         hpText.text = hpCurrent.Value.ToString();
         if (!CanDespawn()) return;
-        Debug.Log("Breaked");
+
+        var canDropItem = this.GetComponent<ItemDrop>();
+
+        if (canDropItem != null)
+        {
+            canDropItem.DropItem();
+        }
+
         Despawn();
     }
 
     protected override void Despawn()
     {
-        DespawnServerRpc();
+        DespawnClientRpc();
     }
 
-    [ServerRpc]
-    protected virtual void DespawnServerRpc()
+    [ClientRpc]
+    protected virtual void DespawnClientRpc()
     {
         LevelGenerator.Instance.DeSpawn(this.gameObject);
     }

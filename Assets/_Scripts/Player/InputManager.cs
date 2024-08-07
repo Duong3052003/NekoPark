@@ -4,16 +4,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class InputManager : MonoBehaviour
+public static class InputManager
 {
-    public static InputManager Instance { get; private set; }
-
-    private void Awake()
-    {
-        Instance = this;
-    }
-
-    public float InputHorizon()
+    public static float InputHorizon()
     {
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKey(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKey(KeyCode.RightArrow))
         {
@@ -29,7 +22,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    public float InputVertical()
+    public static float InputVertical()
     {
         if (Input.GetKeyDown("w") || Input.GetKey("w") || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetButtonDown("Jump") || Input.GetButton("Jump"))
         {
