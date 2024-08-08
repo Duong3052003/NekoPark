@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Windows;
 
-public class PlayerMove : NetworkBehaviour,IPlayerMovement,IObserver
+public class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObserver
 {
     private PlayerCtrl playerCtrl;
 
@@ -37,7 +37,7 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement,IObserver
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Owner);
 
-    private readonly float reconciliationThreshold = 100f;
+    private readonly float reconciliationThreshold = 2.5f;
 
     private void Awake()
     {
@@ -55,7 +55,7 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement,IObserver
         if (!IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static || !CanMove) return;
 
         MoveInput();
-        //Movement(MoveInput());
+        Movement(MoveInput());
     }
 
     private void OnEnable()
@@ -87,7 +87,8 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement,IObserver
         {
             tick = currentTick,
             timestamp = DateTime.Now,
-            networkObjID = NetworkObjectId,
+            OwnerObjID = OwnerClientId,
+            NetworkObjID = NetworkObjectId,
             inputVector = MoveInput(),
             position = transform.position
         };
@@ -95,7 +96,7 @@ public class PlayerMove : NetworkBehaviour,IPlayerMovement,IObserver
         Server.Instance.OnClientInput(inputPayload);
     }
 
-    public void Movement(Vector2 inputVector)
+    public void Movement(Vector3 inputVector)
     {
         if (playerCtrl.rb.bodyType == RigidbodyType2D.Static) return;
         Move(inputVector);

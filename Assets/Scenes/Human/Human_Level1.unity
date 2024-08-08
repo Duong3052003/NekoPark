@@ -18113,7 +18113,7 @@ PrefabInstance:
       objectReference: {fileID: 7539240349293113528, guid: 12d33fabea16f344ba331faf4adcae10, type: 3}
     - target: {fileID: 8870279052952092, guid: cdcc7e4e95fd4d54eb2c95dc8e6e395b, type: 3}
       propertyPath: isHost.Array.data[0]
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8870279052952092, guid: cdcc7e4e95fd4d54eb2c95dc8e6e395b, type: 3}
       propertyPath: isHost.Array.data[1]

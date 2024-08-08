@@ -42,16 +42,13 @@ public class Server : NetworkBehaviour
     {
         while (serverInputQueue.TryDequeue(out var inputPayload))
         {
-            SimulateInputServerRpc(inputPayload, inputPayload.networkObjID);
+            SimulateInputServerRpc(inputPayload, inputPayload.OwnerObjID);
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
     public void SimulateInputServerRpc(InputPayLoad inputPayLoad, ulong excepClientID)
-    {
-        Debug.Log(excepClientID);
-        Debug.Log(OwnerClientId);
-        
+    {   
         List<ulong> targetClients = NetworkManager.Singleton.ConnectedClientsList
             .Where(client => client.ClientId != excepClientID)
             .Select(client => client.ClientId)
@@ -71,13 +68,12 @@ public class Server : NetworkBehaviour
     [ClientRpc]
     public void SimulateInputClientRpc(InputPayLoad inputPayLoad, ClientRpcParams clientRpcParams = default)
     {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(inputPayLoad.networkObjID, out var networkObject))
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(inputPayLoad.NetworkObjID, out var networkObject))
         {
-            Debug.LogWarning($"NetworkObject with ID {inputPayLoad.networkObjID} not found.");
+            Debug.LogWarning($"NetworkObject with ID {inputPayLoad.OwnerObjID} not found.");
             return;
         }
 
-        networkObject.GetComponent<IPlayerMovement>()?.Movement(inputPayLoad.inputVector);
-        networkObject.GetComponent<IObjectMovement>()?.Movement(inputPayLoad.inputVector);
+        networkObject.GetComponent<IObjectServerMovement>()?.Movement(inputPayLoad.inputVector);
     }
 }

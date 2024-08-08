@@ -9,7 +9,8 @@ public struct InputPayLoad : INetworkSerializable
 {
     public int tick;
     public DateTime timestamp;
-    public ulong networkObjID;
+    public ulong OwnerObjID;
+    public ulong NetworkObjID;
     public Vector3 inputVector;
     public Vector3 position;
 
@@ -17,7 +18,8 @@ public struct InputPayLoad : INetworkSerializable
     {
         serializer.SerializeValue(ref tick);
         serializer.SerializeValue(ref timestamp);
-        serializer.SerializeValue(ref networkObjID);
+        serializer.SerializeValue(ref OwnerObjID);
+        serializer.SerializeValue(ref NetworkObjID);
         serializer.SerializeValue(ref inputVector);
         serializer.SerializeValue(ref position);
     }

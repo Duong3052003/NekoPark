@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Ball : NetworkBehaviour,IObjectMovement,IObserver
+public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver
 {
     private int damage = 1;
     private Rigidbody2D rb;
@@ -54,7 +54,8 @@ public class Ball : NetworkBehaviour,IObjectMovement,IObserver
         {
             tick = currentTick,
             timestamp = System.DateTime.Now,
-            networkObjID = NetworkObjectId,
+            OwnerObjID = OwnerClientId,
+            NetworkObjID = NetworkObjectId,
             inputVector = _inputVector,
             position = transform.position
         };
@@ -81,6 +82,9 @@ public class Ball : NetworkBehaviour,IObjectMovement,IObserver
         Vector2 reflectDirection = Vector2.Reflect(new Vector2(velocityX,velocityY), normal);
 
         SendMovementToServer(reflectDirection);
+
+        if (!IsOwner) return;
+        Movement(reflectDirection);
     }
 
     private void ChangedGravity()

@@ -94,6 +94,8 @@ public class LevelGenerator : Spawner,IObserver
                 if (levelStorage.items[j] == null) return;
                 GameObject newItem = Instantiate(levelStorage.items[j].gameObject);
 
+                Debug.Log(newItem.name);
+
                 if (levelStorage.isHost[j] == true)
                 {
                     newItem.GetComponent<NetworkObject>().SpawnWithOwnership(0);

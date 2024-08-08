@@ -10,21 +10,6 @@ public class PlayerSpawn : NetworkBehaviour
     [SerializeField] private float posRanged = 5f;
     public CinemachineTargetGroup targetGroup;
 
-    private void Awake()
-    {
-        try
-        {
-            targetGroup = GameObject.Find("TargetGroupPlayer").GetComponent<CinemachineTargetGroup>();
-        }
-        catch
-        {
-            Debug.Log("Khong co targetGroupPlayer trong Scene nay");
-        }
-
-        if (targetGroup == null) return;
-        AddPlayersToTargetGroup();
-    }
-
     private void OnEnable()
     {
         if (targetGroup == null) return;
@@ -39,6 +24,7 @@ public class PlayerSpawn : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         UpdatePosServerRpc();
+        FindAndAddTargetGroup();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -46,6 +32,22 @@ public class PlayerSpawn : NetworkBehaviour
     {
         transform.position = new Vector2(Random.Range(-posRanged, posRanged), 1);
         transform.rotation = new Quaternion(0, 0, 0, 0);
+    }
+
+    private void FindAndAddTargetGroup()
+    {
+        try
+        {
+            Debug.Log("Phat hien co targetGroupPlayer trong Scene nay");
+            targetGroup = GameObject.Find("TargetGroupPlayer").GetComponent<CinemachineTargetGroup>();
+        }
+        catch
+        {
+            Debug.Log("Khong co targetGroupPlayer trong Scene nay");
+        }
+
+        if (targetGroup == null) return;
+        AddPlayersToTargetGroup();
     }
 
     void AddPlayersToTargetGroup()
