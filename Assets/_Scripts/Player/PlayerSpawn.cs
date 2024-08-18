@@ -23,7 +23,6 @@ public class PlayerSpawn : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        UpdatePosServerRpc();
         FindAndAddTargetGroup();
     }
 

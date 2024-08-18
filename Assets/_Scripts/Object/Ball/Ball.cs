@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver
+public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectServerSpawn
 {
     private int damage = 1;
     private Rigidbody2D rb;
@@ -17,6 +18,7 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver
     const float k_serverTickRate = 60f; // 60 FPS
     const int k_bufferSize = 1024;
     public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0, 0, 0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    
     private float reconciliationThreshold = 2.5f;
 
     private void Awake()
@@ -67,11 +69,11 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver
     {
         if (!IsOwner) return;
         AddForceToServer(collision);
-
+        Debug.Log(collision.gameObject.name);
         ITakeDamaged objTakeDamaged = collision.gameObject.GetComponent<ITakeDamaged>();
         if (objTakeDamaged != null)
         {
-            objTakeDamaged.TakeDamagedServerRpc(damage);
+            objTakeDamaged.TakeDamaged(damage);
         }
     }
 
@@ -148,5 +150,16 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver
     private void SetCanMoveClientRpc(bool boolen)
     {
         canMove = boolen;
+    }
+
+    public void Spawn(Vector3 inputVector)
+    {
+        SpawnClientRPC(inputVector);
+    }
+
+    [ClientRpc]
+    private void SpawnClientRPC(Vector3 inputVector)
+    {
+        transform.position = inputVector;
     }
 }

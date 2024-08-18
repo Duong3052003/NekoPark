@@ -406,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 827045018
+  GlobalObjectIdHash: 3887293421
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -577,9 +577,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17a9af0e640bd9e4b9aa3c83f0b5fe71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  takeDameLayer:
-    serializedVersion: 2
-    m_Bits: 128
+  hpBarPrefab: {fileID: 5547387330414121776, guid: 247ae8b1a746b5041bd27d58ed57a3fc, type: 3}
+  CanvasWorldSpacePrefab: {fileID: 2696021214243124683, guid: 40ab0425ac301764f8af8082022ac2f9, type: 3}
+  hpMax: 3
 --- !u!1 &3286091562618086778
 GameObject:
   m_ObjectHideFlags: 0

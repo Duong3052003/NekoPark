@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class DeSpawnByHp : DeSpawn
 {
-    protected NetworkVariable<int> hpCurrent = new NetworkVariable<int>(0);
+    protected NetworkVariable<float> hpCurrent = new NetworkVariable<float>(
+       0,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Owner);
 
     protected override bool CanDespawn()
     {

@@ -64,6 +64,7 @@ public class _ScenesManager : NetworkBehaviour
 
         PlayerManager.Instance.SetBodyTypeAllPlayersServerRpc(0);
         PlayerManager.Instance.SetupPlayersClientRPC();
+        PlayerManager.Instance.GetSettingStatusPlayer();
 
         NetworkTimer.Instance.OnPauseServerRpc(5);
     }

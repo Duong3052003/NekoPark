@@ -17,13 +17,18 @@ public class BrickDespawn : DeSpawnByHp, ITakeDamaged
         hpCurrent.OnValueChanged += (oldValue, newValue) => Breaked(newValue);
     }
 
+    public void TakeDamaged(int damage)
+    {
+        TakeDamagedServerRpc(damage);
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void TakeDamagedServerRpc(int damage)
     {
         hpCurrent.Value = hpCurrent.Value - damage;
     }
 
-    private void Breaked(int _hpCurrent)
+    private void Breaked(float _hpCurrent)
     {
         hpText.text = hpCurrent.Value.ToString();
         if (!CanDespawn()) return;

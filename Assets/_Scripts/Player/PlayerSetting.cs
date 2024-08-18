@@ -23,8 +23,17 @@ public class PlayerSetting : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         PlayerManager.Instance.players.Add(this.gameObject);
+
+        if(!IsOwner) return;
+        playerHUDImg.SetActive(true);
         SetUpPlayer();
+
         nCharacter.OnValueChanged += (oldValue, newValue) => UpdateModel(newValue);
+    }
+
+    private void OnDisable()
+    {
+        playerHUDImg.SetActive(false);
     }
 
     public void SetUpPlayer()
@@ -38,8 +47,6 @@ public class PlayerSetting : NetworkBehaviour
             GetButton();
 
             UpdateModelServerRpc(color);
-            playerHUDImg.SetActive(true);
-
         }
     }
 

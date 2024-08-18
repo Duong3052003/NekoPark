@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using System.Linq;
+using Unity.VisualScripting;
 
 public class PlayerManager : NetworkBehaviour
 {
@@ -27,6 +29,15 @@ public class PlayerManager : NetworkBehaviour
         foreach (GameObject player in players)
         {
             player.SetActive(boollen);
+        }
+    }
+
+    public void GetSettingStatusPlayer()
+    {
+        foreach (GameObject player in players)
+        {
+            ulong idPlayer = player.GetComponent<NetworkObject>().OwnerClientId;
+            player.GetComponent<IPlayerStatus>().GetSetting(idPlayer);
         }
     }
 
@@ -78,5 +89,10 @@ public class PlayerManager : NetworkBehaviour
     public void SetPositionPlayersServerRpc(int numberPlayer, Vector3 pos)
     {
         players[numberPlayer].transform.position = pos;
+    }
+
+    public bool CheckGameOver()
+    {
+        return players.Count(obj => obj.activeSelf) == 1;
     }
 }

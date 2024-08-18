@@ -94,8 +94,6 @@ public class LevelGenerator : Spawner,IObserver
                 if (levelStorage.items[j] == null) return;
                 GameObject newItem = Instantiate(levelStorage.items[j].gameObject);
 
-                Debug.Log(newItem.name);
-
                 if (levelStorage.isHost[j] == true)
                 {
                     newItem.GetComponent<NetworkObject>().SpawnWithOwnership(0);
@@ -110,8 +108,7 @@ public class LevelGenerator : Spawner,IObserver
                     newItem.transform.SetParent(PlayerManager.Instance.players[i].transform);
                 }
 
-                newItem.transform.position = new Vector2(transformPlayers[i].position.x + levelStorage.itemsTransformX[j], transformPlayers[i].position.y + levelStorage.itemsTransformY[j]);
-
+                newItem.GetComponent<IObjectServerSpawn>().Spawn(new Vector2(transformPlayers[i].position.x + levelStorage.itemsTransformX[j], transformPlayers[i].position.y + levelStorage.itemsTransformY[j]));
             }
 
             indexId++;

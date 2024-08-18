@@ -19,4 +19,9 @@ public class GameManager : NetworkBehaviour
             Destroy(Instance);
         }
     }
+
+    public void GameOver()
+    {
+        //UI.GameOverScreen
+    }
 }

@@ -11,11 +11,18 @@ public class PlayerCtrl : MonoBehaviour
     public Animator animator { get; private set; }
     public PlayerMove playerMove { get; private set; }
     public PlayerSpawn playerSpawn { get; private set; }
+    public PlayerAnimator playerAnimator { get; private set; }
+    public Collider2D col { get; private set; }
 
 
     private void Awake()
     {
         LoadComponents();
+    }
+
+    private void OnEnable()
+    {
+        SetActivePlayer(true);
     }
 
     private void LoadComponents()
@@ -25,5 +32,21 @@ public class PlayerCtrl : MonoBehaviour
         animator = GetComponent<Animator>();
         playerMove = GetComponent<PlayerMove>();
         playerSpawn = GetComponent<PlayerSpawn>();
+        playerAnimator = GetComponent<PlayerAnimator>();
+        col = GetComponent<Collider2D>();
+    }
+
+    public void SetActivePlayer(bool boolen)
+    {
+        if (boolen == true)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            col.isTrigger = false;
+        }
+        else
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+            col.isTrigger = true;
+        }
     }
 }

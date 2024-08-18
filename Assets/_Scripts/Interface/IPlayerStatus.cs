@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITakeDamaged
+public interface IPlayerStatus
 {
-    void TakeDamaged(int damage);
+    void GetSetting(ulong _idPlayer);
 }
