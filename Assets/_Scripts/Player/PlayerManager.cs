@@ -20,15 +20,26 @@ public class PlayerManager : NetworkBehaviour
         }
         else
         {
-            Destroy(Instance);
+            Destroy(this.gameObject);
         }
     }
-    
-    public void SetActiveAllPlayers(bool boollen)
+
+    [ClientRpc]
+    public void SetActiveAllPlayersClientRpc(bool boollen)
     {
         foreach (GameObject player in players)
         {
             player.SetActive(boollen);
+        }
+    }
+
+    [ClientRpc]
+    public void RefreshPlayersClientRpc()
+    {
+        foreach (GameObject player in players)
+        {
+            player.SetActive(false);
+            player.SetActive(true);
         }
     }
 
@@ -93,6 +104,49 @@ public class PlayerManager : NetworkBehaviour
 
     public bool CheckGameOver()
     {
-        return players.Count(obj => obj.activeSelf) == 1;
+        return players.Count(obj => obj.activeSelf) <= 1;
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    public void DestroyPlayerServerRpc(ServerRpcParams rpcParams = default)
+    {
+        for(int i = 0; i < players.Count; i++)
+        {
+            if(players[i].gameObject.GetComponent<NetworkObject>().OwnerClientId == rpcParams.Receive.SenderClientId)
+            {
+                foreach (Transform child in players[i].gameObject.transform)
+                {
+                    var childNetwork = child.GetComponent<NetworkObject>();
+                    if (childNetwork != null && childNetwork.IsSpawned)
+                    {
+                        childNetwork.Despawn();
+                        Destroy(child.gameObject);
+                    }
+                }
+
+                DestroyAllOwnedObjects(rpcParams.Receive.SenderClientId);
+
+                Destroy(players[i].gameObject);
+            }
+        }
+    }
+
+    public void DestroyAllOwnedObjects(ulong clientId)
+    {
+        NetworkObject[] networkObjects = FindObjectsOfType<NetworkObject>();
+
+        foreach (NetworkObject networkObject in networkObjects)
+        {
+            if (networkObject.OwnerClientId == clientId)
+            {
+                networkObject.Despawn(true);
+                Destroy(networkObject.gameObject);
+            }
+        }
+    }
+
+    public void RemoveAllPlayers()
+    {
+        players.Clear();
     }
 }

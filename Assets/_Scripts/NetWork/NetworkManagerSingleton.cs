@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyPlayerPrefs : MonoBehaviour
+public class NetworkManagerSingleton : MonoBehaviour
 {
-    public static MyPlayerPrefs Instance { get; private set; }
+    public static NetworkManagerSingleton Instance { get; private set; }
 
     private void Awake()
     {
@@ -16,11 +16,7 @@ public class MyPlayerPrefs : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
-        }
-    }
 
-    public void SaveColor(int indexColor)
-    {
-        PlayerPrefs.SetInt("Color", indexColor);
+        }
     }
 }

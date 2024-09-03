@@ -19,7 +19,7 @@ public class _ScenesManager : NetworkBehaviour
         }
         else
         {
-            Destroy(Instance);
+            Destroy(this.gameObject);
         }
     }
 
@@ -43,6 +43,8 @@ public class _ScenesManager : NetworkBehaviour
         StartCoroutine(LoadLevel(sceneName));
 
         //SetPlayersStatic
+        PlayerManager.Instance.RefreshPlayersClientRpc();
+
         PlayerManager.Instance.SetBodyTypeAllPlayersServerRpc(2);
     }
 

@@ -23,7 +23,7 @@ public class TestRelay : MonoBehaviour
         }
         else
         {
-            Destroy(Instance);
+            Destroy(this.gameObject);
         }
     }
 
@@ -79,6 +79,19 @@ public class TestRelay : MonoBehaviour
         catch (RelayServiceException e)
         {
             Debug.Log(e);
+        }
+    }
+
+    public void LeaveRelay()
+    {
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+        {
+            NetworkManager.Singleton.Shutdown();
+            Debug.Log("Disconnected from Relay.");
+        }
+        else
+        {
+            Debug.LogWarning("No active Relay session to disconnect from.");
         }
     }
 }

@@ -77,6 +77,7 @@ public class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObserver
 
     void HandleClientTick()
     {
+        if(this == null) return;
         UpdateNetworkVariables();
 
         if (!IsOwner) return;

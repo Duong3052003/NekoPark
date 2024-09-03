@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2289751741784781835}
   - component: {fileID: 25829464141419890}
   - component: {fileID: 7756445887642637987}
+  - component: {fileID: 5196122849776629556}
   m_Layer: 0
   m_Name: LevelGenerator
   m_TagString: Untagged
@@ -50,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 634733695
+  GlobalObjectIdHash: 1960746888
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -73,6 +74,7 @@ MonoBehaviour:
   holder: {fileID: 8187872767834515465}
   prefab: {fileID: 8403506746482345233, guid: 43a485f7a048d114b8ea4ed0f35c106b, type: 3}
   poolObjs: []
+  brickHolders: []
   size: {x: 6, y: 5}
   offset: {x: 3.55, y: 1.3}
   gradient:
@@ -105,14 +107,24 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  TestBrick: {fileID: 0}
-  testK: 0
   transformPlayers:
   - {fileID: 6186041187019897633}
   - {fileID: 1953832183759791039}
   - {fileID: 5783506816799828851}
   - {fileID: 8409121921887388882}
   generateMapBtn: {fileID: 0}
+--- !u!114 &5196122849776629556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 746003326291428551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abef0ab1539ff7347a61c26521f88e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &110597657405135054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -127,7 +139,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6984313889913621488, guid: 77984de69f86c224bb3e5768b7581127, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1241860944
+      value: 3936677298
       objectReference: {fileID: 0}
     - target: {fileID: 8447583219780672540, guid: 77984de69f86c224bb3e5768b7581127, type: 3}
       propertyPath: m_LocalPosition.x
@@ -233,7 +245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9046237619503043293, guid: 4259379be65fd0d40922a667574aeb9d, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2312030871
+      value: 624798206
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -259,7 +271,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6984313889913621488, guid: 77984de69f86c224bb3e5768b7581127, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 48558446
+      value: 1261356904
       objectReference: {fileID: 0}
     - target: {fileID: 8447583219780672540, guid: 77984de69f86c224bb3e5768b7581127, type: 3}
       propertyPath: m_LocalPosition.x
@@ -325,7 +337,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6984313889913621488, guid: 77984de69f86c224bb3e5768b7581127, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3321034248
+      value: 4104398178
       objectReference: {fileID: 0}
     - target: {fileID: 8447583219780672540, guid: 77984de69f86c224bb3e5768b7581127, type: 3}
       propertyPath: m_LocalPosition.x
@@ -391,7 +403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6984313889913621488, guid: 77984de69f86c224bb3e5768b7581127, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2867286764
+      value: 3172740292
       objectReference: {fileID: 0}
     - target: {fileID: 8447583219780672540, guid: 77984de69f86c224bb3e5768b7581127, type: 3}
       propertyPath: m_LocalPosition.x

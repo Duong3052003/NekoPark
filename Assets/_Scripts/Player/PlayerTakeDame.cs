@@ -6,14 +6,9 @@ using UnityEngine.UI;
 
 public class PlayerTakeDame : PlayerHp
 {
-    public override void TakeDamaged(int _CurrentHp)
+    public override void TakeDamaged(int damage)
     {
-        TakeDamagedServerRpc(_CurrentHp);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void TakeDamagedServerRpc(int damage)
-    {
+        if (!IsOwner) return;
         hpCurrent.Value = hpCurrent.Value - damage;
     }
 

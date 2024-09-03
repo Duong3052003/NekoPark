@@ -13823,6 +13823,8 @@ MonoBehaviour:
   hostBtnScreen: {fileID: 1392839260}
   settingLobbyScreen: {fileID: 925017594}
   choiceLevelScreen: {fileID: 1897052728}
+  gameOverScreen: {fileID: 0}
+  gameOverScreenClient: {fileID: 0}
   lobbyGameObj: {fileID: 1792007053115647195, guid: ca996bfe72beac64999935bbfd7e298a, type: 3}
   listLobby: {fileID: 1576169020}
   isPrivateTxt: {fileID: 1236963700}

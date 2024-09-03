@@ -25,7 +25,7 @@ public class NetworkTimer : NetworkBehaviour
     private void Awake()
     {
         Instance = this;
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()

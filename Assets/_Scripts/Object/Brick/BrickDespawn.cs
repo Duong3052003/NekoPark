@@ -45,7 +45,15 @@ public class BrickDespawn : DeSpawnByHp, ITakeDamaged
 
     protected override void Despawn()
     {
-        DespawnClientRpc();
+        DestroyServerRPC();
+    }
+
+    [ServerRpc]
+    protected virtual void DestroyServerRPC()
+    {
+        NetworkObject netObj = this.GetComponent<NetworkObject>();
+        netObj.Despawn();
+        Destroy(netObj.gameObject);
     }
 
     [ClientRpc]

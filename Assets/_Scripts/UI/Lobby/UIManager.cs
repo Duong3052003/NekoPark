@@ -15,7 +15,7 @@ using UnityEngine.UIElements;
 using static Cinemachine.CinemachineTriggerAction.ActionSettings;
 using static Cinemachine.DocumentationSortingAttribute;
 
-public class UIManager : MonoBehaviour
+public class UIManager : NetworkBehaviour
 {
     public static UIManager Instance { get; private set; }
 
@@ -28,13 +28,14 @@ public class UIManager : MonoBehaviour
 
     private string nameScene = "Scenes/SampleScene";
 
-
     //Screen
     [SerializeField] private GameObject mainMenuScreen;
     [SerializeField] private GameObject listLobbyScreen;
     [SerializeField] private GameObject hostBtnScreen;
     [SerializeField] private GameObject settingLobbyScreen;
     [SerializeField] private GameObject choiceLevelScreen;
+    [SerializeField] private GameObject gameOverScreen;
+    [SerializeField] private GameObject gameOverScreenClient;
 
     //List Lobby
     [SerializeField] private GameObject lobbyGameObj;
@@ -64,13 +65,16 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            Destroy(Instance);
+            Destroy(this.gameObject);
+
         }
     }
 
     private async void Start()
     {
         await UnityServices.InitializeAsync();
+
+        if (AuthenticationService.Instance.IsSignedIn) return;
 
         AuthenticationService.Instance.SignedIn += () =>
         {
@@ -320,7 +324,6 @@ public class UIManager : MonoBehaviour
     {
         try
         {
-            SettingLobbyScreen();
             await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
             joinedLobby= null;
         }
@@ -584,5 +587,46 @@ public class UIManager : MonoBehaviour
             choiceLevelScreen.SetActive(true);
         }
     }
+
+    public void GameOverScreen()
+    {
+        GameOverScreenServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void GameOverScreenServerRpc()
+    {
+        GameOverScreenClientRpc();
+    }
+
+    [ClientRpc]
+    private void GameOverScreenClientRpc()
+    {
+        if (IsHost)
+        {
+            gameOverScreen.SetActive(true);
+        }
+        else
+        {
+            gameOverScreenClient.SetActive(true);
+        }
+    }
     #endregion
+
+    public void Leave()
+    {
+        LeaveLobby();
+
+        gameOverScreenClient.SetActive(false);
+        gameOverScreen.SetActive(false);
+
+        mainMenuScreen.SetActive(true);
+        backGround.SetActive(true);
+
+        PlayerManager.Instance.DestroyPlayerServerRpc();
+        PlayerManager.Instance.RemoveAllPlayers();
+
+        NetworkManager.Singleton.SceneManager.LoadScene("MainScreen", LoadSceneMode.Single);
+        TestRelay.Instance.LeaveRelay();
+    }
 }

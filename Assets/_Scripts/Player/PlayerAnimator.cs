@@ -7,10 +7,16 @@ using UnityEngine;
 public class PlayerAnimator : NetworkBehaviour
 {
     private PlayerCtrl playerCtrl;
-  
+
     private void Awake()
     {
         playerCtrl = GetComponent<PlayerCtrl>();
+    }
+
+    private void OnEnable()
+    {
+        Physics2D.IgnoreLayerCollision(3, 7, false);
+        playerCtrl.animator.SetLayerWeight(1, 0);
     }
 
     void Update()
@@ -41,7 +47,7 @@ public class PlayerAnimator : NetworkBehaviour
         this.gameObject.SetActive(false);
 
         if (!PlayerManager.Instance.CheckGameOver()) return;
-
+        UIManager.Instance.GameOverScreen();
     }
 
     public IEnumerator Invisible(float _time)

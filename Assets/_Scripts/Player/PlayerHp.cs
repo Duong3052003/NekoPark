@@ -77,7 +77,6 @@ public abstract class PlayerHp : DeSpawnByHp, ITakeDamaged, IPlayerStatus
         {
             hpBar = networkObject.GetComponent<Slider>();
             hpBar.value = hpCurrent.Value / hpMax;
-            Debug.Log(hpBar + "Nhan dc serverRPC");
         }
         else
         {
@@ -87,8 +86,7 @@ public abstract class PlayerHp : DeSpawnByHp, ITakeDamaged, IPlayerStatus
 
     protected virtual void Update()
     {
-        if (!IsOwner || hpBar == null) return;
-        Debug.Log(hpBar + "id client: "+ OwnerClientId + "id obj: " +hpBar.gameObject.GetComponent<NetworkObject>().NetworkObjectId);
+        if (hpBar == null) return;
         hpBar.gameObject.transform.rotation = Camera.main.transform.rotation;
     }
 
