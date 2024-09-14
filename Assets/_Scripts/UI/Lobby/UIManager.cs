@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using TMPro;
-using Unity.Mathematics;
 using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -72,21 +71,30 @@ public class UIManager : NetworkBehaviour
 
     private async void Start()
     {
-        await UnityServices.InitializeAsync();
-
-        if (AuthenticationService.Instance.IsSignedIn) return;
-
-        AuthenticationService.Instance.SignedIn += () =>
+        try
         {
-            Debug.Log("Sign in: " + AuthenticationService.Instance.PlayerId);
-        };
+            await UnityServices.InitializeAsync();
 
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            if (AuthenticationService.Instance.IsSignedIn) return;
 
-        playerName = "Player" + UnityEngine.Random.Range(10, 100);
-        playerNameTF.text = playerName;
+            AuthenticationService.Instance.SignedIn += () =>
+            {
+                Debug.Log("Sign in: " + AuthenticationService.Instance.PlayerId);
+            };
 
-        Debug.Log(playerName);
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+            playerName = "Player" + UnityEngine.Random.Range(10, 100);
+            playerNameTF.text = playerName;
+
+            Debug.Log(playerName);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error: " + ex.Message);
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     private void Update()
@@ -458,7 +466,7 @@ public class UIManager : NetworkBehaviour
         }
     }
 
-    public void UpdatePlayerLobby()
+    /*public void UpdatePlayerLobby()
     {
         int index = 0;
 
@@ -481,7 +489,7 @@ public class UIManager : NetworkBehaviour
             inforPlayer.SetInformation(player.Data["PlayerName"].Value, color);
             Debug.Log(player.Data["PlayerName"].Value + color);
         }
-    }
+    }*/
 
     private void GetIDLobby(Lobby lobby)
     {

@@ -24,4 +24,9 @@ public class LobbyGameObj : BaseButton
         Debug.Log("Pressed");
         UIManager.Instance.JoinLobby(index);
     }
+
+    private void OnDisable()
+    {
+        Destroy(this.gameObject);
+    }
 }

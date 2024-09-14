@@ -108,11 +108,39 @@ public class LevelGenerator : Spawner,IObserver
                     newItem.transform.SetParent(PlayerManager.Instance.players[i].transform);
                 }
 
-                newItem.GetComponent<IObjectServerSpawn>().Spawn(new Vector2(transformPlayers[i].position.x + levelStorage.itemsTransformX[j], transformPlayers[i].position.y + levelStorage.itemsTransformY[j]));
+                newItem.GetComponent<IObjectServerSpawn>().Spawn(new Vector2(transformPlayers[i].position.x + levelStorage.itemsTransformX[j], transformPlayers[i].position.y + levelStorage.itemsTransformY[j]),Vector2.zero);
             }
 
             indexId++;
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SpawnObjServerRpc(int indexItem,ulong idOwner, Vector2 posSpawn, Vector2 velocityVector)
+    {
+        LevelStorage levelStorage = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>();
+        if (levelStorage.items[indexItem] == null) return;
+        GameObject newItem = Instantiate(levelStorage.items[indexItem].gameObject);
+        newItem.GetComponent<NetworkObject>().SpawnWithOwnership(idOwner);
+        newItem.GetComponent<IObjectServerSpawn>().Spawn(posSpawn, velocityVector);
+    }
+
+    public List<GameObject> CallAllBallsOfClient(ulong clientId)
+    {
+        GameObject[] allBalls = GameObject.FindGameObjectsWithTag("Bullet");
+
+        List<GameObject> clientBalls = new List<GameObject>();
+
+        foreach (GameObject ball in allBalls)
+        {
+            NetworkObject networkObject = ball.GetComponent<NetworkObject>();
+            if (networkObject != null && networkObject.OwnerClientId == clientId)
+            {
+                clientBalls.Add(ball);
+            }
+        }
+
+        return clientBalls;
     }
 
     [ServerRpc]

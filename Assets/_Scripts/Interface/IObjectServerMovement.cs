@@ -10,5 +10,5 @@ public interface IObjectServerMovement
 
 public interface IObjectServerSpawn
 {
-    void Spawn(Vector3 inputVector);
+    void Spawn(Vector3 inputVector, Vector2 velocityVector);
 }

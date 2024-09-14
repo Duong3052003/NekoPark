@@ -18,17 +18,21 @@ public class PlayerSetting : NetworkBehaviour
 
     private int color;
 
-    private NetworkVariable<int> nCharacter = new NetworkVariable<int>(0);
+    private NetworkVariable<int> nCharacter = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
 
     public override void OnNetworkSpawn()
     {
         PlayerManager.Instance.players.Add(this.gameObject);
 
-        if(!IsOwner) return;
+        skins = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().skins;
+        controllers = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().controllers;
+
+        nCharacter.OnValueChanged += (oldValue, newValue) => UpdateModel();
+
+        UpdateModel();
+        if (!IsOwner) return;
         playerHUDImg.SetActive(true);
         SetUpPlayer();
-
-        nCharacter.OnValueChanged += (oldValue, newValue) => UpdateModel(newValue);
     }
 
     private void OnDisable()
@@ -38,15 +42,10 @@ public class PlayerSetting : NetworkBehaviour
 
     public void SetUpPlayer()
     {
-        skins = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().skins;
-        controllers = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().controllers;
-
         if (IsOwner)
         {
             GetDataPlayer();
             GetButton();
-
-            UpdateModelServerRpc(color);
         }
     }
 
@@ -90,21 +89,10 @@ public class PlayerSetting : NetworkBehaviour
         });
     }
 
-    private void UpdateModel(int _color)
+    private void UpdateModel()
     {
-        transform.GetComponent<SpriteRenderer>().sprite = skins[_color];
-        transform.GetComponent<Animator>().runtimeAnimatorController = controllers[_color];
-    }
-
-    [ServerRpc]
-    private void UpdateModelServerRpc(int _color)
-    {
-        nCharacter.Value = _color;
-
-        if (IsOwner)
-        {
-            UpdateModel(_color);
-        }
+        transform.GetComponent<SpriteRenderer>().sprite = skins[nCharacter.Value];
+        transform.GetComponent<Animator>().runtimeAnimatorController = controllers[nCharacter.Value];
     }
 
     public void ChangedSkinBtn()
@@ -119,7 +107,7 @@ public class PlayerSetting : NetworkBehaviour
 
         UIManager.Instance.UpdateColorPlayer(color);
 
-        UpdateModelServerRpc(color);
+        nCharacter.Value = color;
     }
 
     /* public override void OnNetworkSpawn()

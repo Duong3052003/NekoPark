@@ -13,7 +13,7 @@ public class PlayerAnimator : NetworkBehaviour
         playerCtrl = GetComponent<PlayerCtrl>();
     }
 
-    private void OnEnable()
+    private void Start()
     {
         Physics2D.IgnoreLayerCollision(3, 7, false);
         playerCtrl.animator.SetLayerWeight(1, 0);

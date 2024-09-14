@@ -7,6 +7,7 @@ using UnityEngine;
 public class ItemDrop : Spawner
 {
     [SerializeField] protected List<GameObject> listObj;
+    [SerializeField] protected float rateDrop;
 
     public virtual void DropItem()
     {
@@ -24,6 +25,19 @@ public class ItemDrop : Spawner
 
     protected virtual void GetRandomItem()
     {
+        if(!CheckRateDropItem()) return;
         prefab = RandomGameObjectFromList.GetRandomGameObject(listObj);
+    }
+
+    bool CheckRateDropItem()
+    {
+        int randomValue = Random.Range(0, 100);
+
+        if (randomValue < rateDrop)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

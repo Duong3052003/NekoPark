@@ -8,6 +8,7 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
 {
     private int damage = 1;
     private Rigidbody2D rb;
+    private Collider2D col;
     private float forceMagnitude = 10f;
     private float velocityX=0;
     private float velocityY=-0.5f;
@@ -24,11 +25,17 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
     }
 
     public override void OnNetworkSpawn()
     {
         ReconcileTransform();
+    }
+
+    private void Start()
+    {
+        col.enabled = true;
     }
 
     private void Update()
@@ -40,6 +47,17 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
     private void FixedUpdate()
     {
         ReconcileTransform();
+    }
+
+    public void SetVelocity(Vector2 velocityVector)
+    {
+        velocityX = velocityVector.x;
+        velocityY = velocityVector.y;
+    }
+
+    public Vector2 GetVelocity()
+    {
+        return new Vector2(velocityX, velocityY);
     }
 
     private void Move(float _x,float _y)
@@ -87,6 +105,7 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
 
         if (!IsOwner) return;
         Movement(reflectDirection);
+        transform.position += new Vector3(velocityX/15, velocityY/15, 0f);
     }
 
     private void ChangedGravity()
@@ -114,6 +133,20 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
             if (positionError < reconciliationThreshold) return;
             transform.position = nPosition.Value;
         }
+    }
+
+    void ResetCollider(Collider2D collider)
+    {
+        collider.enabled = false;
+        StartCoroutine(ReEnableCollider(collider));
+    }
+
+    IEnumerator ReEnableCollider(Collider2D collider)
+    {
+        Debug.Log("Cho 1 frame");
+        yield return null;
+        collider.enabled = true;
+        Debug.Log("Mo lai collider");
     }
 
     private void OnEnable()
@@ -152,8 +185,9 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
         canMove = boolen;
     }
 
-    public void Spawn(Vector3 inputVector)
+    public void Spawn(Vector3 inputVector, Vector2 velocityVector = default)
     {
+        //Vector2 velocityVector = default
         SpawnClientRPC(inputVector);
     }
 
