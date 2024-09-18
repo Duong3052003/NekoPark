@@ -24,9 +24,12 @@ public abstract class PlayerHp : DeSpawnByHp, ITakeDamaged, IPlayerStatus
 
     public override void OnNetworkSpawn()
     {
-        if(!IsOwner) return;
-        hpCurrent.Value = hpMax;
-        hpCurrent.OnValueChanged += (oldValue, newValue) => UpdateHpBar(newValue);
+        if (IsOwner)
+        {
+            hpCurrent.Value = hpMax;
+        }
+
+        hpCurrent.OnValueChanged += (oldValue, newValue) => UpdateHpBar();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -96,6 +99,6 @@ public abstract class PlayerHp : DeSpawnByHp, ITakeDamaged, IPlayerStatus
     }
 
     protected override abstract void Despawn();
-    protected abstract void UpdateHpBar(float _hpCurrent);
+    protected abstract void UpdateHpBar();
     public abstract void TakeDamaged(int damage);
 }

@@ -17,7 +17,7 @@ public abstract class ItemTrigger : DeSpawn, IItemTrigger
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.gameObject.CompareTag("Player") || !IsHost) return;
+        if (!collision.gameObject.CompareTag("Player") || !IsHost || Target(collision)== null) return;
         Effect(Target(collision));
         Despawn();
     }

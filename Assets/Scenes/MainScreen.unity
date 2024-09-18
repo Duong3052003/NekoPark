@@ -1579,6 +1579,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8738843005137374525, guid: 7c748305cc2ef5846a88a3a08597e113, type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738843005137374525, guid: 7c748305cc2ef5846a88a3a08597e113, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738843005137374525, guid: 7c748305cc2ef5846a88a3a08597e113, type: 3}
       propertyPath: m_ChildScaleWidth
       value: 1
       objectReference: {fileID: 0}

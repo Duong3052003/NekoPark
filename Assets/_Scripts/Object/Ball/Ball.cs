@@ -87,7 +87,7 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
     {
         if (!IsOwner) return;
         AddForceToServer(collision);
-        Debug.Log(collision.gameObject.name);
+
         ITakeDamaged objTakeDamaged = collision.gameObject.GetComponent<ITakeDamaged>();
         if (objTakeDamaged != null)
         {
@@ -105,7 +105,8 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
 
         if (!IsOwner) return;
         Movement(reflectDirection);
-        transform.position += new Vector3(velocityX/15, velocityY/15, 0f);
+        rb.AddForce(new Vector3(velocityX, velocityY, 0f)*100);
+        Debug.Log(new Vector3(velocityX, velocityY, 0f));
     }
 
     private void ChangedGravity()

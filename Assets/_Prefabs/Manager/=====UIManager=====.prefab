@@ -3041,7 +3041,7 @@ MonoBehaviour:
   choiceLevelScreen: {fileID: 5316314369244833404}
   gameOverScreen: {fileID: 6051824594009982643}
   gameOverScreenClient: {fileID: 3799559241098816668}
-  lobbyGameObj: {fileID: 1792007053115647195, guid: ca996bfe72beac64999935bbfd7e298a, type: 3}
+  lobbyGameObj: {fileID: 8313644735172149183, guid: 5b7ab49f6bc1ab24dbf8e79798be3b9d, type: 3}
   listLobby: {fileID: 8986802093244171464}
   isPrivateTxt: {fileID: 230351235362205191}
   informationPlayer: {fileID: 11360054006559657, guid: c70302c482e7d35439fd4b1741b2cb78, type: 3}

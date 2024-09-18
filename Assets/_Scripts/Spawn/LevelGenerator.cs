@@ -14,12 +14,12 @@ public class LevelGenerator : Spawner,IObserver
 
     [SerializeField] private Vector2Int size;
     [SerializeField] private Vector2 offset;
-    [SerializeField] private Gradient gradient;
 
     [SerializeField] private List<Transform> transformPlayers;
     [SerializeField] private Button generateMapBtn;
 
     private GameObject brick;
+    private int cdRespam;
 
     private void Awake()
     {
@@ -45,17 +45,15 @@ public class LevelGenerator : Spawner,IObserver
         });*/
     }
 
-    private void GenerateBricks()
+    private void GenerateBricks(int numRow)
     {
         for (int k = 0; k < brickHolders.Length; k++)
         {
             for (int i = 0; i < size.x; i++)
             {
-                for (int j = 0; j < size.y; j++)
+                for (int j = 0; j < numRow; j++)
                 {
                     GenerateBrickServerRPC(k,i,j);
-
-                    brick.GetComponent<SpriteRenderer>().color = gradient.Evaluate((float)j / (size.y - 1));
                 }
             }
         }
@@ -69,6 +67,9 @@ public class LevelGenerator : Spawner,IObserver
         brick.transform.position = brickHolders[k].transform.position + new Vector3((float)((size.x - 1) * 0.5f - i) * offset.x, j * offset.y, 0);
 
         brick.transform.SetParent(brickHolders[k].transform);
+
+        brick.GetComponent<BrickDespawn>().SetColorGradientClientRpc((float)j / (size.y - 1));
+        brick.GetComponent<BrickDespawn>().SetHp(3*(j+1));
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -147,7 +148,7 @@ public class LevelGenerator : Spawner,IObserver
     public void GenerateMapServerRpc()
     {
         SetActivePlayersServerRPC();
-        GenerateBricks();
+        GenerateBricks(size.y);
     }
 
     private void OnEnable()
@@ -176,7 +177,7 @@ public class LevelGenerator : Spawner,IObserver
 
     public void OnResume()
     {
-        GenerateBricks();
+        GenerateBricks(size.y);
         if (!IsHost) return;
         SetUpLevelServerRPC();
     }

@@ -18159,7 +18159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8870279052952092, guid: cdcc7e4e95fd4d54eb2c95dc8e6e395b, type: 3}
       propertyPath: itemsTransformY.Array.data[1]
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 2440254394877795585, guid: cdcc7e4e95fd4d54eb2c95dc8e6e395b, type: 3}
       propertyPath: m_LocalPosition.x

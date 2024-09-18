@@ -18,11 +18,12 @@ public class PlayerTakeDame : PlayerHp
         playerCtrl.playerAnimator.Desappear();
     }
 
-    protected override void UpdateHpBar(float _hpCurrent)
+    protected override void UpdateHpBar()
     {
         StartCoroutine(playerCtrl.playerAnimator.Invisible(3f));
 
-        hpBar.value = _hpCurrent / hpMax;
+        if (hpBar == null) return;
+        hpBar.value = hpCurrent.Value / hpMax;
 
         if (hpCurrent.Value > 0) return;
         Despawn();

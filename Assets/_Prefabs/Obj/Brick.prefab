@@ -403,8 +403,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a72dca8ec8b743468150f130fb4ac3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpMax: 5
   hpText: {fileID: 7075257861664879568}
+  gradient:
+    serializedVersion: 2
+    key0: {r: 0.8018868, g: 0.7349901, b: 0.34344962, a: 1}
+    key1: {r: 0.1830188, g: 1, b: 0.34446588, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
 --- !u!114 &1352845231568084148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,4 +482,5 @@ MonoBehaviour:
   listObj:
   - {fileID: 3257577659951314459, guid: b814d656a0f48e244b9a5f9112a3cacf, type: 3}
   - {fileID: 3257577659951314459, guid: fcbb5789dae7c1f4eb5c04ffcd2d7579, type: 3}
+  - {fileID: 1946328606087292309, guid: f0270cf00e88c2a4a913c2104a97a3d0, type: 3}
   rateDrop: 100
