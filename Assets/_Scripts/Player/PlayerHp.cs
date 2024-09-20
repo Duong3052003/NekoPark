@@ -29,7 +29,7 @@ public abstract class PlayerHp : DeSpawnByHp, ITakeDamaged, IPlayerStatus
             hpCurrent.Value = hpMax;
         }
 
-        hpCurrent.OnValueChanged += (oldValue, newValue) => UpdateHpBar();
+        hpCurrent.OnValueChanged += (oldValue, newValue) => UpdateHpBar(oldValue, newValue);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -46,11 +46,12 @@ public abstract class PlayerHp : DeSpawnByHp, ITakeDamaged, IPlayerStatus
         hpBarGameObj.transform.localScale = new Vector3(1, 2, 1);
         hpBarGameObj.transform.localPosition = new Vector3(0, -120f, 0);
 
-        SimulateInputServerRpc(networkObject.NetworkObjectId, _idPlayer);
+        SendObjectIdToClientClientRpc(networkObject.NetworkObjectId, default);
+        //SelectTargetServerRpc(networkObject.NetworkObjectId, _idPlayer);
     }
 
     [ServerRpc]
-    private void SimulateInputServerRpc(ulong networkObjectId, ulong clientSelected)
+    private void SelectTargetServerRpc(ulong networkObjectId, ulong clientSelected)
     {
         List<ulong> targetClients = NetworkManager.Singleton.ConnectedClientsList
             .Where(client => client.ClientId == clientSelected)
@@ -62,6 +63,7 @@ public abstract class PlayerHp : DeSpawnByHp, ITakeDamaged, IPlayerStatus
             Send = new ClientRpcSendParams
             {
                 TargetClientIds = targetClients
+                //TargetClientIds = default
             }
         };
 
@@ -99,6 +101,6 @@ public abstract class PlayerHp : DeSpawnByHp, ITakeDamaged, IPlayerStatus
     }
 
     protected override abstract void Despawn();
-    protected abstract void UpdateHpBar();
+    protected abstract void UpdateHpBar(float oldValue, float newValue);
     public abstract void TakeDamaged(int damage);
 }

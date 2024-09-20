@@ -105,8 +105,17 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
 
         if (!IsOwner) return;
         Movement(reflectDirection);
-        rb.AddForce(new Vector3(velocityX, velocityY, 0f)*100);
-        Debug.Log(new Vector3(velocityX, velocityY, 0f));
+
+        //rb.AddForce(new Vector3(velocityX, velocityY, 0f)*150);
+        transform.position += new Vector3(velocityX, velocityY, 0f)/25;
+        StartCoroutine(DisableColliderTemporary());
+    }
+
+    private IEnumerator DisableColliderTemporary()
+    {
+        col.enabled = false;
+        yield return new WaitForSeconds(0.01f);
+        col.enabled = true;    
     }
 
     private void ChangedGravity()
