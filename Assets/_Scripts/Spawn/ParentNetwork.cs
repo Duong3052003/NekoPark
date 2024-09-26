@@ -7,6 +7,12 @@ public class ParentNetwork : NetworkBehaviour
 {
     public override void OnNetworkDespawn()
     {
+        DestroyChildServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]    
+    private void DestroyChildServerRpc()
+    {
         foreach (Transform child in this.transform)
         {
             var childNetwork = child.GetComponent<NetworkObject>();

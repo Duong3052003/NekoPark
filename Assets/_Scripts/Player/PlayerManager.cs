@@ -10,6 +10,7 @@ public class PlayerManager : NetworkBehaviour
 {
     public static PlayerManager Instance { get; private set; }
     public List<GameObject> players;
+    [SerializeField] private GameObject playerPrefab;
 
     private void Awake()
     {
@@ -93,6 +94,7 @@ public class PlayerManager : NetworkBehaviour
     [ClientRpc]
     public void SetPositionPlayersClientRpc(int numberPlayer,Vector3 pos)
     {
+        if (players[numberPlayer] == null) return;
         players[numberPlayer].transform.position = pos;
     }
 
@@ -114,21 +116,42 @@ public class PlayerManager : NetworkBehaviour
         {
             if(players[i].gameObject.GetComponent<NetworkObject>().OwnerClientId == rpcParams.Receive.SenderClientId)
             {
-                foreach (Transform child in players[i].gameObject.transform)
-                {
-                    var childNetwork = child.GetComponent<NetworkObject>();
-                    if (childNetwork != null && childNetwork.IsSpawned)
-                    {
-                        childNetwork.Despawn();
-                        Destroy(child.gameObject);
-                    }
-                }
+                DestroyPlayer(i, rpcParams.Receive.SenderClientId);
+            }
+        }
+    }
 
-                DestroyAllOwnedObjects(rpcParams.Receive.SenderClientId);
+    [ServerRpc(RequireOwnership = false)]
+    public void DestroyAllPlayerServerRpc(ServerRpcParams rpcParams = default)
+    {
+        /*ulong idOwner=0;
+        for (int i = 0; i < players.Count; i++)
+        {
+            //DestroyPlayer(i, idOwner);
+
+            Destroy(players[i].gameObject);
+
+            idOwner++;
+        }
+
+        players.Clear();*/
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i] != null)
+            {
+                NetworkObject networkObject = players[i].GetComponent<NetworkObject>();
+
+                if (networkObject != null && networkObject.IsSpawned)
+                {
+                    networkObject.Despawn(true);
+                }
 
                 Destroy(players[i].gameObject);
             }
         }
+
+        players.Clear();
     }
 
     public void DestroyAllOwnedObjects(ulong clientId)
@@ -137,7 +160,8 @@ public class PlayerManager : NetworkBehaviour
 
         foreach (NetworkObject networkObject in networkObjects)
         {
-            if (networkObject.OwnerClientId == clientId)
+            var objectServerSpawn = networkObject.GetComponent<IObjectServerSpawn>();
+            if (networkObject.OwnerClientId == clientId && networkObject.IsSpawned ==true && objectServerSpawn!=null)
             {
                 networkObject.Despawn(true);
                 Destroy(networkObject.gameObject);
@@ -145,8 +169,49 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
+    private void DestroyPlayer(int count, ulong idOwner)
+    {
+        foreach (Transform child in players[count].gameObject.transform)
+        {
+            var childNetwork = child.GetComponent<NetworkObject>();
+            if (childNetwork != null && childNetwork.IsSpawned)
+            {
+                childNetwork.Despawn();
+                Destroy(child.gameObject);
+            }
+        }
+        DestroyAllOwnedObjects(idOwner);
+
+        Destroy(players[count].gameObject);
+
+        players.Remove(players[count].gameObject);
+    }
+
     public void RemoveAllPlayers()
     {
         players.Clear();
+    }
+
+    [ClientRpc]
+    public void SpawnPlayerClientRpc()
+    {
+        SpawnPlayerServerRpc(OwnerClientId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnPlayerServerRpc(ulong clientId)
+    {
+        GameObject playerInstance = Instantiate(playerPrefab);
+        NetworkObject networkObject = playerInstance.GetComponent<NetworkObject>();
+
+        // Spawn Player và gán nó cho clientId
+        networkObject.SpawnAsPlayerObject(clientId);
+    }
+
+    [ServerRpc]
+    public void DesAndSpawnAllPlayerServerRpc()
+    {
+        DestroyAllPlayerServerRpc();
+        SpawnPlayerClientRpc();
     }
 }

@@ -101,6 +101,7 @@ public class UIManager : NetworkBehaviour
     {
         HandleLobbyHeartBeat();
         HandleLobbyPollForUpdate();
+        HandleInput();
     }
 
     #region Lobby
@@ -598,28 +599,40 @@ public class UIManager : NetworkBehaviour
 
     public void GameOverScreen()
     {
-        GameOverScreenServerRpc();
+        GameOverScreenServerRpc(true);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void GameOverScreenServerRpc()
+    private void GameOverScreenServerRpc(bool boolen)
     {
-        GameOverScreenClientRpc();
+        GameOverScreenClientRpc(boolen);
     }
 
     [ClientRpc]
-    private void GameOverScreenClientRpc()
+    private void GameOverScreenClientRpc(bool boolen)
     {
         if (IsHost)
         {
-            gameOverScreen.SetActive(true);
+            gameOverScreen.SetActive(boolen);
         }
         else
         {
-            gameOverScreenClient.SetActive(true);
+            gameOverScreenClient.SetActive(boolen);
         }
     }
     #endregion
+
+    public void Restart()
+    {
+        _ScenesManager.Instance.LoadScene(SceneManager.GetActiveScene().name);
+        PlayerManager.Instance.DesAndSpawnAllPlayerServerRpc();
+        foreach(var obj in FindAllGameObjectsWithIObject())
+        {
+            obj.GetComponent<IObjectServerSpawn>().DeSpawn();
+        }
+
+        GameOverScreenServerRpc(false);
+    }
 
     public void Leave()
     {
@@ -636,5 +649,32 @@ public class UIManager : NetworkBehaviour
 
         NetworkManager.Singleton.SceneManager.LoadScene("MainScreen", LoadSceneMode.Single);
         TestRelay.Instance.LeaveRelay();
+    }
+
+    private void HandleInput()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameOverScreen();
+        }
+    }
+
+    public static List<GameObject> FindAllGameObjectsWithIObject()
+    {
+        List<GameObject> objectsWithIObject = new List<GameObject>();
+
+        GameObject[] allObjects = FindObjectsOfType<GameObject>();
+
+        foreach (GameObject obj in allObjects)
+        {
+            IObjectServerSpawn iObjectComponent = obj.GetComponent<IObjectServerSpawn>();
+
+            if (iObjectComponent != null)
+            {
+                objectsWithIObject.Add(obj);
+            }
+        }
+
+        return objectsWithIObject;
     }
 }

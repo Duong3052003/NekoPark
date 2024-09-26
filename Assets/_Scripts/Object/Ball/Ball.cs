@@ -206,4 +206,9 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
     {
         transform.position = inputVector;
     }
+
+    public void DeSpawn()
+    {
+        Destroy(this.gameObject);
+    }
 }

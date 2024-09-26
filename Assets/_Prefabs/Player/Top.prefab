@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -8433362829672120365}
   - component: {fileID: -4875849902504467823}
   - component: {fileID: -3763661752949273410}
-  m_Layer: 3
+  m_Layer: 9
   m_Name: Top
   m_TagString: Breakout
   m_Icon: {fileID: 0}

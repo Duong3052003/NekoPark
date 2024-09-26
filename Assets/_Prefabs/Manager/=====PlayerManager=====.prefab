@@ -46,13 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 870870176
+  GlobalObjectIdHash: 1562528512
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 1
   SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
+  DontDestroyWithOwner: 1
   AutoObjectParentSync: 1
 --- !u!114 &7881614917936929644
 MonoBehaviour:
@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
+  playerPrefab: {fileID: 1974370104080657351, guid: ab24ecd2c0bac644cbb97c4e6eaae5b0, type: 3}
 --- !u!114 &8054777342206736617
 MonoBehaviour:
   m_ObjectHideFlags: 0

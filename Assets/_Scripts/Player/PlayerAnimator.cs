@@ -8,20 +8,25 @@ public class PlayerAnimator : NetworkBehaviour
 {
     private PlayerCtrl playerCtrl;
 
+    private int playerLayer;
+    private int trapLayer;
+
     private void Awake()
     {
         playerCtrl = GetComponent<PlayerCtrl>();
+        playerLayer = LayerMask.NameToLayer("Player");
+        trapLayer = LayerMask.NameToLayer("Trap");
     }
 
     private void Start()
     {
-        Physics2D.IgnoreLayerCollision(3, 7, false);
+        Physics2D.IgnoreLayerCollision(playerLayer, trapLayer, false);
         playerCtrl.animator.SetLayerWeight(1, 0);
     }
 
     void Update()
     {
-        if(!IsLocalPlayer) return;
+        if(!IsOwner) return;
         Jump();
         Move();
     }
@@ -44,6 +49,7 @@ public class PlayerAnimator : NetworkBehaviour
 
     private void Dead()
     {
+        StopAllCoroutines();
         this.gameObject.SetActive(false);
 
         if (!PlayerManager.Instance.CheckGameOver()) return;
@@ -52,10 +58,12 @@ public class PlayerAnimator : NetworkBehaviour
 
     public IEnumerator Invisible(float _time)
     {
-        Physics2D.IgnoreLayerCollision(3, 7);
+        Physics2D.IgnoreLayerCollision(playerLayer, trapLayer);
         playerCtrl.animator.SetLayerWeight(1,1);
+
         yield return new WaitForSeconds(_time);
-        Physics2D.IgnoreLayerCollision(3, 7, false);
+
+        Physics2D.IgnoreLayerCollision(playerLayer, trapLayer, false);
         playerCtrl.animator.SetLayerWeight(1, 0);
     }
 }
