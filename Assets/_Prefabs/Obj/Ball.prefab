@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7765232990869245690}
   - component: {fileID: 6361888503043027470}
   - component: {fileID: 2858205336459722183}
+  - component: {fileID: -1518070610702466732}
   m_Layer: 7
   m_Name: Ball
   m_TagString: Bullet
@@ -184,3 +185,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
+--- !u!114 &-1518070610702466732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971811299125603045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23573cc01a6eb4944a85672cbce3c229, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  collisionDame: 1
+  triggerDame: 0

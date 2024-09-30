@@ -12,8 +12,8 @@ public class PlayerSpawn : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        FindAndAddTargetGroup();
         PlayerManager.Instance.players.Add(this.gameObject);
+        FindAndAddTargetGroup();
     }
 
     private void OnEnable()
@@ -38,7 +38,6 @@ public class PlayerSpawn : NetworkBehaviour
     {
         try
         {
-            Debug.Log("Phat hien co targetGroupPlayer trong Scene nay");
             targetGroup = GameObject.Find("TargetGroupPlayer").GetComponent<CinemachineTargetGroup>();
         }
         catch
@@ -47,10 +46,11 @@ public class PlayerSpawn : NetworkBehaviour
         }
 
         if (targetGroup == null) return;
+        Debug.Log("Phat hien co targetGroupPlayer trong Scene nay");
         AddPlayersToTargetGroup();
     }
 
-    void AddPlayersToTargetGroup()
+    private void AddPlayersToTargetGroup()
     {
         foreach (GameObject player in PlayerManager.Instance.players)
         {

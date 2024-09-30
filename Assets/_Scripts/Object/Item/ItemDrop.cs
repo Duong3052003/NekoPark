@@ -20,7 +20,7 @@ public class ItemDrop : Spawner
     private void DropItemServerRPC()
     {
         GameObject newItem = ObjIsSpawned();
-        newItem.transform.position = this.transform.position;
+        newItem.GetComponent<IObjectServerSpawn>().Spawn(this.transform.position,new Vector2(0,-1));
     }
 
     protected virtual void GetRandomItem()

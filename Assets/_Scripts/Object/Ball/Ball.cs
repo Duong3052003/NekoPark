@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 
 public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectServerSpawn
 {
-    private int damage = 1;
     private Rigidbody2D rb;
     private Collider2D col;
     private float forceMagnitude = 10f;
@@ -87,12 +86,6 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
     {
         if (!IsOwner) return;
         AddForceToServer(collision);
-
-        ITakeDamaged objTakeDamaged = collision.gameObject.GetComponent<ITakeDamaged>();
-        if (objTakeDamaged != null)
-        {
-            objTakeDamaged.TakeDamaged(damage);
-        }
     }
 
     private void AddForceToServer(Collision2D collision)

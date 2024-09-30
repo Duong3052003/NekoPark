@@ -287,9 +287,9 @@ GameObject:
   - component: {fileID: 7957242850775539763}
   - component: {fileID: 5714031758006248160}
   - component: {fileID: 1255697710832447506}
-  - component: {fileID: 8659463809349287022}
   - component: {fileID: 5520547233377292942}
   - component: {fileID: -6670701864465675324}
+  - component: {fileID: 5305028086829766892}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -534,22 +534,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkGroundColiisionObj: {fileID: 6864688575084278056}
---- !u!114 &8659463809349287022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974370104080657351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1905522be1f6da74d891fa51f92280ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 7
-  jumpPower: 18
-  gravitymin: 5
-  gravitymax: 7
 --- !u!114 &5520547233377292942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -580,6 +564,22 @@ MonoBehaviour:
   hpBarPrefab: {fileID: 5547387330414121776, guid: 247ae8b1a746b5041bd27d58ed57a3fc, type: 3}
   CanvasWorldSpacePrefab: {fileID: 2696021214243124683, guid: 40ab0425ac301764f8af8082022ac2f9, type: 3}
   hpMax: 3
+--- !u!114 &5305028086829766892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974370104080657351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06361eba05e341548b8ba42b854b61f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 7
+  jumpPower: 18
+  gravitymin: 5
+  gravitymax: 7
 --- !u!1 &3286091562618086778
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class ItemTrigger : DeSpawn, IItemTrigger
+public abstract class ItemTrigger : DeSpawn, IItemTrigger, IObjectServerSpawn
 {
     [SerializeField] protected float velocityX;
     [SerializeField] protected float velocityY;
@@ -36,4 +36,16 @@ public abstract class ItemTrigger : DeSpawn, IItemTrigger
     protected abstract void Move(float _x, float _y);
     public abstract void Effect(GameObject _gameObject);
     public abstract GameObject Target(Collider2D _collision);
+
+    public void Spawn(Vector3 inputVector, Vector2 velocityVector)
+    {
+        this.transform.position = inputVector;
+        velocityX= velocityVector.x;
+        velocityY= velocityVector.y;
+    }
+
+    public void DeSpawn()
+    {
+        Destroy(this.gameObject);
+    }
 }

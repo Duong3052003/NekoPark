@@ -7,6 +7,8 @@ TagManager:
   - GameStarted
   - Breakout
   - Bullet
+  - Ladder
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -41,6 +43,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: UI
+    uniqueID: 1497772595
+    locked: 0
+  - name: Enviroment
+    uniqueID: 3540859857
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Object
+    uniqueID: 132662753
+    locked: 0
+  - name: FrontObject
+    uniqueID: 1257977573
     locked: 0

@@ -529,7 +529,7 @@ public class UIManager : NetworkBehaviour
     private void StartSceneLobby()
     {
         if (nameScene.Equals("test")) return;
-        _ScenesManager.Instance.LoadSceneLocal("Scenes/SampleScene");
+        _ScenesManager.Instance.LoadSceneLocal("_Scenes/SampleScene");
 
         listLobbyScreen.SetActive(false);
         settingLobbyScreen.SetActive(false);

@@ -22,6 +22,16 @@ public class BrickDespawn : DeSpawnByHp, ITakeDamaged
         hpCurrent.OnValueChanged += (oldValue, newValue) => Breaked(newValue);
     }
 
+    private void Start()
+    {
+        if (hpMax.Value == 0)
+        {
+            SetHp(3);
+            SetColorGradientClientRpc(1/5f);
+            hpText.text = hpCurrent.Value.ToString();
+        }
+    }
+
     public void SetHp(int _hp)
     {
         this.hpMax.Value = _hp;
