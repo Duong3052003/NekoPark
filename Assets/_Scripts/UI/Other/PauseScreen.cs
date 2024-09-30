@@ -66,6 +66,5 @@ public class PauseScreen : NetworkBehaviour,IObserver
     {
         backGround.SetActive(boolen);
         timeCountText.gameObject.SetActive(boolen);
-
     }
 }

@@ -18,8 +18,7 @@ public class Server : NetworkBehaviour
     {
         if (Instance != null)
         {
-            Destroy(Instance .gameObject);
-            return;
+            Destroy(Instance.gameObject);
         }
 
         Instance = this;

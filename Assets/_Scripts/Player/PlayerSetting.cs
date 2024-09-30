@@ -4,6 +4,7 @@ using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -17,13 +18,10 @@ public class PlayerSetting : NetworkBehaviour
     [SerializeField] private Button changedColorBtn;
 
     private int color;
-
-    private NetworkVariable<int> nCharacter = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
+    private NetworkVariable<int> nCharacter = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     public override void OnNetworkSpawn()
     {
-        PlayerManager.Instance.players.Add(this.gameObject);
-
         skins = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().skins;
         controllers = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().controllers;
 
@@ -31,7 +29,6 @@ public class PlayerSetting : NetworkBehaviour
 
         UpdateModel();
         if (!IsOwner) return;
-        playerHUDImg.SetActive(true);
         SetUpPlayer();
     }
 
@@ -45,7 +42,11 @@ public class PlayerSetting : NetworkBehaviour
         if (IsOwner)
         {
             GetDataPlayer();
-            GetButton();
+
+            if (SceneManager.GetActiveScene().name == "SampleScene")
+            {
+                GetButton();
+            }
         }
     }
 
@@ -62,6 +63,7 @@ public class PlayerSetting : NetworkBehaviour
                 if (player.Id == AuthenticationService.Instance.PlayerId)
                 {
                     color = UIManager.Instance.GetIndexColor(player.Data["PlayerColor"].Value);
+                    nCharacter.Value = color;
                 }
             }
         }
@@ -69,6 +71,8 @@ public class PlayerSetting : NetworkBehaviour
 
     private void GetButton()
     {
+        playerHUDImg.SetActive(true);
+
         if (IsHost)
         {
             startBtn.gameObject.SetActive(true);
@@ -93,6 +97,7 @@ public class PlayerSetting : NetworkBehaviour
     {
         transform.GetComponent<SpriteRenderer>().sprite = skins[nCharacter.Value];
         transform.GetComponent<Animator>().runtimeAnimatorController = controllers[nCharacter.Value];
+        this.gameObject.layer = LayerMask.NameToLayer(UIManager.Instance.GetStringColor(nCharacter.Value));
     }
 
     public void ChangedSkinBtn()
@@ -106,7 +111,7 @@ public class PlayerSetting : NetworkBehaviour
         }
 
         UIManager.Instance.UpdateColorPlayer(color);
-
+        //PlayerManager.Instance.SetColor(color);
         nCharacter.Value = color;
     }
 

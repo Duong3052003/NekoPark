@@ -10,6 +10,12 @@ public class PlayerSpawn : NetworkBehaviour
     [SerializeField] private float posRanged = 5f;
     public CinemachineTargetGroup targetGroup;
 
+    public override void OnNetworkSpawn()
+    {
+        FindAndAddTargetGroup();
+        PlayerManager.Instance.players.Add(this.gameObject);
+    }
+
     private void OnEnable()
     {
         if (targetGroup == null) return;
@@ -19,11 +25,6 @@ public class PlayerSpawn : NetworkBehaviour
     private void OnDisable()
     {
         targetGroup=null;
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        FindAndAddTargetGroup();
     }
 
     [ServerRpc(RequireOwnership = false)]

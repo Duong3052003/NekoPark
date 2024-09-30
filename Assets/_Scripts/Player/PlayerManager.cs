@@ -18,12 +18,23 @@ public class PlayerManager : NetworkBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            //SetColor(0);
         }
         else
         {
             Destroy(this.gameObject);
         }
     }
+
+    /*public int GetColor()
+    {
+        return PlayerPrefs.GetInt("Color", 0);
+    }
+
+    public void SetColor(int indexColor)
+    {
+        PlayerPrefs.SetInt("Color", indexColor);
+    }*/
 
     [ClientRpc]
     public void SetActiveAllPlayersClientRpc(bool boollen)
@@ -151,6 +162,12 @@ public class PlayerManager : NetworkBehaviour
             }
         }
 
+        ClearListClientRPC();
+    }
+
+    [ClientRpc]
+    public void ClearListClientRPC()
+    {
         players.Clear();
     }
 
@@ -195,17 +212,32 @@ public class PlayerManager : NetworkBehaviour
     [ClientRpc]
     public void SpawnPlayerClientRpc()
     {
-        SpawnPlayerServerRpc(OwnerClientId);
+        SpawnPlayerServerRpc();
+
+        /*SpawnPlayerServerRpc(OwnerClientId);
+        Debug.Log("owner ID" + this.GetComponent<NetworkObject>().OwnerClientId);*/
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnPlayerServerRpc(ulong clientId)
+    /*[ServerRpc]
+    public void SpawnPlayerServerRpc(ServerRpcParams rpcParams = default)
+    {
+        GameObject newPlayer = Instantiate(playerPrefab);
+
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+
+        Debug.Log("Player spawned for client ID: " + clientId);
+    }*/
+
+    [ServerRpc(RequireOwnership =false)]
+    private void SpawnPlayerServerRpc(ServerRpcParams rpcParams = default)
     {
         GameObject playerInstance = Instantiate(playerPrefab);
         NetworkObject networkObject = playerInstance.GetComponent<NetworkObject>();
 
-        // Spawn Player và gán nó cho clientId
-        networkObject.SpawnAsPlayerObject(clientId);
+        networkObject.SpawnAsPlayerObject(rpcParams.Receive.SenderClientId);
+        Debug.Log("owner ID" + rpcParams.Receive.SenderClientId);
     }
 
     [ServerRpc]

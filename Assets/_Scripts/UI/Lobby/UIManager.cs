@@ -57,7 +57,15 @@ public class UIManager : NetworkBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null)
+        {
+            Destroy(Instance.gameObject);
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        /*if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -65,8 +73,7 @@ public class UIManager : NetworkBehaviour
         else
         {
             Destroy(this.gameObject);
-
-        }
+        }*/
     }
 
     private async void Start()
@@ -649,6 +656,7 @@ public class UIManager : NetworkBehaviour
 
         NetworkManager.Singleton.SceneManager.LoadScene("MainScreen", LoadSceneMode.Single);
         TestRelay.Instance.LeaveRelay();
+        Destroy(this.gameObject);
     }
 
     private void HandleInput()
