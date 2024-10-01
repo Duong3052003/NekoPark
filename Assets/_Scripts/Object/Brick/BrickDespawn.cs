@@ -24,6 +24,7 @@ public class BrickDespawn : DeSpawnByHp, ITakeDamaged
 
     private void Start()
     {
+        if (!IsHost) return;
         if (hpMax.Value == 0)
         {
             SetHp(3);

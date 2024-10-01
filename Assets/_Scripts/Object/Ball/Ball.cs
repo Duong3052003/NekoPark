@@ -119,7 +119,10 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
 
     public void Movement(Vector3 direction)
     {
-        Vector3 newVelocity = direction.normalized * forceMagnitude;
+        Vector3 flexVector = direction.normalized * forceMagnitude;
+        Vector3 randomVector = new Vector3(Random.Range(-0.3f, 0.3f), 0, 0);
+        Vector3 newVelocity = flexVector + randomVector;
+
         velocityX = newVelocity.x;
         velocityY = newVelocity.y;
     }

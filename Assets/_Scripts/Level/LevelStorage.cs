@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class LevelStorage : MonoBehaviour
 {
+    [SerializeField] public GameObject playerModel;
     [SerializeField] public Sprite[] skins;
     [SerializeField] public RuntimeAnimatorController[] controllers;
     [SerializeField] public GameObject[] items;

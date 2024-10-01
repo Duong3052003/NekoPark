@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Human_Level1
   m_EditorClassIdentifier: 
   nameScene: _Scenes/Human/Human_Level1
-  imageScene: {fileID: 4965478120403269316, guid: e3e6b3d6c57dc7b488e7d1e8be902988, type: 3}
+  imageScene: {fileID: 21300000, guid: 3aa928f23d2e37643bb0ddd68b010e96, type: 3}

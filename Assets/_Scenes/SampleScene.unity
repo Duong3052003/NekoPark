@@ -542,8 +542,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 8870279052952092, guid: cdcc7e4e95fd4d54eb2c95dc8e6e395b, type: 3}
+      propertyPath: playerModel
+      value: 
+      objectReference: {fileID: 1974370104080657351, guid: ab24ecd2c0bac644cbb97c4e6eaae5b0, type: 3}
+    - target: {fileID: 8870279052952092, guid: cdcc7e4e95fd4d54eb2c95dc8e6e395b, type: 3}
       propertyPath: items.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8870279052952092, guid: cdcc7e4e95fd4d54eb2c95dc8e6e395b, type: 3}
+      propertyPath: playerModel.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8870279052952092, guid: cdcc7e4e95fd4d54eb2c95dc8e6e395b, type: 3}
       propertyPath: itemsTransformX.Array.size
@@ -2312,6 +2320,8 @@ MonoBehaviour:
   hostBtnScreen: {fileID: 989759853}
   settingLobbyScreen: {fileID: 436005804}
   choiceLevelScreen: {fileID: 648060974}
+  gameOverScreen: {fileID: 0}
+  gameOverScreenClient: {fileID: 0}
   lobbyGameObj: {fileID: 1792007053115647195, guid: ca996bfe72beac64999935bbfd7e298a, type: 3}
   listLobby: {fileID: 1859344367}
   isPrivateTxt: {fileID: 1207917596}

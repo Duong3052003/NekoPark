@@ -73,9 +73,12 @@ public class _ScenesManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        if (IsHost || NetworkManager.Singleton.SceneManager == null)
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.SceneManager != null)
         {
-            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= OnLoadEventCompleted;
+            if (IsHost)
+            {
+                NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= OnLoadEventCompleted;
+            }
         }
         SceneManager.sceneLoaded -= OnSceneLoadedLocal;
     }
