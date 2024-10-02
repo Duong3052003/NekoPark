@@ -14,6 +14,7 @@ public class PlayerSpawn : NetworkBehaviour
     {
         PlayerManager.Instance.players.Add(this.gameObject);
         FindAndAddTargetGroup();
+        PlayerManager.Instance.ResetPositionAllPlayers();
     }
 
     private void OnEnable()

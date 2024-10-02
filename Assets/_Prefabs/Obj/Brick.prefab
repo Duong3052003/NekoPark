@@ -404,6 +404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpText: {fileID: 7075257861664879568}
+  setHpIfAlreadyInScene: 0
   gradient:
     serializedVersion: 2
     key0: {r: 0.8018868, g: 0.7349901, b: 0.34344962, a: 1}

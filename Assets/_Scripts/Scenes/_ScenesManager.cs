@@ -43,8 +43,6 @@ public class _ScenesManager : NetworkBehaviour
         StartCoroutine(LoadLevel(sceneName));
 
         //SetPlayersStatic
-        PlayerManager.Instance.RefreshPlayersClientRpc();
-
         PlayerManager.Instance.SetBodyTypeAllPlayersServerRpc(2);
     }
 
@@ -64,9 +62,10 @@ public class _ScenesManager : NetworkBehaviour
     {
         Debug.Log("LoadSceneCompleted");
 
-        PlayerManager.Instance.SetBodyTypeAllPlayersServerRpc(0);
+        PlayerManager.Instance.RefreshPlayersClientRpc(true);
         PlayerManager.Instance.SetupPlayersClientRPC();
         PlayerManager.Instance.GetSettingStatusPlayer();
+        //PlayerManager.Instance.RefreshPlayersClientRpc();
 
         NetworkTimer.Instance.OnPauseServerRpc(5);
     }

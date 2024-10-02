@@ -27,13 +27,17 @@ public class PlayerCtrl : MonoBehaviour
 
     private void LoadComponents()
     {
-        checkGroundColiision = checkGroundColiisionObj.GetComponent<CheckGroundColiision>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         playerMove = GetComponent<PlayerMove>();
         playerSpawn = GetComponent<PlayerSpawn>();
         playerAnimator = GetComponent<PlayerAnimator>();
         col = GetComponent<Collider2D>();
+
+        if (checkGroundColiisionObj != null)
+        {
+            checkGroundColiision = checkGroundColiisionObj.GetComponent<CheckGroundColiision>();
+        }
     }
 
     public void SetActivePlayer(bool boolen)

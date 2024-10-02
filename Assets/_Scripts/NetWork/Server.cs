@@ -69,7 +69,7 @@ public class Server : NetworkBehaviour
     {
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(inputPayLoad.NetworkObjID, out var networkObject))
         {
-            Debug.LogWarning($"NetworkObject with ID {inputPayLoad.OwnerObjID} not found.");
+            //Debug.LogWarning($"NetworkObject with ID {inputPayLoad.OwnerObjID} not found.");
             return;
         }
 

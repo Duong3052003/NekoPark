@@ -10,7 +10,7 @@ public class LevelGenerator : Spawner,IObserver
 {
     public static LevelGenerator Instance { get; private set; }
     
-    [SerializeField] private GameObject[] brickHolders;
+    [SerializeField] private GameObject[] objSpawnedHolders;
 
     [SerializeField] private Vector2Int size;
     [SerializeField] private Vector2 offset;
@@ -18,7 +18,7 @@ public class LevelGenerator : Spawner,IObserver
     [SerializeField] private List<Transform> transformPlayers;
     [SerializeField] private Button generateMapBtn;
 
-    private GameObject brick;
+    private GameObject objSpawned;
     private int cdRespam;
 
     private void Awake()
@@ -29,7 +29,7 @@ public class LevelGenerator : Spawner,IObserver
         }
         else
         {
-            Destroy(Instance);
+            Destroy(this.gameObject);
         }
     }
 
@@ -45,39 +45,39 @@ public class LevelGenerator : Spawner,IObserver
         });*/
     }
 
-    private void GenerateBricks(int numRow)
+    private void GenerateObj(int numRow)
     {
-        for (int k = 0; k < brickHolders.Length; k++)
+        for (int k = 0; k < objSpawnedHolders.Length; k++)
         {
             for (int i = 0; i < size.x; i++)
             {
                 for (int j = 0; j < numRow; j++)
                 {
-                    GenerateBrickServerRPC(k,i,j);
+                    GenerateObjsServerRPC(k,i,j);
                 }
             }
         }
     }
 
     [ServerRpc(RequireOwnership =false)]
-    private void GenerateBrickServerRPC(int k, int i, int j)
+    private void GenerateObjsServerRPC(int k, int i, int j)
     {
-        brick = ObjIsSpawned();
+        objSpawned = ObjIsSpawned();
 
-        brick.transform.position = brickHolders[k].transform.position + new Vector3((float)((size.x - 1) * 0.5f - i) * offset.x, j * offset.y, 0);
+        objSpawned.transform.position = objSpawnedHolders[k].transform.position + new Vector3((float)((size.x - 1) * 0.5f - i) * offset.x, j * offset.y, 0);
+        
+        objSpawned.transform.SetParent(objSpawnedHolders[k].transform);
 
-        brick.transform.SetParent(brickHolders[k].transform);
-
-        brick.GetComponent<BrickDespawn>().SetColorGradientClientRpc((float)j / (size.y - 1));
-        brick.GetComponent<BrickDespawn>().SetHp(3*(j+1));
+        objSpawned.GetComponent<ObjDeSpawnByHp>().SettingObjIfAlreadyInScene((float)j / (size.y - 1));
+        objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(3*(j+1));
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void SetActivePlayersServerRPC()
     {
-        for (int i = 0; i < PlayerManager.Instance.players.Count; i++)
+        for (int i = 0; i < PlayerManager.Instance.playerControl.Count; i++)
         {
-            PlayerManager.Instance.SetPositionPlayersClientRpc(i, transformPlayers[i].position);
+            PlayerManager.Instance.SetPositionPlayersControlClientRpc(i, transformPlayers[i].position);
         }
     }
 
@@ -148,7 +148,7 @@ public class LevelGenerator : Spawner,IObserver
     public void GenerateMapServerRpc()
     {
         SetActivePlayersServerRPC();
-        GenerateBricks(size.y);
+        GenerateObj(size.y);
     }
 
     private void OnEnable()
@@ -177,7 +177,7 @@ public class LevelGenerator : Spawner,IObserver
 
     public void OnResume()
     {
-        GenerateBricks(size.y);
+        GenerateObj(size.y);
         if (!IsHost) return;
         SetUpLevelServerRPC();
     }

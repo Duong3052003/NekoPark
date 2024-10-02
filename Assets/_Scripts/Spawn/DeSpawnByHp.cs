@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class DeSpawnByHp : DeSpawn
+public abstract class DeSpawnByHp : DeSpawn
 {
     protected NetworkVariable<float> hpCurrent = new NetworkVariable<float>(
        0,
@@ -15,8 +15,5 @@ public class DeSpawnByHp : DeSpawn
         return hpCurrent.Value <= 0;
     }
 
-    protected override void Despawn()
-    {
-
-    }
+    protected abstract override void Despawn();
 }

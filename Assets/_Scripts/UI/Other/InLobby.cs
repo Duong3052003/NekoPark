@@ -9,6 +9,7 @@ public class InLobby : MonoBehaviour
     private void OnEnable()
     {
         gameObjScene.GetComponent<SceneInformation>().openWithFullButton = true;
+        gameObjScene.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(50,50);
         Instantiate(gameObjScene, this.transform);
     }
 }

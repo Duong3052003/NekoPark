@@ -5,11 +5,13 @@ using Unity.Netcode;
 using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
+using Unity.Services.Lobbies.Models;
 
 public class PlayerManager : NetworkBehaviour
 {
     public static PlayerManager Instance { get; private set; }
     public List<GameObject> players;
+    public List<GameObject> playerControl;
     [SerializeField] private GameObject playerPrefab;
 
     private void Awake()
@@ -46,13 +48,31 @@ public class PlayerManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RefreshPlayersClientRpc()
+    public void RefreshPlayersClientRpc(bool isPlayerControl)
     {
-        foreach (GameObject player in players)
+        if(isPlayerControl == false)
         {
-            player.SetActive(false);
-            player.SetActive(true);
+            foreach (GameObject player in players)
+            {
+                player.SetActive(false);
+                player.SetActive(true);
+            }
         }
+        else
+        {
+            players.Clear();
+
+            foreach (GameObject player in playerControl)
+            {
+                if(player != null)
+                {
+                    player.SetActive(false);
+                    player.SetActive(true);
+                }
+                
+            }
+        }
+        
     }
 
     public void GetSettingStatusPlayer()
@@ -73,11 +93,13 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
-    public void ResetPositionAllPlayers(Vector3 pos)
+    public void ResetPositionAllPlayers()
     {
-        foreach (GameObject player in players)
+        for(int i = 0;i < playerControl.Count; i++)
         {
-            player.transform.position = pos;
+            if (i >=players.Count) return;
+            if (players[i] == null || playerControl[i] == null) return;
+            players[i].transform.position = playerControl[i].transform.position;
         }
     }
 
@@ -86,6 +108,7 @@ public class PlayerManager : NetworkBehaviour
     {
         foreach (GameObject player in players)
         {
+            if (player.GetComponent<Rigidbody2D>() == null) return;
             switch (index)
             {
                 case 0:
@@ -107,6 +130,13 @@ public class PlayerManager : NetworkBehaviour
     {
         if (players[numberPlayer] == null) return;
         players[numberPlayer].transform.position = pos;
+    }
+
+    [ClientRpc]
+    public void SetPositionPlayersControlClientRpc(int numberPlayer, Vector3 pos)
+    {
+        if (playerControl[numberPlayer] == null) return;
+        playerControl[numberPlayer].transform.position = pos;
     }
 
     [ServerRpc(RequireOwnership =false)]
@@ -147,18 +177,18 @@ public class PlayerManager : NetworkBehaviour
 
         players.Clear();*/
 
-        for (int i = 0; i < players.Count; i++)
+        for (int i = 0; i < playerControl.Count; i++)
         {
-            if (players[i] != null)
+            if (playerControl[i] != null)
             {
-                NetworkObject networkObject = players[i].GetComponent<NetworkObject>();
+                NetworkObject networkObject = playerControl[i].GetComponent<NetworkObject>();
 
                 if (networkObject != null && networkObject.IsSpawned)
                 {
                     networkObject.Despawn(true);
                 }
 
-                Destroy(players[i].gameObject);
+                Destroy(playerControl[i].gameObject);
             }
         }
 
@@ -168,9 +198,9 @@ public class PlayerManager : NetworkBehaviour
     [ClientRpc]
     public void ClearListClientRPC()
     {
-        players.Clear();
+        playerControl.Clear();
     }
-
+    
     public void DestroyAllOwnedObjects(ulong clientId)
     {
         NetworkObject[] networkObjects = FindObjectsOfType<NetworkObject>();
@@ -207,6 +237,11 @@ public class PlayerManager : NetworkBehaviour
     public void RemoveAllPlayers()
     {
         players.Clear();
+    }
+
+    public void RemoveAllPlayersControl()
+    {
+        playerControl.Clear();
     }
 
     [ClientRpc]

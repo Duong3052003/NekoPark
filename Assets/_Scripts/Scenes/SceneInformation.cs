@@ -25,6 +25,7 @@ public class SceneInformation : MonoBehaviour
         {
             inLobby.gameObjScene = Instantiate(this.gameObject);
             UIManager.Instance.ChoiceLevelScreen();
+            this.gameObject.SetActive(false);
         });
 
         if (!openWithFullButton) return;

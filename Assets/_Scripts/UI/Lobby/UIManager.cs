@@ -653,8 +653,10 @@ public class UIManager : NetworkBehaviour
 
         PlayerManager.Instance.DestroyPlayerServerRpc();
         PlayerManager.Instance.RemoveAllPlayers();
+        PlayerManager.Instance.RemoveAllPlayersControl();
 
         NetworkManager.Singleton.SceneManager.LoadScene("MainScreen", LoadSceneMode.Single);
+
         TestRelay.Instance.LeaveRelay();
         Destroy(this.gameObject);
     }

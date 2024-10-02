@@ -16,7 +16,7 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
     [SerializeField] protected float speed = 7f;
 
     [Header("Others")]
-    protected bool CanMove = true;
+    [SerializeField] protected bool CanMove = true;
 
     // Netcode general
     const float k_serverTickRate = 60f; // 60 FPS

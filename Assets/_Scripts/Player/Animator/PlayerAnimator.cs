@@ -4,9 +4,9 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-public class PlayerAnimator : NetworkBehaviour
+public abstract class PlayerAnimator : NetworkBehaviour
 {
-    private PlayerCtrl playerCtrl;
+    protected PlayerCtrl playerCtrl;
 
     private int playerLayer;
     private int trapLayer;
@@ -25,21 +25,11 @@ public class PlayerAnimator : NetworkBehaviour
 
     void Update()
     {
-        if(!IsOwner) return;
-        Jump();
-        Move();
+        if (!IsOwner) return;
+        Action();
     }
 
-    void Jump()
-    {
-        playerCtrl.animator.SetFloat("velocityY", playerCtrl.rb.velocity.y);
-        playerCtrl.animator.SetBool("isJumping", !playerCtrl.checkGroundColiision.IsGrounded());
-    }
-
-    void Move()
-    {
-        playerCtrl.animator.SetFloat("velocityX", Mathf.Abs(InputManager.InputHorizon()));
-    }
+    protected abstract void Action();
 
     public void Desappear()
     {

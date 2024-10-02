@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c25fcd4933f5e74ea6afafd074dfcef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dataScene: {fileID: 11400000, guid: 19b05a2f69e151240876a55eeda8eccd, type: 2}
+  dataScene: {fileID: 11400000, guid: 93e9fec964f07e849b2a02663d767e48, type: 2}
   buttonScene: {fileID: 5377906793307928122}
   settingSceneBtn: {fileID: 2604637780997211425}
   createLobbyBtn: {fileID: 820184902151370009}
