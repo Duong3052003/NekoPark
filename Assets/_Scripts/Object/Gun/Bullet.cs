@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviour, IObserver
 {
     private Rigidbody2D rb;
     private Collider2D col;
     [SerializeField] private float speed = 5f;
     private Vector2 vectorTarget;
+    private Spawner spawner;
 
     private void Awake()
     {
@@ -15,16 +16,46 @@ public class Bullet : MonoBehaviour
         col = GetComponent<Collider2D>();
     }
 
-    public void SetTarget(Vector2 position, Vector2 newTarget)
+    public void SetTarget(Vector2 position, Vector2 newTarget, Spawner _spawner)
     {
         this.transform.position = position;
+        spawner = _spawner;
         vectorTarget = (position - newTarget).normalized;
         rb.velocity = vectorTarget * speed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        BulletSpawn.Instance.DeSpawn(this.gameObject);
+        spawner.DeSpawn(this.gameObject);
+    }
 
+    private void OnEnable()
+    {
+        AddListObserver(this);
+    }
+
+    private void OnDisable()
+    {
+        RemoveListObserver(this);
+    }
+
+    public void AddListObserver(IObserver observer)
+    {
+        NetworkTimer.Instance.AddListObserver(observer);
+    }
+
+    public void RemoveListObserver(IObserver observer)
+    {
+        NetworkTimer.Instance.RemoveListObserver(observer);
+    }
+
+    public void OnPause(int time)
+    {
+        rb.velocity = Vector2.zero;
+    }
+
+    public void OnResume()
+    {
+        rb.velocity = vectorTarget * speed;
     }
 }

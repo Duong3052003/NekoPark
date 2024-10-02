@@ -3,28 +3,22 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class BulletSpawn : SpawmObjByTime, IObserver
+public class BulletSpawn : Spawner, IObserver
 {
-    public static BulletSpawn Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-
     [ClientRpc]
-    protected override void SpawnObjClientRpc(Vector2 position, Vector2 newTarget)
+    protected void SpawnObjClientRpc(Vector2 position, Vector2 newTarget)
     {
         GameObject objSpawned = ObjIsSpawned();
         objSpawned.transform.parent = holder.transform;
-        objSpawned.GetComponent<Bullet>().SetTarget(position, newTarget);
+        objSpawned.GetComponent<Bullet>().SetTarget(position, newTarget, this);
+    }
+
+    public void SpawnObj(GameObject bullet, Vector2 position, Vector2 head)
+    {
+        if (!IsHost) return;
+        prefab = bullet;
+        SpawnObjClientRpc(position, head);
+        Debug.Log("Spawn");
     }
 
     private void OnEnable()
@@ -49,12 +43,11 @@ public class BulletSpawn : SpawmObjByTime, IObserver
 
     public void OnPause(int time)
     {
-        canSpawn=false;
+        
     }
 
     public void OnResume()
     {
-        StartCoroutine(SpawnObject());
-        canSpawn =true;
+        
     }
 }

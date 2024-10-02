@@ -17,6 +17,10 @@ public class PlayerTakeDame : PlayerHp
     protected override void Despawn()
     {
         playerCtrl.SetActivePlayer(false);
+        foreach(Transform child in this.transform)
+        {
+            child.gameObject.SetActive(false);
+        }
         playerCtrl.playerAnimator.Desappear();
     }
 

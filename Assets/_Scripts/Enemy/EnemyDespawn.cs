@@ -5,12 +5,14 @@ using UnityEngine;
 public class EnemyDespawn : ObjDeSpawnByHp
 {
     private EnemyBehaviour enemyBehaviour;
+    private Collider2D col;
 
     private bool beingDetroyed=false;
 
     private void Awake()
     {
         enemyBehaviour = GetComponent<EnemyBehaviour>();
+        col = GetComponent<Collider2D>();
     }
 
     private void Update()
@@ -32,7 +34,7 @@ public class EnemyDespawn : ObjDeSpawnByHp
     protected void BeingDestroyed()
     {
         if (beingDetroyed == false) return;
-        //do somthing
+        col.enabled = false;
     }
 
     protected override void Despawn()

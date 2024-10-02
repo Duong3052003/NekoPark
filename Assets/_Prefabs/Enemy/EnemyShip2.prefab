@@ -157,7 +157,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ebf8f1e5dd029043a6ec0984af963d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 16
   rotationSpeed: 10
+  velocityX: 0
+  velocityY: -1
+  nPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  nRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
 --- !u!61 &-4531836595914341756
 BoxCollider2D:
   m_ObjectHideFlags: 0

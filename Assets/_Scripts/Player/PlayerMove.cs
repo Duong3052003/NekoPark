@@ -103,7 +103,7 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
             float positionError = Vector3.Distance(nPosition.Value, transform.position);
 
             if (positionError < reconciliationThreshold) return;
-            transform.position = nPosition.Value;
+            transform.position = Vector3.Lerp(transform.position, nPosition.Value,Time.deltaTime*speed);
             transform.rotation = nRotation.Value;
         }
     }
