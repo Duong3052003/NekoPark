@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PortGun : Spawner, IObserver
+public class BulletSpawner : Spawner, IObserver
 {
     public bool canSpawn;
 

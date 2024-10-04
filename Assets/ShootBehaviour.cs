@@ -20,6 +20,7 @@ public class ShootBehaviour : StateMachineBehaviour
         time = Random.Range(minTime, maxTime);
         target = new Vector2(playerPos.position.x, playerPos.position.y);
         enemy = animator.gameObject;
+        enemy.GetComponent<EnemyBehaviour>().ChangeStyle(1);
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

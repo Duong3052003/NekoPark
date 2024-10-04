@@ -10,11 +10,13 @@ public abstract class PlayerAnimator : NetworkBehaviour
 
     private int playerLayer;
     private int trapLayer;
+    private int enemyPlayer;
 
     private void Awake()
     {
         playerCtrl = GetComponent<PlayerCtrl>();
         trapLayer = LayerMask.NameToLayer("Trap");
+        enemyPlayer = LayerMask.NameToLayer("Enemy");
     }
 
     private void Start()
@@ -50,11 +52,13 @@ public abstract class PlayerAnimator : NetworkBehaviour
         playerLayer = this.gameObject.layer;
 
         Physics2D.IgnoreLayerCollision(playerLayer, trapLayer);
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyPlayer);
         playerCtrl.animator.SetLayerWeight(1,1);
 
         yield return new WaitForSeconds(_time);
 
         Physics2D.IgnoreLayerCollision(playerLayer, trapLayer, false);
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyPlayer, false);
         playerCtrl.animator.SetLayerWeight(1, 0);
     }
 

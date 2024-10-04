@@ -15,11 +15,6 @@ public class EnemyDespawn : ObjDeSpawnByHp
         col = GetComponent<Collider2D>();
     }
 
-    private void Update()
-    {
-        BeingDestroyed();
-    }
-
     public override void TakeDamaged(int damage)
     {
         if (!IsOwner) return;
@@ -31,15 +26,12 @@ public class EnemyDespawn : ObjDeSpawnByHp
         
     }
 
-    protected void BeingDestroyed()
-    {
-        if (beingDetroyed == false) return;
-        col.enabled = false;
-    }
-
     protected override void Despawn()
     {
-        enemyBehaviour.animator.SetBool("expl",true);
+        if (beingDetroyed == true) return;
+        beingDetroyed = true;
+        col.enabled = false;
+        enemyBehaviour.animator.SetTrigger("expl");
     }
 
     protected void BeDestroyed()

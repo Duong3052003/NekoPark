@@ -75,7 +75,6 @@ MonoBehaviour:
   prefab: {fileID: 8403506746482345233, guid: 43a485f7a048d114b8ea4ed0f35c106b, type: 3}
   poolObjs: []
   objSpawnedHolders: []
-  playerModel: {fileID: 198470444426104793, guid: b5f16f4ec3dc4024fb1e42e746d033fb, type: 3}
   size: {x: 6, y: 5}
   offset: {x: 3.55, y: 1.3}
   transformPlayers:
@@ -84,6 +83,8 @@ MonoBehaviour:
   - {fileID: 5783506816799828851}
   - {fileID: 8409121921887388882}
   generateMapBtn: {fileID: 0}
+  mupltiHP: 1
+  hpObj: 3
 --- !u!114 &5196122849776629556
 MonoBehaviour:
   m_ObjectHideFlags: 0

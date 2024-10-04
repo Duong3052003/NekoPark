@@ -9607,6 +9607,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7756445887642637987, guid: 43259df7f7907034ebb3e6923eed081a, type: 3}
+      propertyPath: mupltiHP
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7756445887642637987, guid: 43259df7f7907034ebb3e6923eed081a, type: 3}
       propertyPath: offset.x
       value: 8
       objectReference: {fileID: 0}

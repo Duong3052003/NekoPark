@@ -18,6 +18,9 @@ public class LevelGenerator : Spawner,IObserver
     [SerializeField] private List<Transform> transformPlayers;
     [SerializeField] private Button generateMapBtn;
 
+    [SerializeField] private bool mupltiHP=true;
+    [SerializeField] private int hpObj;
+
     private GameObject objSpawned;
     private int cdRespam;
 
@@ -69,7 +72,12 @@ public class LevelGenerator : Spawner,IObserver
         objSpawned.transform.SetParent(objSpawnedHolders[k].transform);
 
         objSpawned.GetComponent<ObjDeSpawnByHp>().SettingObjIfAlreadyInScene((float)j / (size.y - 1));
-        objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(3*(j+1));
+
+        if(mupltiHP== true)
+        {
+            hpObj = 3 * (j + 1);
+        }
+        objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpObj);
     }
 
     [ServerRpc(RequireOwnership = false)]

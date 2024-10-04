@@ -9,10 +9,14 @@ public class IdleBehaviour : StateMachineBehaviour
     public float minTime;
     public float maxTime;
 
+    private GameObject enemy;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         rand = Random.Range(0, 2);
         time = Random.Range(minTime, maxTime);
+        enemy = animator.gameObject;
+        enemy.GetComponent<EnemyBehaviour>().ChangeStyle(0);
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
