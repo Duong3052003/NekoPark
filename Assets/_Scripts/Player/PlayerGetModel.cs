@@ -19,13 +19,14 @@ public class PlayerGetModel : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         PlayerManager.Instance.playerControl.Add(this.gameObject);
-        GetModelFromStorage();
+        if(!IsOwner) return;
+        GetModelServerRpc(OwnerClientId);
     }
 
-    private void OnEnable()
+   /* private void OnEnable()
     {
         GetModelFromStorage();
-    }
+    }*/
 
     private void OnDisable()
     {
@@ -40,16 +41,23 @@ public class PlayerGetModel : NetworkBehaviour
     {
         if (networkObj == null) return;
         playerModel = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().playerModel;
-        if (!IsOwner) return;
-        GetModelServerRpc();
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void GetModelServerRpc(ServerRpcParams rpcParams = default)
+    public void GetModelServerRpc(ulong _idOwner)
     {
+        GetModelFromStorage();
         playerInstance = Instantiate(playerModel);
         NetworkObject networkObject = playerInstance.GetComponent<NetworkObject>();
-        networkObject.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
-        //playerInstance.transform.SetParent(this.transform);
+        networkObject.SpawnWithOwnership(_idOwner);
+        playerInstance.transform.SetParent(this.transform);
+        //SetPositionModelClientRpc();
     }
+
+    /*[ClientRpc]
+    private void SetPositionModelClientRpc()
+    {
+        if (playerInstance == null) return;
+        playerInstance.GetComponent<PlayerMove>().SetPositionNetworkVariable(this.transform.position);
+    }*/
 }

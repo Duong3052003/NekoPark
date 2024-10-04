@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - Ladder
   - Platform
+  - Holder
   layers:
   - Default
   - TransparentFX

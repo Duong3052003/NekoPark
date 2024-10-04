@@ -406,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 827045018
+  GlobalObjectIdHash: 3887293421
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -535,7 +535,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraFocus: {fileID: 91100878073842534}
-  posRanged: 2
   targetGroup: {fileID: 0}
 --- !u!114 &-6670701864465675324
 MonoBehaviour:
@@ -566,6 +565,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 7
   CanMove: 1
+  nPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  nRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
   jumpPower: 18
   gravitymin: 5
   gravitymax: 7

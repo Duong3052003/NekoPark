@@ -23,12 +23,12 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
     const int k_bufferSize = 1024;
 
     //network variable
-    protected NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(
+    public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(
         Vector3.zero,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Owner);
 
-    protected NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(
+    public NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(
         Quaternion.identity,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Owner);
@@ -40,16 +40,21 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
         playerCtrl = GetComponent<PlayerCtrl>();
     }
 
+    public void SetPositionNetworkVariable(Vector3 newPos)
+    {
+        this.transform.position = newPos;
+        if (!IsOwner) return;
+        nPosition.Value = newPos;
+    }
+
     public override void OnNetworkSpawn()
     {
-        UpdateNetworkVariables();
         NetworkTimer.Instance.CurrentTick.OnValueChanged += (oldValue, newValue) => HandleClientTick();
     }
 
     private void Update()
     {
         if (!IsOwner || playerCtrl.rb.bodyType == RigidbodyType2D.Static || !CanMove) return;
-
         MoveInput();
         Movement(MoveInput());
     }
@@ -72,23 +77,30 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
     void HandleClientTick()
     {
         if(this == null) return;
-        UpdateNetworkVariables();
-
-        if (!IsOwner) return;
-        var currentTick = NetworkTimer.Instance.CurrentTick.Value;
-        var bufferIndex = currentTick % k_bufferSize;
-
-        InputPayLoad inputPayload = new InputPayLoad()
+        if (!CanMove)
         {
-            tick = currentTick,
-            timestamp = DateTime.Now,
-            OwnerObjID = OwnerClientId,
-            NetworkObjID = NetworkObjectId,
-            inputVector = MoveInput(),
-            position = transform.position
-        };
+            UpdateAbsNetworkVariables();
+        }
+        else
+        {
+            UpdateNetworkVariables();
 
-        Server.Instance.OnClientInput(inputPayload);
+            if (!IsOwner) return;
+            var currentTick = NetworkTimer.Instance.CurrentTick.Value;
+            var bufferIndex = currentTick % k_bufferSize;
+
+            InputPayLoad inputPayload = new InputPayLoad()
+            {
+                tick = currentTick,
+                timestamp = DateTime.Now,
+                OwnerObjID = OwnerClientId,
+                NetworkObjID = NetworkObjectId,
+                inputVector = MoveInput(),
+                position = transform.position
+            };
+
+            Server.Instance.OnClientInput(inputPayload);
+        }
     }
 
     private void UpdateNetworkVariables()
@@ -103,7 +115,21 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
             float positionError = Vector3.Distance(nPosition.Value, transform.position);
 
             if (positionError < reconciliationThreshold) return;
-            transform.position = Vector3.Lerp(transform.position, nPosition.Value,Time.deltaTime*speed);
+            transform.position = Vector3.Lerp(transform.position, nPosition.Value, Time.deltaTime * speed);
+            transform.rotation = nRotation.Value;
+        }
+    }
+
+    private void UpdateAbsNetworkVariables()
+    {
+        if (IsOwner)
+        {
+            nPosition.Value = transform.position;
+            nRotation.Value = transform.rotation;
+        }
+        else
+        {
+            transform.position = nPosition.Value;
             transform.rotation = nRotation.Value;
         }
     }
@@ -132,6 +158,7 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
 
     public void OnResume()
     {
+        UpdateAbsNetworkVariables();
         if (!IsServer) return;
         SetCanMoveClientRpc(true);
     }

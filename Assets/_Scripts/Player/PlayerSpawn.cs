@@ -3,18 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerSpawn : NetworkBehaviour
 {
     public GameObject cameraFocus;
-    [SerializeField] private float posRanged = 5f;
     public CinemachineTargetGroup targetGroup;
 
     public override void OnNetworkSpawn()
     {
         PlayerManager.Instance.players.Add(this.gameObject);
         FindAndAddTargetGroup();
-        PlayerManager.Instance.ResetPositionAllPlayers();
+
+        //if (!IsHost) return;
+        /*if (IsHost && SceneManager.GetActiveScene().name != "SampleScene")
+        {
+            ulong _idOwner = 0;
+            for (int i = 0; i < PlayerManager.Instance.playerControl.Count; i++)
+            {
+                Vector3 newPos = PlayerManager.Instance.playerControl[(int)_idOwner].transform.position;
+                PlayerManager.Instance.SetPositionPlayersClientRpc((int)_idOwner, newPos);
+                _idOwner++;
+            }
+        }*/
+
+        //PlayerManager.Instance.ResetPositionAllPlayers();
     }
 
     private void OnEnable()
@@ -26,13 +39,6 @@ public class PlayerSpawn : NetworkBehaviour
     private void OnDisable()
     {
         targetGroup=null;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void UpdatePosServerRpc()
-    {
-        transform.position = new Vector2(Random.Range(-posRanged, posRanged), 1);
-        transform.rotation = new Quaternion(0, 0, 0, 0);
     }
 
     private void FindAndAddTargetGroup()

@@ -19,7 +19,8 @@ public class ItemDrop : Spawner
     [ServerRpc(RequireOwnership =false)]
     private void DropItemServerRPC()
     {
-        GameObject newItem = ObjIsSpawned();
+        var newItem = ObjIsSpawned();
+        if (newItem == null) return;
         newItem.GetComponent<IObjectServerSpawn>().Spawn(this.transform.position,new Vector2(0,-1));
     }
 

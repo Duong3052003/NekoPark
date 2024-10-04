@@ -100,7 +100,7 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
         Movement(reflectDirection);
 
         //rb.AddForce(new Vector3(velocityX, velocityY, 0f)*150);
-        transform.position += new Vector3(velocityX, velocityY, 0f)/25;
+        transform.position += new Vector3(velocityX, velocityY, 0f)/35;
         StartCoroutine(DisableColliderTemporary());
     }
 

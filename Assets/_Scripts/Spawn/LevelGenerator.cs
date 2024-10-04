@@ -37,7 +37,7 @@ public class LevelGenerator : Spawner,IObserver
     {
         if (!IsHost) return;
 
-        SetActivePlayersServerRPC();
+        SetActivePlayerControlServerRPC();
 
         /*generateMapBtn.onClick.AddListener(() =>
         {
@@ -73,11 +73,24 @@ public class LevelGenerator : Spawner,IObserver
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetActivePlayersServerRPC()
+    private void SetActivePlayerControlServerRPC()
     {
+        PlayerManager.Instance.SetPlayerControlClientRpc(true);
+        ulong _idOwner = 0;
         for (int i = 0; i < PlayerManager.Instance.playerControl.Count; i++)
         {
             PlayerManager.Instance.SetPositionPlayersControlClientRpc(i, transformPlayers[i].position);
+            PlayerManager.Instance.playerControl[i].GetComponent<PlayerGetModel>().GetModelServerRpc(_idOwner);
+            _idOwner++;
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetActivePlayersServerRPC()
+    {
+        for (int i = 0; i < PlayerManager.Instance.players.Count; i++)
+        {
+            PlayerManager.Instance.SetPositionPlayersClientRpc(i, transformPlayers[i].position);
         }
     }
 
@@ -147,7 +160,7 @@ public class LevelGenerator : Spawner,IObserver
     [ServerRpc]
     public void GenerateMapServerRpc()
     {
-        SetActivePlayersServerRPC();
+        SetActivePlayerControlServerRPC();
         GenerateObj(size.y);
     }
 
@@ -173,6 +186,8 @@ public class LevelGenerator : Spawner,IObserver
 
     public void OnPause(int time)
     {
+        if (!IsHost) return;
+        SetActivePlayersServerRPC();
     }
 
     public void OnResume()
@@ -180,5 +195,6 @@ public class LevelGenerator : Spawner,IObserver
         GenerateObj(size.y);
         if (!IsHost) return;
         SetUpLevelServerRPC();
+        PlayerManager.Instance.GetSettingStatusPlayer();
     }
 }

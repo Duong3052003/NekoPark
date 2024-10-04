@@ -11,6 +11,11 @@ public class PortGun : Spawner, IObserver
     public Transform positionTransform;
     public float spawnCD;
 
+    private void Awake()
+    {
+        holder = GameObject.FindGameObjectWithTag("Holder").transform;
+    }
+
     protected IEnumerator SpawnObjectCD()
     {
         while (canSpawn)

@@ -52,6 +52,7 @@ public class _ScenesManager : NetworkBehaviour
         yield return new WaitForSeconds(2);
         if (IsHost)
         {
+            PlayerManager.Instance.SetPlayerControlClientRpc(false);
             NetworkManager.Singleton.SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
         //transition
@@ -62,9 +63,7 @@ public class _ScenesManager : NetworkBehaviour
     {
         Debug.Log("LoadSceneCompleted");
 
-        PlayerManager.Instance.RefreshPlayersClientRpc(true);
         PlayerManager.Instance.SetupPlayersClientRPC();
-        PlayerManager.Instance.GetSettingStatusPlayer();
         //PlayerManager.Instance.RefreshPlayersClientRpc();
 
         NetworkTimer.Instance.OnPauseServerRpc(5);

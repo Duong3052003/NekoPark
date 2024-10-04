@@ -48,6 +48,15 @@ public class PlayerManager : NetworkBehaviour
     }
 
     [ClientRpc]
+    public void SetPlayersClientRpc(bool boolen)
+    {
+        foreach (GameObject player in players)
+        {
+            player.SetActive(boolen);
+        }
+    }
+
+    [ClientRpc]
     public void RefreshPlayersClientRpc(bool isPlayerControl)
     {
         if(isPlayerControl == false)
@@ -72,7 +81,24 @@ public class PlayerManager : NetworkBehaviour
                 
             }
         }
-        
+    }
+
+    [ClientRpc]
+    public void SetPlayerControlClientRpc(bool boolen)
+    {
+        if(boolen == false)
+        {
+            players.Clear();
+        }
+
+        foreach (GameObject player in playerControl)
+        {
+            if (player != null)
+            {
+                player.SetActive(boolen);
+            }
+
+        }
     }
 
     public void GetSettingStatusPlayer()
@@ -129,7 +155,7 @@ public class PlayerManager : NetworkBehaviour
     public void SetPositionPlayersClientRpc(int numberPlayer,Vector3 pos)
     {
         if (players[numberPlayer] == null) return;
-        players[numberPlayer].transform.position = pos;
+        players[numberPlayer].GetComponent<PlayerMove>().SetPositionNetworkVariable(pos);
     }
 
     [ClientRpc]

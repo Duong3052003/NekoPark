@@ -16,7 +16,7 @@ public class PauseScreen : NetworkBehaviour,IObserver
     {
         timeCountText.text = nTime.Value.ToString();
 
-        if (IsServer && nTime.Value >0)
+        if (IsServer && nTime.Value >0 && nTime !=null)
         {
             floatTime -= Time.deltaTime;
 
