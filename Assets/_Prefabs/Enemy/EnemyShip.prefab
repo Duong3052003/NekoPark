@@ -14,11 +14,11 @@ GameObject:
   - component: {fileID: 1480542237144805817}
   - component: {fileID: 8177648039983603339}
   - component: {fileID: 5144263742663215406}
-  - component: {fileID: 4831047806644968078}
   - component: {fileID: 2026282771547804296}
   - component: {fileID: 3095976817716222298}
   - component: {fileID: -6104265787167210527}
   - component: {fileID: 8051147500638132974}
+  - component: {fileID: -5354103794802068676}
   m_Layer: 14
   m_Name: EnemyShip
   m_TagString: Untagged
@@ -177,30 +177,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpText: {fileID: 0}
   setHpIfAlreadyInScene: 0
---- !u!114 &4831047806644968078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2415912171062337475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ebf8f1e5dd029043a6ec0984af963d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  turbo: {fileID: 4068113435195663144}
-  speed: 5
-  rotationSpeed: 10
-  velocityX: 0
-  velocityY: 0
-  rangeX: 0
-  styleCurrent: 0
-  posCurrent: {x: 0, y: 0, z: 0}
-  nPosition:
-    m_InternalValue: {x: 0, y: 0, z: 0}
-  nRotation:
-    m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
 --- !u!61 &2026282771547804296
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -230,7 +206,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -273,8 +249,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  collisionDame: 1
-  triggerDame: 0
+  collisionDame: 0
+  triggerDame: 1
 --- !u!114 &8051147500638132974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,10 +266,42 @@ MonoBehaviour:
   holder: {fileID: 0}
   prefab: {fileID: 1616980606662130335, guid: c4c2c93ab1e2c8041907bae920fe333a, type: 3}
   poolObjs: []
-  canSpawn: 1
+  canSpawn: 0
   headTransform: {fileID: 3804641835763374027}
   positionTransform: {fileID: 7459202090504303369}
-  spawnCD: 2
+  spawnCD: 1
+--- !u!114 &-5354103794802068676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2415912171062337475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35488d80f26a7a94ba7db99405bd2794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  rotationSpeed: 10
+  canMove: 0
+  velocityX: 0
+  velocityY: 0
+  nPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  nRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
+  time: 0
+  rangeX: 3
+  styleCurrent: 1
+  styleFirst: 1
+  posCurrent: {x: 0, y: 0, z: 0}
+  posSpawnNeedToGo: {x: 0, y: 0, z: 0}
+  posTransformSpawnNeedToGo: {fileID: 0}
+  targetTransform: {fileID: 0}
+  turbo: {fileID: 4068113435195663144}
+  lockStyle: 0
+  isStraght: 1
 --- !u!1001 &4068859708957127544
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -377,6 +385,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GunPort
       objectReference: {fileID: 0}
+    - target: {fileID: 2529318097588325285, guid: a1ef4b79a33aa34479eee626ea516921, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6542558040580358873, guid: a1ef4b79a33aa34479eee626ea516921, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -416,6 +428,10 @@ PrefabInstance:
     - target: {fileID: 6542558040580358873, guid: a1ef4b79a33aa34479eee626ea516921, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 8093342605739306855, guid: a1ef4b79a33aa34479eee626ea516921, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

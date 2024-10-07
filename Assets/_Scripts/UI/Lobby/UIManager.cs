@@ -10,7 +10,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using static Cinemachine.CinemachineTriggerAction.ActionSettings;
 using static Cinemachine.DocumentationSortingAttribute;
 
@@ -27,7 +27,7 @@ public class UIManager : NetworkBehaviour
 
     private string nameScene = "Scenes/SampleScene";
 
-    //Screen
+    [Header("Menu screens")]
     [SerializeField] private GameObject mainMenuScreen;
     [SerializeField] private GameObject listLobbyScreen;
     [SerializeField] private GameObject hostBtnScreen;
@@ -35,19 +35,24 @@ public class UIManager : NetworkBehaviour
     [SerializeField] private GameObject choiceLevelScreen;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject gameOverScreenClient;
+    [SerializeField] private GameObject loadingScreen;
 
-    //List Lobby
+    [Header("List Lobby")]
     [SerializeField] private GameObject lobbyGameObj;
     [SerializeField] private Transform listLobby;
 
-    //Host Lobby
+    [Header("Host Lobby")]
     [SerializeField] private TextMeshProUGUI isPrivateTxt;
 
-    //Lobby
+    [Header("Lobby")]
     [SerializeField] private GameObject informationPlayer;
     [SerializeField] private Transform listPlayer;
 
-    //Others
+    [Header("Slider")]
+    [SerializeField] private GameObject loadingSliderObj;
+    [SerializeField] private Slider loadingSlider;
+
+    [Header("Others")]
     [SerializeField] private GameObject backGround;
     [SerializeField] private TextMeshProUGUI gameModeTxt;
     [SerializeField] private TMP_InputField lobbyCodeTF;
@@ -524,8 +529,6 @@ public class UIManager : NetworkBehaviour
         return false;
     }
 
-    #endregion
-
     private void StartSceneLobby()
     {
         if (nameScene.Equals("test")) return;
@@ -552,6 +555,7 @@ public class UIManager : NetworkBehaviour
             TestRelay.Instance.JoinRelay(joinedLobby.Data["StartGame"].Value);
         }
     }
+    #endregion
 
     #region buttonScreen
     public void ListLobbyScreen()
@@ -629,6 +633,7 @@ public class UIManager : NetworkBehaviour
     }
     #endregion
 
+    #region SettingMenuGame
     public void Restart()
     {
         _ScenesManager.Instance.LoadScene(SceneManager.GetActiveScene().name);
@@ -668,6 +673,36 @@ public class UIManager : NetworkBehaviour
             GameOverScreen();
         }
     }
+    #endregion
+
+    #region LoadingScreen
+    public void Display()
+    {
+        loadingScreen.SetActive(true);
+        if(loadingSlider == null)
+        {
+            loadingSlider = loadingSliderObj.GetComponent<Slider>();
+        }
+    }
+
+    public void UpdateProgress(float progress)
+    {
+        loadingSlider.value = progress;
+    }
+
+    public void Hide()
+    {
+        HideClientRpc();
+    }
+
+    [ClientRpc]
+    private void HideClientRpc()
+    {
+        loadingScreen.SetActive(false);
+    }
+    #endregion
+
+
 
     public static List<GameObject> FindAllGameObjectsWithIObject()
     {

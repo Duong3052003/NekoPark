@@ -40,12 +40,12 @@ public class PauseScreen : NetworkBehaviour,IObserver
 
     public void AddListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.AddListObserver(observer);
+        _ScenesManager.Instance.AddListObserver(observer);
     }
 
     public void RemoveListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.AddListObserver(observer);
+        _ScenesManager.Instance.AddListObserver(observer);
     }
 
     public void OnPause(int time)
@@ -66,5 +66,9 @@ public class PauseScreen : NetworkBehaviour,IObserver
     {
         backGround.SetActive(boolen);
         timeCountText.gameObject.SetActive(boolen);
+    }
+
+    public void OnLoadDone()
+    {
     }
 }

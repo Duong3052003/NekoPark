@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ParentNetwork : NetworkBehaviour
 {
-    public override void OnNetworkDespawn()
+   /* public override void OnNetworkDespawn()
     {
         DestroyChildServerRpc();
     }
@@ -23,5 +23,5 @@ public class ParentNetwork : NetworkBehaviour
             }
         }
         base.OnNetworkDespawn();
-    }
+    }*/
 }

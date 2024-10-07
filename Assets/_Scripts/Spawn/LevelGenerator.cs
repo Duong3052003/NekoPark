@@ -8,27 +8,26 @@ using UnityEngine.UI;
 
 public class LevelGenerator : Spawner,IObserver
 {
-    public static LevelGenerator Instance { get; private set; }
-    
-    [SerializeField] private GameObject[] objSpawnedHolders;
+    public static LevelGenerator levelGenerator { get; private set; }
 
-    [SerializeField] private Vector2Int size;
-    [SerializeField] private Vector2 offset;
+    [SerializeField] protected GameObject[] objSpawnedHolders;
 
-    [SerializeField] private List<Transform> transformPlayers;
-    [SerializeField] private Button generateMapBtn;
+    [SerializeField] protected Vector2Int size;
+    [SerializeField] protected Vector2 offset;
 
-    [SerializeField] private bool mupltiHP=true;
-    [SerializeField] private int hpObj;
+    [SerializeField] protected List<Transform> transformPlayers;
+    [SerializeField] protected Button generateMapBtn;
 
-    private GameObject objSpawned;
-    private int cdRespam;
+    [SerializeField] protected bool mupltiHP=true;
+    [SerializeField] protected int hpObj;
 
-    private void Awake()
+    protected GameObject objSpawned;
+
+    protected virtual void Awake()
     {
-        if (Instance == null)
+        if (levelGenerator == null)
         {
-            Instance = this;
+            levelGenerator = this;
         }
         else
         {
@@ -48,7 +47,7 @@ public class LevelGenerator : Spawner,IObserver
         });*/
     }
 
-    private void GenerateObj(int numRow)
+    protected virtual void GenerateObj(int numRow)
     {
         for (int k = 0; k < objSpawnedHolders.Length; k++)
         {
@@ -63,7 +62,7 @@ public class LevelGenerator : Spawner,IObserver
     }
 
     [ServerRpc(RequireOwnership =false)]
-    private void GenerateObjsServerRPC(int k, int i, int j)
+    protected virtual void GenerateObjsServerRPC(int k, int i, int j)
     {
         objSpawned = ObjIsSpawned();
 
@@ -81,7 +80,7 @@ public class LevelGenerator : Spawner,IObserver
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetActivePlayerControlServerRPC()
+    protected virtual void SetActivePlayerControlServerRPC()
     {
         PlayerManager.Instance.SetPlayerControlClientRpc(true);
         ulong _idOwner = 0;
@@ -94,7 +93,7 @@ public class LevelGenerator : Spawner,IObserver
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetActivePlayersServerRPC()
+    protected virtual void SetActivePlayersServerRPC()
     {
         for (int i = 0; i < PlayerManager.Instance.players.Count; i++)
         {
@@ -103,7 +102,7 @@ public class LevelGenerator : Spawner,IObserver
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetUpLevelServerRPC()
+    protected virtual void SetUpLevelServerRPC()
     {
         LevelStorage levelStorage = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>();
 
@@ -138,7 +137,7 @@ public class LevelGenerator : Spawner,IObserver
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void SpawnObjServerRpc(int indexItem,ulong idOwner, Vector2 posSpawn, Vector2 velocityVector)
+    public virtual void SpawnObjServerRpc(int indexItem,ulong idOwner, Vector2 posSpawn, Vector2 velocityVector)
     {
         LevelStorage levelStorage = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>();
         if (levelStorage.items[indexItem] == null) return;
@@ -147,62 +146,49 @@ public class LevelGenerator : Spawner,IObserver
         newItem.GetComponent<IObjectServerSpawn>().Spawn(posSpawn, velocityVector);
     }
 
-    public List<GameObject> CallAllBallsOfClient(ulong clientId)
-    {
-        GameObject[] allBalls = GameObject.FindGameObjectsWithTag("Bullet");
-
-        List<GameObject> clientBalls = new List<GameObject>();
-
-        foreach (GameObject ball in allBalls)
-        {
-            NetworkObject networkObject = ball.GetComponent<NetworkObject>();
-            if (networkObject != null && networkObject.OwnerClientId == clientId)
-            {
-                clientBalls.Add(ball);
-            }
-        }
-
-        return clientBalls;
-    }
-
     [ServerRpc]
-    public void GenerateMapServerRpc()
+    public virtual void GenerateMapServerRpc()
     {
         SetActivePlayerControlServerRPC();
         GenerateObj(size.y);
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         AddListObserver(this);
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         RemoveListObserver(this);
     }
 
-    public void AddListObserver(IObserver observer)
+    public virtual void AddListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.AddListObserver(observer);
+        _ScenesManager.Instance.AddListObserver(observer);
     }
 
-    public void RemoveListObserver(IObserver observer)
+    public virtual void RemoveListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.RemoveListObserver(observer);
+        _ScenesManager.Instance.RemoveListObserver(observer);
     }
 
-    public void OnPause(int time)
+    public virtual void OnPause(int time)
     {
-        if (!IsHost) return;
-        SetActivePlayersServerRPC();
+        
     }
 
-    public void OnResume()
+    public virtual void OnResume()
     {
         GenerateObj(size.y);
         if (!IsHost) return;
         SetUpLevelServerRPC();
         PlayerManager.Instance.GetSettingStatusPlayer();
+    }
+
+    public void OnLoadDone()
+    {
+        if (!IsHost) return;
+        SetActivePlayersServerRPC();
     }
 }

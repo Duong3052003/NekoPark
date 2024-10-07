@@ -26,6 +26,14 @@ public class EnemyDespawn : ObjDeSpawnByHp
         
     }
 
+    public void CallDespawn()
+    {
+        if (beingDetroyed == true) return;
+        beingDetroyed = true;
+        col.enabled = false;
+        enemyBehaviour.animator.SetTrigger("expl");
+    }
+
     protected override void Despawn()
     {
         if (beingDetroyed == true) return;

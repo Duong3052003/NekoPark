@@ -17,7 +17,7 @@ public class ItemIncScale : ItemDebuff
     [ClientRpc]
     private void ApplyEffectClientRpc(ulong idOwner)
     {
-        clientBalls = LevelGenerator.Instance.CallAllBallsOfClient(idOwner);
+        clientBalls = LevelBricksGenerator.Instance.CallAllBallsOfClient(idOwner);
 
         foreach (GameObject clientBall in clientBalls)
         {

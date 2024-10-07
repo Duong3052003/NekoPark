@@ -9,11 +9,11 @@ public class ItemAddBall : ItemDebuff
     {
         ulong idOwner = PlayerManager.Instance.players[PlayerManager.Instance.players.FindIndex(player => player == _gameObject)].GetComponent<NetworkObject>().OwnerClientId;
 
-        List<GameObject> clientBalls =  LevelGenerator.Instance.CallAllBallsOfClient(idOwner);
+        List<GameObject> clientBalls =  LevelBricksGenerator.Instance.CallAllBallsOfClient(idOwner);
 
         foreach (GameObject clientBall in clientBalls)
         {
-            LevelGenerator.Instance.SpawnObjServerRpc(0,idOwner,clientBall.transform.position, new Vector2 (clientBall.GetComponent<Ball>().GetVelocity().x *-1, clientBall.GetComponent<Ball>().GetVelocity().y));
+            LevelBricksGenerator.Instance.SpawnObjServerRpc(0,idOwner,clientBall.transform.position, new Vector2 (clientBall.GetComponent<Ball>().GetVelocity().x *-1, clientBall.GetComponent<Ball>().GetVelocity().y));
         }
     }
 }

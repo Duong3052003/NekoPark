@@ -2282,6 +2282,7 @@ GameObject:
   - component: {fileID: 558541694}
   - component: {fileID: 558541693}
   - component: {fileID: 558541692}
+  - component: {fileID: 558541696}
   - component: {fileID: 558541691}
   - component: {fileID: 558541690}
   m_Layer: 5
@@ -2322,11 +2323,14 @@ MonoBehaviour:
   choiceLevelScreen: {fileID: 648060974}
   gameOverScreen: {fileID: 0}
   gameOverScreenClient: {fileID: 0}
+  loadingScreen: {fileID: 0}
   lobbyGameObj: {fileID: 1792007053115647195, guid: ca996bfe72beac64999935bbfd7e298a, type: 3}
   listLobby: {fileID: 1859344367}
   isPrivateTxt: {fileID: 1207917596}
   informationPlayer: {fileID: 11360054006559657, guid: c70302c482e7d35439fd4b1741b2cb78, type: 3}
   listPlayer: {fileID: 0}
+  loadingSliderObj: {fileID: 0}
+  loadingSlider: {fileID: 0}
   backGround: {fileID: 263070606}
   gameModeTxt: {fileID: 512843105}
   lobbyCodeTF: {fileID: 2119718995}
@@ -2421,6 +2425,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &558541696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558541689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3810216364
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &584744681
 GameObject:
   m_ObjectHideFlags: 0

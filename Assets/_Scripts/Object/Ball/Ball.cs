@@ -167,12 +167,12 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
 
     public void AddListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.AddListObserver(observer);
+        _ScenesManager.Instance.AddListObserver(observer);
     }
 
     public void RemoveListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.RemoveListObserver(observer);
+        _ScenesManager.Instance.RemoveListObserver(observer);
     }
 
     public void OnPause(int time)
@@ -206,5 +206,10 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
     public void DeSpawn()
     {
         Destroy(this.gameObject);
+    }
+
+    public void OnLoadDone()
+    {
+        throw new System.NotImplementedException();
     }
 }

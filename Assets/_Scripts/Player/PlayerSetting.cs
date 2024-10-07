@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies.Models;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class PlayerSetting : NetworkBehaviour
+public class PlayerSetting : NetworkBehaviour,IObserver
 {
-    private Sprite[] skins;
-    private RuntimeAnimatorController[] controllers;
+    [SerializeField] private Sprite[] skins;
+    [SerializeField] private RuntimeAnimatorController[] controllers;
     [SerializeField] private GameObject playerHUDImg;
 
     [SerializeField] private Button startBtn;
@@ -22,19 +24,11 @@ public class PlayerSetting : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        skins = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().skins;
-        controllers = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().controllers;
-
         nCharacter.OnValueChanged += (oldValue, newValue) => UpdateModel();
 
         UpdateModel();
         if (!IsOwner) return;
         SetUpPlayer();
-    }
-
-    private void OnDisable()
-    {
-        playerHUDImg.SetActive(false);
     }
 
     public void SetUpPlayer()
@@ -95,6 +89,11 @@ public class PlayerSetting : NetworkBehaviour
 
     private void UpdateModel()
     {
+        skins = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().skins;
+        controllers = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().controllers;
+        Debug.Log(GameObject.Find("=====LevelStorage=====").transform.position);
+        Debug.Log(skins[1].name);
+
         transform.GetComponent<SpriteRenderer>().sprite = skins[nCharacter.Value];
         transform.GetComponent<Animator>().runtimeAnimatorController = controllers[nCharacter.Value];
         this.gameObject.layer = LayerMask.NameToLayer(UIManager.Instance.GetStringColor(nCharacter.Value));
@@ -113,6 +112,47 @@ public class PlayerSetting : NetworkBehaviour
         UIManager.Instance.UpdateColorPlayer(color);
         //PlayerManager.Instance.SetColor(color);
         nCharacter.Value = color;
+    }
+
+    protected virtual void OnEnable()
+    {
+        AddListObserver(this);
+    }
+
+    protected void OnDisable()
+    {
+        RemoveListObserver(this);
+        playerHUDImg.SetActive(false);
+    }
+
+    public virtual void AddListObserver(IObserver observer)
+    {
+        _ScenesManager.Instance.AddListObserver(observer);
+    }
+
+    public virtual void RemoveListObserver(IObserver observer)
+    {
+        _ScenesManager.Instance.RemoveListObserver(observer);
+    }
+
+    public virtual void OnPause(int time)
+    {
+
+    }
+
+    public virtual void OnResume()
+    {
+    }
+
+    public void OnLoadDone()
+    {
+        UpdateModelClientRpc();
+    }
+
+    [ClientRpc]
+    private void UpdateModelClientRpc()
+    {
+        UpdateModel();
     }
 
     /* public override void OnNetworkSpawn()

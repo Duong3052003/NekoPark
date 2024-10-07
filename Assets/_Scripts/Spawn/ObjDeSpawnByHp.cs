@@ -87,7 +87,7 @@ public abstract class ObjDeSpawnByHp : DeSpawnByHp, ITakeDamaged
     [ClientRpc]
     protected virtual void DespawnClientRpc()
     {
-        LevelGenerator.Instance.DeSpawn(this.gameObject);
+        LevelGenerator.levelGenerator.DeSpawn(this.gameObject);
     }
 
     public abstract void SettingObjIfAlreadyInScene(float _float);

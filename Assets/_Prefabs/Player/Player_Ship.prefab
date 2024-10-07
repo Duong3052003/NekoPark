@@ -494,7 +494,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1.3, y: 1.6}
   m_EdgeRadius: 0
 --- !u!114 &5714031758006248160
 MonoBehaviour:
@@ -553,6 +553,7 @@ MonoBehaviour:
   hpBarPrefab: {fileID: 5547387330414121776, guid: 247ae8b1a746b5041bd27d58ed57a3fc, type: 3}
   CanvasWorldSpacePrefab: {fileID: 2696021214243124683, guid: 40ab0425ac301764f8af8082022ac2f9, type: 3}
   hpMax: 3
+  IMMORTAL: 1
 --- !u!114 &2790736402166689405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,7 +566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e3131d767cffd479fa6ba1a36d7d29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 15
   CanMove: 1
   nPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
@@ -602,7 +603,7 @@ MonoBehaviour:
   canSpawn: 1
   headTransform: {fileID: 5307581328653838760}
   positionTransform: {fileID: 1936816431470497130}
-  spawnCD: 1
+  spawnCD: 0.5
 --- !u!1 &3286091562618086778
 GameObject:
   m_ObjectHideFlags: 0

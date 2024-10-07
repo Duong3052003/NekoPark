@@ -7,9 +7,11 @@ using UnityEngine.UI;
 
 public class PlayerTakeDame : PlayerHp
 {
+    [SerializeField] private bool IMMORTAL = false;
+
     public override void TakeDamaged(int damage)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || IMMORTAL) return;
         if (hpCurrent.Value==0 || hpCurrent.Value - damage > hpMax) return;
         hpCurrent.Value = hpCurrent.Value - damage;
     }

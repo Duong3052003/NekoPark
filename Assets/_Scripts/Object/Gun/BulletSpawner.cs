@@ -11,17 +11,27 @@ public class BulletSpawner : Spawner, IObserver
     public Transform positionTransform;
     public float spawnCD;
 
-    private void Awake()
-    {
-        holder = GameObject.FindGameObjectWithTag("Holder").transform;
-    }
-
     protected IEnumerator SpawnObjectCD()
     {
-        while (canSpawn)
+        while (true)
         {
-            SpawnObj();
-            yield return new WaitForSeconds(spawnCD);
+            if (canSpawn)
+            {
+                SpawnObj();
+                yield return new WaitForSeconds(spawnCD);
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+    }
+
+    public void StartCoroutineSpawn()
+    {
+        if (IsHost)
+        {
+            StartCoroutine(this.SpawnObjectCD());
         }
     }
 
@@ -34,6 +44,11 @@ public class BulletSpawner : Spawner, IObserver
     [ClientRpc]
     protected void SpawnObjClientRpc()
     {
+        if(holder == null)
+        {
+            holder = GameObject.FindGameObjectWithTag("Holder").transform;
+
+        }
         GameObject objSpawned = ObjIsSpawned();
         objSpawned.transform.SetParent(holder.transform, true);
         objSpawned.GetComponent<Bullet>().SetTarget(positionTransform.position, headTransform.position, this);
@@ -51,12 +66,12 @@ public class BulletSpawner : Spawner, IObserver
 
     public void AddListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.AddListObserver(observer);
+        _ScenesManager.Instance.AddListObserver(observer);
     }
 
     public void RemoveListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.RemoveListObserver(observer);
+        _ScenesManager.Instance.RemoveListObserver(observer);
     }
 
     public void OnPause(int time)
@@ -69,9 +84,10 @@ public class BulletSpawner : Spawner, IObserver
 
     public void OnResume()
     {
-        if (IsHost)
-        {
-            StartCoroutine(this.SpawnObjectCD());
-        }
+        StartCoroutineSpawn();
+    }
+
+    public void OnLoadDone()
+    {
     }
 }

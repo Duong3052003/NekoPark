@@ -142,12 +142,12 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
 
     public void AddListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.AddListObserver(observer);
+        _ScenesManager.Instance.AddListObserver(observer);
     }
 
     public void RemoveListObserver(IObserver observer)
     {
-        NetworkTimer.Instance.RemoveListObserver(observer);
+        _ScenesManager.Instance.RemoveListObserver(observer);
     }
 
     public void OnPause(int time)
@@ -167,6 +167,12 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
     private void SetCanMoveClientRpc(bool boolen)
     {
         CanMove = boolen;
+    }
+
+    public void OnLoadDone()
+    {
+        if (!IsServer) return;
+        SetCanMoveClientRpc(false);
     }
 }
 

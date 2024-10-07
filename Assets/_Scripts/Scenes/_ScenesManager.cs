@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static Unity.Netcode.NetworkSceneManager;
@@ -9,6 +11,12 @@ public class _ScenesManager : NetworkBehaviour
 {
     public static _ScenesManager Instance { get; private set; }
     public string startScene = "SampleScene";
+    public NetworkVariable<int> numberPlayer = new NetworkVariable<int>(
+       0,
+       NetworkVariableReadPermission.Everyone,
+       NetworkVariableWritePermission.Server);
+
+    private List<IObserver> listObserver = new List<IObserver>();
 
     private void Awake()
     {
@@ -49,6 +57,7 @@ public class _ScenesManager : NetworkBehaviour
     private IEnumerator LoadLevel(string sceneName)
     {
         //transition
+        SubscribeHandleOnSceneEventClientRpc(true);
         yield return new WaitForSeconds(2);
         if (IsHost)
         {
@@ -62,11 +71,9 @@ public class _ScenesManager : NetworkBehaviour
         List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
         Debug.Log("LoadSceneCompleted");
-
+        SubscribeHandleOnSceneEventClientRpc(false);
         PlayerManager.Instance.SetupPlayersClientRPC();
         //PlayerManager.Instance.RefreshPlayersClientRpc();
-
-        NetworkTimer.Instance.OnPauseServerRpc(5);
     }
 
     public override void OnDestroy()
@@ -81,8 +88,6 @@ public class _ScenesManager : NetworkBehaviour
         SceneManager.sceneLoaded -= OnSceneLoadedLocal;
     }
 
-    
-
     public void LoadSceneLocal(string sceneName)
     {
         SceneManager.LoadSceneAsync(sceneName);
@@ -94,6 +99,113 @@ public class _ScenesManager : NetworkBehaviour
         {
             Debug.Log("Scene loaded successfully: " + startScene);
             UIManager.Instance.StartConnect();
+        }
+    }
+
+    /*public void loadLevelBtn(string lvToLoad)
+    {
+        mainMenu.SetActive(false);
+        loadingScreen.SetActive(true);
+
+        StartCoroutine(LoadLevelAsync(lvToLoad));
+    }*/
+
+
+    [ClientRpc]
+    public void SubscribeHandleOnSceneEventClientRpc(bool boolen)
+    {
+        if (boolen)
+        {
+            NetworkManager.Singleton.SceneManager.OnSceneEvent += HandleOnSceneEvent;
+            Debug.Log("Dang ki r ne");
+        }
+        else
+        {
+            NetworkManager.Singleton.SceneManager.OnSceneEvent -= HandleOnSceneEvent;
+            Debug.Log("HUY Dang ki r ne");
+        }
+    }
+
+    private async void HandleOnSceneEvent(SceneEvent sceneEvent)
+    {
+        if (NetworkManager.Singleton.LocalClientId != sceneEvent.ClientId)
+        {
+            return;
+        }
+
+        if (sceneEvent.SceneEventType == SceneEventType.Load)
+        {
+            UIManager.Instance.Display();
+            while (!sceneEvent.AsyncOperation.isDone)
+            {
+                await Task.Yield();
+                UIManager.Instance.UpdateProgress(sceneEvent.AsyncOperation.progress);
+            }
+        }
+
+        if (sceneEvent.SceneEventType == SceneEventType.LoadComplete)
+        {
+            StartCoroutine(EndLoadingScreen(3f));
+        }
+    }
+
+    IEnumerator EndLoadingScreen(float _time)
+    {
+        yield return new WaitForSeconds(_time);
+        PlayerLoadDoneServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void PlayerLoadDoneServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        numberPlayer.Value++;
+        Debug.Log("Player " +serverRpcParams.Receive.SenderClientId+" da load xong | "+ numberPlayer.Value +"/" + NetworkManager.Singleton.ConnectedClientsList.Count);
+        if (numberPlayer.Value >= NetworkManager.Singleton.ConnectedClientsList.Count)
+        {
+            UIManager.Instance.Hide();
+            ResetPlayerLoadDoneServerRpc();
+            OnLoadDoneServerRpc();
+            OnPauseServerRpc(5);
+        }
+    }
+
+    [ServerRpc]
+    private void ResetPlayerLoadDoneServerRpc()
+    {
+        numberPlayer.Value =0;
+    }
+
+    public void AddListObserver(IObserver observer)
+    {
+        listObserver.Add(observer);
+    }
+
+    public void RemoveListObserver(IObserver observer)
+    {
+        listObserver.Remove(observer);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void OnLoadDoneServerRpc()
+    {
+        listObserver.ForEach(observer => observer.OnLoadDone());
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void OnPauseServerRpc(int time)
+    {
+        listObserver.ForEach(observer => observer.OnPause(time));
+
+        Invoke(nameof(OnResumeServerRpc), time);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void OnResumeServerRpc()
+    {
+        CancelInvoke();
+        for (int i = 0; i < listObserver.Count; i++)
+        {
+            listObserver[i].OnResume();
         }
     }
 }

@@ -53,34 +53,6 @@ public class NetworkTimer : NetworkBehaviour
 
         return false;
     }
-
-    public void AddListObserver(IObserver observer)
-    {
-        listObserver.Add(observer);
-    }
-
-    public void RemoveListObserver(IObserver observer)
-    {
-        listObserver.Remove(observer);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void OnPauseServerRpc(int time)
-    {
-        listObserver.ForEach(observer => observer.OnPause(time));
-
-        Invoke(nameof(OnResumeServerRpc), time);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void OnResumeServerRpc()
-    {
-        CancelInvoke();
-        for (int i = 0; i < listObserver.Count; i++)
-        {
-            listObserver[i].OnResume();
-        }
-    }
 }
 
 

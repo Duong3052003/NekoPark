@@ -1,0 +1,1253 @@
+fileFormatVersion: 2
+guid: e82967a4b1c0cb844af4315f3b6f6149
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 9630
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b032af8ac75bbf429f3da1daf93f0ab
+      internalID: -1913337010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_1
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 9630
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38e0ebc4f28023040850d6af2b0852e2
+      internalID: -1481860230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_2
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 9630
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58c5714c299bd08489475b3a668ffa1b
+      internalID: 1928976645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_3
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 9630
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b20b4fcac850c84599476b4d3af6cf3
+      internalID: 1177407105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_4
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 9630
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0bbd596f8d165d4a967167df97de596
+      internalID: -108354282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8560
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 712e78098c8977f4691b07ed2e56393d
+      internalID: 1722936511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_6
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 8560
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80386db932712114f84e07c8db3ceb21
+      internalID: 1167599229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_7
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 8560
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3d7bf687eb07c445a45d5cc2f08db5d
+      internalID: -2112746091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_8
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 8560
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76cd6e11ed4c32041a23eb815c6517d4
+      internalID: 34987973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_9
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 8560
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dbeb4d2086b5c64b8b2f68281e508a1
+      internalID: 1653414507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 7490
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e469120a743d5f24983495ae8fec2c5b
+      internalID: 317113500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_11
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 7490
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d673a50034eb3849b211e1adf44d230
+      internalID: 368214084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_12
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 7490
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e2dc0f05435ea64fa8f23d09df8e7bd
+      internalID: 701549749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_13
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 7490
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e3ae991082e40f41ba8a0de6dde88e5
+      internalID: 1164346510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_14
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 7490
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f074281d9c02a034caf08a756b2f0ca3
+      internalID: -863444384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6420
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffadbbfb898536a4d91547038645b3ac
+      internalID: -914401502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_16
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 6420
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78efe74d936a61049b753abd5736cc60
+      internalID: -1759490670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_17
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 6420
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47679af01612b004f93fb028f066370b
+      internalID: -2024569015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_18
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 6420
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c05a52f34a4164e47b76f4efe032f142
+      internalID: -1606285011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_19
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 6420
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d65dbe83cd9a94f44bb94f24138284f9
+      internalID: 238427408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5350
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3106ab4321c55c444a1966ef8bdf7413
+      internalID: -680656263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_21
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 5350
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f8c1b507dde41141ab458e30aae5a36
+      internalID: -601510969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_22
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 5350
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5590546de716a0041b9db6965160cfb4
+      internalID: -1748997953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_23
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 5350
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb95e6f43d59b604baa0f9c8eb3589b0
+      internalID: 210455665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_24
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 5350
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c2f186ac965010489c5334c301114ec
+      internalID: 888927911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4280
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 591c5fa4e1ebeb04f9677a01652dadee
+      internalID: 1413851770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_26
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 4280
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9579b7b2367049a40924cb9f7f322ad2
+      internalID: 1886071633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_27
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 4280
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 473514c34959cda449ad39d687f5466e
+      internalID: 121681580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_28
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 4280
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18380a252ff54334798236cfb017af41
+      internalID: 1537894815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_29
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 4280
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a5848b9dea7ce54ea229486beed9edf
+      internalID: 1496727454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3210
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a337eca43b33fe84d950c92da4c1a5d1
+      internalID: -120279462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_31
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 3210
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83fe73b12088b0c4f879bc2a5bdb6995
+      internalID: 1796314828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_32
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 3210
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33fb41ec1732afb44a2f1c421a80ab0d
+      internalID: -2074168413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_33
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 3210
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a20f81e2a6f823e48b36059d1ec8cb5a
+      internalID: -1968219599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_34
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 3210
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c62fc212e48075e4e95220cfbc6620db
+      internalID: -1417057073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_35
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2140
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 033ca8faf205f404bb523fd831ed891d
+      internalID: -1085237541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_36
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 2140
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41cc99c1c2add8140b3a5d6fe77c163a
+      internalID: 886112806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_37
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 2140
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8018a408b1fcfa147abc9cf58c62a813
+      internalID: 1260959224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_38
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 2140
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2603b95bc8e15ef41b88c4d1d43ad58f
+      internalID: -142937394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_39
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 2140
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8b045b4de0aa8b458ec3e922fae1175
+      internalID: -1840027862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1070
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eba4374a81565e84588fd71302079132
+      internalID: -945426073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_41
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1070
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13eb04c6bc9479f4ebb2784dcf8958b5
+      internalID: -495314692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_42
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 1070
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d651314bbc63a2e4e819a0a9c7d225d5
+      internalID: 1348971064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_43
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 1070
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0297890b5e90f5b409be2fdcc2acb4db
+      internalID: 135592945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_44
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 1070
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac64218caefbd594cbc73700b318859a
+      internalID: 2010362271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_45
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79e94e73b900bd1469a0a3faebab130a
+      internalID: -1754932592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_46
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe39bffa73a494444b67566a3d526ddc
+      internalID: -1338312285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_47
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 0
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8b315ca88e9d0945b96ec7f4b1096a6
+      internalID: -1061980545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_48
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 0
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91fe4abc0250dc040b7361dd81b8b8d8
+      internalID: 284050373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_49
+      rect:
+        serializedVersion: 2
+        x: 7680
+        y: 0
+        width: 1920
+        height: 1070
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26a5ad16e907fb247980a7c4a62c9f02
+      internalID: -568880819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_0: -1913337010
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_1: -1481860230
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_10: 317113500
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_11: 368214084
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_12: 701549749
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_13: 1164346510
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_14: -863444384
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_15: -914401502
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_16: -1759490670
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_17: -2024569015
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_18: -1606285011
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_19: 238427408
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_2: 1928976645
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_20: -680656263
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_21: -601510969
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_22: -1748997953
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_23: 210455665
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_24: 888927911
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_25: 1413851770
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_26: 1886071633
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_27: 121681580
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_28: 1537894815
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_29: 1496727454
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_3: 1177407105
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_30: -120279462
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_31: 1796314828
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_32: -2074168413
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_33: -1968219599
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_34: -1417057073
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_35: -1085237541
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_36: 886112806
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_37: 1260959224
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_38: -142937394
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_39: -1840027862
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_4: -108354282
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_40: -945426073
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_41: -495314692
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_42: 1348971064
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_43: 135592945
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_44: 2010362271
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_45: -1754932592
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_46: -1338312285
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_47: -1061980545
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_48: 284050373
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_49: -568880819
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_5: 1722936511
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_6: 1167599229
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_7: -2112746091
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_8: 34987973
+      chill_mario_pixel_art_by_bytiny10_by_bytiny10_dfhe6nt-ezgif.com-gif-to-sprite-converter_9: 1653414507
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -8,4 +8,5 @@ public interface IObserver
     void RemoveListObserver(IObserver observer);
     void OnPause(int time);
     void OnResume();
+    void OnLoadDone();
 }
