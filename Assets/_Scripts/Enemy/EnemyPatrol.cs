@@ -19,6 +19,7 @@ public class EnemyPatrol : EnemyBehaviour
 
     [SerializeField] private bool isStraght = true;
     private Coroutine coroutineCurrent;
+    [SerializeField] private Transform targetTransformInScene;
 
     public NetworkVariable<Vector3> nTargetTransform = new NetworkVariable<Vector3>(
         Vector3.zero,
@@ -55,46 +56,25 @@ public class EnemyPatrol : EnemyBehaviour
 
     private void Setup()
     {
-        /*posCurrent = this.transform.position;
-        if (posTransformSpawnNeedToGo != null)
-        {
-            posSpawnNeedToGo = posTransformSpawnNeedToGo.transform.position;
-            ChangeStyle(0);
-        }
-        else if (posSpawnNeedToGo != Vector3.zero)
-        {
-            ChangeStyle(0);
-        }
-        else
-        {
-            ChangeStyle(styleFirst);
-        }*/
         if (IsHost)
         {
             nPosCurrent.Value = this.transform.position;
         }
-        reconciliationThreshold = 0.5f;
+        reconciliationThreshold = 2.5f;
         ChangeStyleClientRpc(-1);
         bulletSpawner.StartCoroutineSpawn();
     }
 
     public override void Spawn(Vector3 inputVector, Vector2 velocityVector)
     {
-        /*if(inputVector != null)
+        if (targetTransformInScene != null && IsHost)
         {
-            posSpawnNeedToGo = inputVector;
+            nTargetTransform.Value = targetTransformInScene.transform.position;
+            lockStyle = false;
+            canMove = true;
         }
 
-        if ((int)velocityVector.x == 0)
-        {
-            styleFirst = 1;
-        }
-        else
-        {
-            styleFirst = (int)velocityVector.x;
-        }*/
         styleFirst = (int)velocityVector.x;
-
         SetCanMoveClientRpc(true);
     }
 
@@ -233,9 +213,8 @@ public class EnemyPatrol : EnemyBehaviour
         {
             isStraght = false;
             bulletSpawner.canSpawn = false;
-            speed = 12f;
+            speed = 15f;
             canMove = true;
-            reconciliationThreshold = 0.5f;
 
             if (IsHost)
             {
@@ -268,7 +247,6 @@ public class EnemyPatrol : EnemyBehaviour
             bulletSpawner.canSpawn = false;
             speed = 3;
             canMove = true;
-            reconciliationThreshold = 100f;
 
             if (IsHost)
             {
@@ -300,7 +278,6 @@ public class EnemyPatrol : EnemyBehaviour
         if (isSetting)
         {
             SetTimeChangeStyle(8);
-            reconciliationThreshold = 100f;
 
             isStraght = true;
             bulletSpawner.canSpawn = true;
@@ -339,8 +316,7 @@ public class EnemyPatrol : EnemyBehaviour
             isStraght = false;
             bulletSpawner.canSpawn = false;
             canMove = false;
-            speed = 20f;
-            reconciliationThreshold = 0.5f;
+            speed = 25f;
 
             lockStyle = true;
 
@@ -413,7 +389,6 @@ public class EnemyPatrol : EnemyBehaviour
         if (isSetting)
         {
             SetTimeChangeStyle(6);
-            reconciliationThreshold = 100f;
 
             isStraght = false;
             bulletSpawner.canSpawn = true;

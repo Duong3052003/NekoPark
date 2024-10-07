@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8544917201152114877}
   - component: {fileID: 4312760670738690524}
   - component: {fileID: 8429455801657706633}
-  - component: {fileID: 1738349694464012376}
   - component: {fileID: -7751487141403105636}
   - component: {fileID: 7321252127682151969}
   - component: {fileID: -5632032640961561869}
@@ -36,7 +35,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -200,34 +199,25 @@ MonoBehaviour:
   holder: {fileID: 5267939220718374105}
   prefab: {fileID: 3875190734681696993, guid: 68540dcfc948da74f90b41b3bd6ea527, type: 3}
   poolObjs: []
-  speed: 30
   distanceBetween: 2.5
   size: 20
   hpHead: 10
   hpPart: 5
   bodyParts: []
---- !u!114 &1738349694464012376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4001054141824543279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e449c2acbf1f234fa75c344139d982a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 25
-  rotationSpeed: 10
-  canMove: 0
   velocityX: 0
   velocityY: 0
-  nPosition:
+  rotationSpeed: 20
+  speed: 45
+  styleCurrent: 0
+  comboCurrent: 0
+  stepComboCurrent: 0
+  bodyCanShoot: 0
+  canMove: 0
+  isFinishStep: 0
+  listTargetObj: []
+  posCurrent: {x: 0, y: 0, z: 0}
+  nTargetPos:
     m_InternalValue: {x: 0, y: 0, z: 0}
-  nRotation:
-    m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
-  distanceBetween: 0
 --- !u!114 &-7751487141403105636
 MonoBehaviour:
   m_ObjectHideFlags: 0

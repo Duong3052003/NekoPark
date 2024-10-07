@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Windows;
 
-public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObserver
+public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, ISceneObserver
 {
     protected PlayerCtrl playerCtrl;
 
@@ -140,12 +140,12 @@ public abstract class PlayerMove : NetworkBehaviour, IObjectServerMovement, IObs
     }
     #endregion
 
-    public void AddListObserver(IObserver observer)
+    public void AddListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.AddListObserver(observer);
     }
 
-    public void RemoveListObserver(IObserver observer)
+    public void RemoveListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.RemoveListObserver(observer);
     }

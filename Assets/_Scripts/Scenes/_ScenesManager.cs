@@ -16,7 +16,7 @@ public class _ScenesManager : NetworkBehaviour
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server);
 
-    private List<IObserver> listObserver = new List<IObserver>();
+    private List<ISceneObserver> listObserver = new List<ISceneObserver>();
 
     private void Awake()
     {
@@ -117,12 +117,10 @@ public class _ScenesManager : NetworkBehaviour
         if (boolen)
         {
             NetworkManager.Singleton.SceneManager.OnSceneEvent += HandleOnSceneEvent;
-            Debug.Log("Dang ki r ne");
         }
         else
         {
             NetworkManager.Singleton.SceneManager.OnSceneEvent -= HandleOnSceneEvent;
-            Debug.Log("HUY Dang ki r ne");
         }
     }
 
@@ -175,12 +173,12 @@ public class _ScenesManager : NetworkBehaviour
         numberPlayer.Value =0;
     }
 
-    public void AddListObserver(IObserver observer)
+    public void AddListObserver(ISceneObserver observer)
     {
         listObserver.Add(observer);
     }
 
-    public void RemoveListObserver(IObserver observer)
+    public void RemoveListObserver(ISceneObserver observer)
     {
         listObserver.Remove(observer);
     }

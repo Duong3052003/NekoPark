@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class PlayerSetting : NetworkBehaviour,IObserver
+public class PlayerSetting : NetworkBehaviour,ISceneObserver
 {
     [SerializeField] private Sprite[] skins;
     [SerializeField] private RuntimeAnimatorController[] controllers;
@@ -123,12 +123,12 @@ public class PlayerSetting : NetworkBehaviour,IObserver
         playerHUDImg.SetActive(false);
     }
 
-    public virtual void AddListObserver(IObserver observer)
+    public virtual void AddListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.AddListObserver(observer);
     }
 
-    public virtual void RemoveListObserver(IObserver observer)
+    public virtual void RemoveListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.RemoveListObserver(observer);
     }

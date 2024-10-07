@@ -25,7 +25,7 @@ public class Spawner : NetworkBehaviour
         {
             newPrefab.GetComponent<NetworkObject>().Spawn();
         }
-        else
+        else if(!newPrefab.activeInHierarchy)
         {
             newPrefab.SetActive(true);
         }
@@ -51,9 +51,9 @@ public class Spawner : NetworkBehaviour
         return newPrefab;
     }
 
-    public virtual void DeSpawn(GameObject prefab)
+    public virtual void DeSpawn(GameObject _prefab)
     {
-        this.poolObjs.Add(prefab);
-        prefab.gameObject.SetActive(false);
+        this.poolObjs.Add(_prefab);
+        _prefab.gameObject.SetActive(false);
     }
 }

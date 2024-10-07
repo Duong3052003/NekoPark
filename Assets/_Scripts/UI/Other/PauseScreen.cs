@@ -4,7 +4,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PauseScreen : NetworkBehaviour,IObserver
+public class PauseScreen : NetworkBehaviour,ISceneObserver
 {
     [SerializeField] TextMeshProUGUI timeCountText;
     [SerializeField] GameObject backGround;
@@ -38,14 +38,14 @@ public class PauseScreen : NetworkBehaviour,IObserver
         RemoveListObserver(this);
     }
 
-    public void AddListObserver(IObserver observer)
+    public void AddListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.AddListObserver(observer);
     }
 
-    public void RemoveListObserver(IObserver observer)
+    public void RemoveListObserver(ISceneObserver observer)
     {
-        _ScenesManager.Instance.AddListObserver(observer);
+        _ScenesManager.Instance.RemoveListObserver(observer);
     }
 
     public void OnPause(int time)

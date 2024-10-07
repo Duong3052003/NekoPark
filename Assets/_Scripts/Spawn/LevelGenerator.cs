@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
-public class LevelGenerator : Spawner,IObserver
+public class LevelGenerator : Spawner,ISceneObserver
 {
     public static LevelGenerator levelGenerator { get; private set; }
 
@@ -163,12 +163,12 @@ public class LevelGenerator : Spawner,IObserver
         RemoveListObserver(this);
     }
 
-    public virtual void AddListObserver(IObserver observer)
+    public virtual void AddListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.AddListObserver(observer);
     }
 
-    public virtual void RemoveListObserver(IObserver observer)
+    public virtual void RemoveListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.RemoveListObserver(observer);
     }

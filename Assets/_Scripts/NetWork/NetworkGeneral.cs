@@ -15,7 +15,7 @@ public class NetworkTimer : NetworkBehaviour
     public float MinTimeBetweenTicks { get; private set; }
     public NetworkVariable<int> CurrentTick = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-    private List<IObserver> listObserver = new List<IObserver>();
+    private List<ISceneObserver> listObserver = new List<ISceneObserver>();
 
     public override void OnNetworkSpawn()
     {

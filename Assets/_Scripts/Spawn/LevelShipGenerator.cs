@@ -84,11 +84,12 @@ public class LevelShipGenerator : LevelGenerator
     {
         for(int n =enemyShipCurrent; n < enemyShip.Count; n++)
         {
-            enemyShip[n].gameObject.SetActive(true);
             if (!enemyShip[n].GetComponent<NetworkObject>().IsSpawned)
             {
                 enemyShip[n].GetComponent<NetworkObject>().Spawn();
             }
+
+            enemyShip[n].GetComponent<IObjectServerSpawn>().Spawn(Vector3.zero,new Vector2(firstStyle[waveCurrent],0));
 
             if (mupltiHP == true)
             {

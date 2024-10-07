@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectServerSpawn
+public class Ball : NetworkBehaviour,IObjectServerMovement,ISceneObserver, IObjectServerSpawn
 {
     private Rigidbody2D rb;
     private Collider2D col;
@@ -165,12 +165,12 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,IObserver, IObjectSer
         RemoveListObserver(this);
     }
 
-    public void AddListObserver(IObserver observer)
+    public void AddListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.AddListObserver(observer);
     }
 
-    public void RemoveListObserver(IObserver observer)
+    public void RemoveListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.RemoveListObserver(observer);
     }

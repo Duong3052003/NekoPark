@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Unity.Networking.Transport.NetworkDriver;
 
-public class EnemySnakeBody : EnemyBehaviour
+public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
 {
     private GameObject target;
     private Vector3 posCurrent;
@@ -29,24 +29,6 @@ public class EnemySnakeBody : EnemyBehaviour
         Movement((target.transform.position - transform.position).normalized);
     }
 
-    #region StyleZero
-    private GameObject Target()
-    {
-        return RandomGameObjectFromList.GetRandomGameObject(PlayerManager.Instance.players);
-    }
-
-    public IEnumerator Chase(float _time)
-    {
-        target = Target();
-        posCurrent = this.transform.position;
-        Movement((target.transform.position - posCurrent).normalized);
-        yield return new WaitForSeconds(_time);
-        canMove = true;
-        yield return new WaitForSeconds(_time);
-        Movement((posCurrent - this.transform.position).normalized);
-    }
-    #endregion
-
     #region Movement
     protected override void Move(float _x, float _y)
     {
@@ -65,6 +47,31 @@ public class EnemySnakeBody : EnemyBehaviour
         {
             rb.rotation = 0;
         }
+    }
+
+    private void Start()
+    {
+        AddListSnakeObserver(this);
+    }
+
+    private void OnDisable()
+    {
+        RemoveListSnakeObserver(this);
+    }
+
+    public void AddListSnakeObserver(ISnakeObserver observer)
+    {
+        EnemySnake.Instance.AddListSnakeObserver(observer);
+    }
+
+    public void RemoveListSnakeObserver(ISnakeObserver observer)
+    {
+        EnemySnake.Instance.RemoveListSnakeObserver(observer);
+    }
+
+    public void OnSetting()
+    {
+        throw new System.NotImplementedException();
     }
     #endregion
 }

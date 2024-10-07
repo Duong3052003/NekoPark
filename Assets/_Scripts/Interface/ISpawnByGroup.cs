@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ISpawnByGroup
 {
-    void AddListObserver(IObserver observer);
-    void RemoveListObserver(IObserver observer);
+    void AddListObserver(ISceneObserver observer);
+    void RemoveListObserver(ISceneObserver observer);
     void CanSpawn(bool boolen);
 }

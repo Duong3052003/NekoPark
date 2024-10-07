@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class VirtualCameraSetting : MonoBehaviour
 {
+    public static VirtualCameraSetting Instance { get; private set; }
+
     private CinemachineVirtualCamera virtualCamera;
     [SerializeField] private float targetFOV = 7.5f;
     [SerializeField] private float zoomSpeed = 2f;
@@ -15,6 +17,14 @@ public class VirtualCameraSetting : MonoBehaviour
     private void Awake()
     {
         virtualCamera = GetComponent<CinemachineVirtualCamera>();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     private void Start()
@@ -35,5 +45,11 @@ public class VirtualCameraSetting : MonoBehaviour
             isZooming = false;
         }
 
+    }
+
+    public void ChangeFieldOfView(float _targetFOV)
+    {
+        targetFOV = _targetFOV;
+        isZooming = true;
     }
 }

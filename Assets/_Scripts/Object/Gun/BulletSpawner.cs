@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class BulletSpawner : Spawner, IObserver
+public class BulletSpawner : Spawner, ISceneObserver
 {
     public bool canSpawn;
 
@@ -64,12 +64,12 @@ public class BulletSpawner : Spawner, IObserver
         RemoveListObserver(this);
     }
 
-    public void AddListObserver(IObserver observer)
+    public void AddListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.AddListObserver(observer);
     }
 
-    public void RemoveListObserver(IObserver observer)
+    public void RemoveListObserver(ISceneObserver observer)
     {
         _ScenesManager.Instance.RemoveListObserver(observer);
     }
