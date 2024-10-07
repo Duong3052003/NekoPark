@@ -10784,6 +10784,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
+      propertyPath: hpObj
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: holder
       value: 
       objectReference: {fileID: 2466590086299507737}
@@ -10794,6 +10798,10 @@ PrefabInstance:
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: size.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
+      propertyPath: mupltiHP
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: generateMapBtn
@@ -10925,7 +10933,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[0]
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[1]
@@ -10933,7 +10941,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[2]
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[3]

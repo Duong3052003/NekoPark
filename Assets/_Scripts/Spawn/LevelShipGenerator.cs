@@ -68,12 +68,16 @@ public class LevelShipGenerator : LevelGenerator
         objSpawned.GetComponent<IObjectServerSpawn>().Spawn(Vector3.zero, new Vector2(firstStyle[waveCurrent], 0));
 
         objSpawned.transform.SetParent(objSpawnedHolders[k].transform);
-
+        int hp;
         if (mupltiHP == true)
         {
-            hpObj = 3 * (j + 1);
+            hp = hpObj * (j + 1);
         }
-        objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpObj);
+        else
+        {
+            hp = hpObj;
+        }
+        objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hp);
     }
 
     private void GenerateObjInScene(int k, int i, int j)

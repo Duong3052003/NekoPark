@@ -11,13 +11,8 @@ public class EnemyPatrol : EnemyBehaviour
     [SerializeField] private float time;
 
     //Style
-    [SerializeField] private float rangeX = 0;
     [SerializeField] private int styleCurrent = 1;
     [SerializeField] private int styleFirst = 1;
-    [SerializeField] private Vector3 posCurrent;
-    [SerializeField] protected Transform transformSpawnNeedToGo;
-    [SerializeField] protected Vector3 posTransformSpawnNeedToGo;
-    [SerializeField] private Transform targetTransform;
     [SerializeField] private GameObject turbo;
 
     [SerializeField] private bool lockStyle = false;
@@ -25,10 +20,24 @@ public class EnemyPatrol : EnemyBehaviour
     [SerializeField] private bool isStraght = true;
     private Coroutine coroutineCurrent;
 
+    public NetworkVariable<Vector3> nTargetTransform = new NetworkVariable<Vector3>(
+        Vector3.zero,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
+    public NetworkVariable<Vector3> nPosCurrent = new NetworkVariable<Vector3>(
+        Vector3.zero,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
+    public NetworkVariable<float> nRange = new NetworkVariable<float>(
+        0,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
     protected override void Awake()
     {
         bulletSpawner = GetComponent<BulletSpawner>();
-        reconciliationThreshold = 10f;
         base.Awake();
     }
 
@@ -60,8 +69,11 @@ public class EnemyPatrol : EnemyBehaviour
         {
             ChangeStyle(styleFirst);
         }*/
-        posCurrent = this.transform.position;
-
+        if (IsHost)
+        {
+            nPosCurrent.Value = this.transform.position;
+        }
+        reconciliationThreshold = 0.5f;
         ChangeStyleClientRpc(-1);
         bulletSpawner.StartCoroutineSpawn();
     }
@@ -87,9 +99,9 @@ public class EnemyPatrol : EnemyBehaviour
     }
 
     #region Time
-    private void SetTimeChangeStyle(float minTime, float maxTime)
+    private void SetTimeChangeStyle(float _time)
     {
-        time = UnityEngine.Random.Range(minTime, maxTime);
+        time = _time;
     }
 
     private bool ExcuteTime()
@@ -189,21 +201,24 @@ public class EnemyPatrol : EnemyBehaviour
             bulletSpawner.canSpawn = false;
             speed = 12f;
             canMove = true;
+            reconciliationThreshold = 0.5f;
 
-            if(transformSpawnNeedToGo== null)
+            if (nTargetTransform.Value == Vector3.zero && IsHost)
             {
-                transformSpawnNeedToGo = LevelShipGenerator.Instance.Target().transform;
+                nTargetTransform.Value = LevelShipGenerator.Instance.Target().transform.position;
             }
-            posTransformSpawnNeedToGo = transformSpawnNeedToGo.position + new Vector3(UnityEngine.Random.Range(-3, 3), UnityEngine.Random.Range(-3, 3), 0);
-            Movement((posTransformSpawnNeedToGo - posCurrent).normalized);
+            Movement((nTargetTransform.Value - nPosCurrent.Value).normalized);
         }
         //Conditions
         else
         {
-            float distance = (posTransformSpawnNeedToGo - transform.position).magnitude;
+            float distance = (nTargetTransform.Value - transform.position).magnitude;
             if (distance <= 1f)
             {
-                posCurrent = this.transform.position;
+                if (IsHost)
+                {
+                    nPosCurrent.Value = this.transform.position;
+                }
                 ChangeStyleClientRpc(styleFirst);
             }
         }
@@ -220,17 +235,22 @@ public class EnemyPatrol : EnemyBehaviour
             bulletSpawner.canSpawn = false;
             speed = 12f;
             canMove = true;
+            reconciliationThreshold = 0.5f;
 
-            transformSpawnNeedToGo = LevelShipGenerator.Instance.Target().transform;
-            Movement((transformSpawnNeedToGo.position - posCurrent).normalized);
+            if (IsHost)
+            {
+                nTargetTransform.Value = LevelShipGenerator.Instance.Target().transform.position;
+            }
+            Movement((nTargetTransform.Value - nPosCurrent.Value).normalized);
         }
         //Conditions
         else
         {
-            float distance = (transformSpawnNeedToGo.position - transform.position).magnitude;
+            float distance = (nTargetTransform.Value - nPosition.Value).magnitude;
             if (distance <= 1f)
             {
-                posCurrent = this.transform.position;
+                if (!IsHost) return;
+                nPosCurrent.Value = this.transform.position;
                 ChangeStyleClientRpc(UnityEngine.Random.Range(1, 5));
             }
         }
@@ -243,35 +263,31 @@ public class EnemyPatrol : EnemyBehaviour
         //Setting
         if (isSetting)
         {
-            SetTimeChangeStyle(2, 3);
+            SetTimeChangeStyle(3);
             isStraght = true;
             bulletSpawner.canSpawn = false;
-            speed = UnityEngine.Random.Range(0, 4);
+            speed = 3;
             canMove = true;
+            reconciliationThreshold = 100f;
 
-            int direct = UnityEngine.Random.Range(0, 2);
-            if (direct == 0)
+            if (IsHost)
             {
-                rangeX = 3;
-            }
-            else
-            {
-                rangeX = - 3;
+                nRange.Value = 3;
             }
         }
         //Conditions
         else
         {
-            float distance = Math.Abs((posCurrent.x + rangeX) - this.transform.position.x);
-            if (distance <= 0.2f)
+            float distance = Math.Abs((nPosCurrent.Value.x + nRange.Value) - nPosition.Value.x);
+            if (distance <= 0.2f && IsHost)
             {
-                rangeX *= -1;
+                nRange.Value *= -1;
             }
-            Movement(new Vector3(posCurrent.x + rangeX, posCurrent.y, 0));
+            Movement(new Vector3(nPosCurrent.Value.x + nRange.Value, nPosCurrent.Value.y, 0));
 
             if (!ExcuteTime()) return;
-            float distanceEnd = Math.Abs((posCurrent.x) - this.transform.position.x);
-            if (distanceEnd > 0.1f) return;
+            float distanceEnd = Math.Abs((nPosCurrent.Value.x) - nPosition.Value.x);
+            if (distanceEnd > 0.1f || !IsHost) return;
             ChangeStyleClientRpc(UnityEngine.Random.Range(2, 5));
         }
     }
@@ -283,36 +299,32 @@ public class EnemyPatrol : EnemyBehaviour
         //Setting
         if (isSetting)
         {
-            SetTimeChangeStyle(8, 10);
+            SetTimeChangeStyle(8);
+            reconciliationThreshold = 100f;
 
             isStraght = true;
             bulletSpawner.canSpawn = true;
-            speed = UnityEngine.Random.Range(0, 6);
+            speed = 5;
             canMove = true;
+            if(IsHost)
+            {
+                nRange.Value = 3;
+            }
 
-            int direct = UnityEngine.Random.Range(0, 2);
-            if (direct == 0)
-            {
-                rangeX = 3;
-            }
-            else
-            {
-                rangeX = - 3;
-            }
         }
         //Conditions
         else
         {
-            float distance = Math.Abs((posCurrent.x + rangeX) - this.transform.position.x);
-            if (distance <= 0.2f)
+            float distance = Math.Abs((nPosCurrent.Value.x + nRange.Value) - nPosition.Value.x);
+            if (distance <= 0.2f && IsHost)
             {
-                rangeX *= -1;
+                nRange.Value *= -1;
             }
-            Movement(new Vector3(posCurrent.x + rangeX, posCurrent.y, 0));
+            Movement(new Vector3(nPosCurrent.Value.x + nRange.Value, nPosCurrent.Value.y, 0));
 
             if (!ExcuteTime()) return;
-            float distanceEnd = Math.Abs((posCurrent.x) - this.transform.position.x);
-            if (distanceEnd > 0.1f) return;
+            float distanceEnd = Math.Abs((nPosCurrent.Value.x) - nPosition.Value.x);
+            if (distanceEnd > 0.1f || !IsHost) return;
             ChangeStyleClientRpc(UnityEngine.Random.Range(0, 5));
         }
     }
@@ -328,6 +340,7 @@ public class EnemyPatrol : EnemyBehaviour
             bulletSpawner.canSpawn = false;
             canMove = false;
             speed = 20f;
+            reconciliationThreshold = 0.5f;
 
             lockStyle = true;
 
@@ -337,11 +350,12 @@ public class EnemyPatrol : EnemyBehaviour
         //Conditions
         else
         {
-            float distance = (posCurrent - this.transform.position).magnitude;
+            float distance = (nPosCurrent.Value - nPosition.Value).magnitude;
             if (distance < 0.2f)
             {
                 StopCoroutine(coroutineCurrent);
                 coroutineCurrent = null;
+                if (!IsHost) return;
                 TurnTurboClientRpc(false);
                 ChangeStyleClientRpc(UnityEngine.Random.Range(0, 5));
             }
@@ -356,14 +370,17 @@ public class EnemyPatrol : EnemyBehaviour
 
     public IEnumerator Chase(float _time)
     {
-        targetTransform = Target().GetComponent<Transform>();
+        if(IsHost)
+        {
+            nTargetTransform.Value = Target().GetComponent<Transform>().position;
+        }
         yield return new WaitForSeconds(_time);
         canMove = true;
-        Vector3 posTarget = targetTransform.position;
-        Movement((posTarget - posCurrent).normalized);
+        Vector3 posTarget = nTargetTransform.Value;
+        Movement((posTarget - nPosCurrent.Value).normalized);
 
         yield return new WaitForSeconds(_time);
-        Movement((posCurrent - posTarget).normalized);
+        Movement((nPosCurrent.Value - posTarget).normalized);
         lockStyle = false;
     }
 
@@ -373,6 +390,20 @@ public class EnemyPatrol : EnemyBehaviour
 
         return RandomGameObjectFromList.GetRandomGameObject(validTargets);
     }
+
+    /*[ServerRpc]
+    public void GetNewTarget()
+    {
+        *//*randomValue = Random.Range(0, 100);
+
+        SendRandomValueToClientsClientRpc(randomValue);*//*
+    }
+
+    [ClientRpc]
+    private void SendRandomValueToClientsClientRpc(int value)
+    {
+        //randomValue = value;
+    }*/
     #endregion
 
     #region StyleFour
@@ -381,7 +412,8 @@ public class EnemyPatrol : EnemyBehaviour
         //Setting
         if (isSetting)
         {
-            SetTimeChangeStyle(5, 7);
+            SetTimeChangeStyle(6);
+            reconciliationThreshold = 100f;
 
             isStraght = false;
             bulletSpawner.canSpawn = true;
@@ -391,9 +423,12 @@ public class EnemyPatrol : EnemyBehaviour
         //Conditions
         else
         {
-            targetTransform = Target().GetComponent<Transform>();
-            Movement((targetTransform.position - posCurrent).normalized);
-            if (!ExcuteTime()) return;
+            if (IsHost)
+            {
+                nTargetTransform.Value = Target().GetComponent<Transform>().position;
+            }
+            Movement((nTargetTransform.Value - nPosCurrent.Value).normalized);
+            if (!ExcuteTime() || !IsHost) return;
             ChangeStyleClientRpc(UnityEngine.Random.Range(0, 5));
         }
     }

@@ -91,8 +91,6 @@ public class PlayerSetting : NetworkBehaviour,IObserver
     {
         skins = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().skins;
         controllers = GameObject.Find("=====LevelStorage=====").GetComponent<LevelStorage>().controllers;
-        Debug.Log(GameObject.Find("=====LevelStorage=====").transform.position);
-        Debug.Log(skins[1].name);
 
         transform.GetComponent<SpriteRenderer>().sprite = skins[nCharacter.Value];
         transform.GetComponent<Animator>().runtimeAnimatorController = controllers[nCharacter.Value];
