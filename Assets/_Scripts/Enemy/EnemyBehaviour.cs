@@ -19,7 +19,6 @@ public abstract class EnemyBehaviour : NetworkBehaviour, IObjectServerMovement, 
     [SerializeField] protected float velocityY = 0;
 
     // Netcode general
-    protected const float k_serverTickRate = 60f; // 60 FPS
     protected const int k_bufferSize = 1024;
     public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0, 0, 0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(Quaternion.identity , NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);

@@ -39,6 +39,22 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
 
+    // Netcode general
+    protected const int k_bufferSize = 1024;
+
+    public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0, 0, 0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    public int indexBody = 0;
+
+    protected float reconciliationThreshold = 0.5f;
+
+    public override void OnNetworkSpawn()
+    {
+        ReconcileTransform();
+        NetworkTimer.Instance.CurrentTick.OnValueChanged += (oldValue, newValue) => SendMovementToServer();
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -55,14 +71,21 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
 
     private void Start()
     {
+        if(!IsHost) return;
+        ChangeComboClientRpc(UnityEngine.Random.Range(0, 2));
+    }
+
+    [ClientRpc]
+    private void SetupClientRpc()
+    {
+        VirtualCameraSetting.Instance.ChangeFieldOfView(25f);
+
+        canMove = true;
         posCurrent = this.transform.position;
 
         comboCurrent = 0;
         styleCurrent = 0;
         isFinishStep = true;
-
-        if(!IsHost) return;
-        ChangeComboClientRpc(UnityEngine.Random.Range(0, 2));
     }
 
     private void Update()
@@ -352,13 +375,40 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
     #endregion
 
     #region BodyFollow
-    private void SetTargetAllBody()
+    [ServerRpc(RequireOwnership = false)]
+    protected override void GenerateObjsServerRPC()
     {
-        bodyParts[0].GetComponent<EnemySnakeBody>().ChangeTarget(this.gameObject);
-        for (int i = 1; i < size; i++)
+        this.gameObject.GetComponent<ObjDeSpawnByHp>().SetHp(hpHead);
+
+        for (int i = 0; i < size; i++)
         {
-            bodyParts[i].GetComponent<EnemySnakeBody>().ChangeTarget(bodyParts[i-1]);
+            objSpawned = ObjIsSpawned();
+
+            objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpPart);
         }
+    }
+
+    public void AddtoListBody(GameObject bodyPart)
+    {
+        bodyParts.Add(bodyPart);
+    }
+
+    public void GetPosition()
+    {
+        if (indexBody == 0)
+        {
+            bodyParts[indexBody].GetComponent<EnemySnakeBody>().target = this.gameObject;
+            bodyParts[indexBody].transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y + distanceBetween);
+        }
+        else
+        {
+            bodyParts[indexBody].GetComponent<EnemySnakeBody>().target = bodyParts[indexBody-1];
+            bodyParts[indexBody].transform.position = new Vector3(bodyParts[indexBody - 1].transform.position.x, bodyParts[indexBody - 1].transform.position.y + distanceBetween);
+        }
+        bodyParts[indexBody].GetComponent<EnemySnakeBody>().distanceBetween = distanceBetween;
+
+        indexBody++;
+
     }
     #endregion
 
@@ -387,13 +437,52 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
 
     public override void OnResume()
     {
-        canMove = true;
-        VirtualCameraSetting.Instance.ChangeFieldOfView(25f);
         GenerateObjsServerRPC();
+        SetupClientRpc();
     }
 
     public override void OnLoadDone()
     {
+    }
+
+    #endregion
+
+    #region SendToServer
+    private void ReconcileTransform()
+    {
+        if (IsOwner)
+        {
+            nPosition.Value = transform.position;
+            nRotation.Value = transform.rotation;
+        }
+        else
+        {
+            float positionError = Vector3.Distance(nPosition.Value, transform.position);
+            transform.rotation = nRotation.Value;
+            if (positionError < reconciliationThreshold) return;
+            transform.position = nPosition.Value;
+        }
+    }
+
+    private void SendMovementToServer()
+    {
+        if (this == null) return;
+        ReconcileTransform();
+
+        var currentTick = NetworkTimer.Instance.CurrentTick.Value;
+        var bufferIndex = currentTick % k_bufferSize;
+
+        InputPayLoad inputPayload = new InputPayLoad()
+        {
+            tick = currentTick,
+            timestamp = System.DateTime.Now,
+            OwnerObjID = OwnerClientId,
+            NetworkObjID = NetworkObjectId,
+            inputVector = GetMovement(),
+            position = transform.position
+        };
+
+        Server.Instance.OnClientInput(inputPayload);
     }
     #endregion
 }

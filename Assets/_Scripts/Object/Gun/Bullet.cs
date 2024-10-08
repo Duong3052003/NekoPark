@@ -26,7 +26,6 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.gameObject.name);
         spawner.DeSpawn(this.gameObject);
     }
 }

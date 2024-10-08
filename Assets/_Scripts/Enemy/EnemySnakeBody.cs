@@ -1,14 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 using static Unity.Networking.Transport.NetworkDriver;
 
 public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
 {
-    private GameObject target;
+    public GameObject target;
     private Vector3 posCurrent;
 
     public float distanceBetween;
+
+    public override void OnNetworkSpawn()
+    {
+        canMove = true;
+        if (!IsHost) return;
+        AddBodyClientRpc();
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
+    [ClientRpc]
+    public void AddBodyClientRpc()
+    {
+        EnemySnake.Instance.bodyParts.Add(this.gameObject);
+        EnemySnake.Instance.GetPosition();
+    }
 
     public void ChangeTarget(GameObject newTarget)
     {
@@ -19,7 +41,7 @@ public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
     protected override void Update()
     {
         if (!canMove) return;
-        if(target == null)
+        if(target == null&&IsHost)
         {
             this.GetComponent<EnemyDespawn>().CallDespawn();
         }

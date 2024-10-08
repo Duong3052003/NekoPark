@@ -1075,7 +1075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b8d3d075636aee45b777e2612db01fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetFOV: 14
+  targetFOV: 25
   zoomSpeed: 1
 --- !u!1 &204708306
 GameObject:
@@ -12132,6 +12132,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HeadSnakeSpace
       objectReference: {fileID: 0}
+    - target: {fileID: 4001054141824543279, guid: a972aa1189fa06e4fa94dd28b7cc07b6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4312760670738690524, guid: a972aa1189fa06e4fa94dd28b7cc07b6, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 163325499
@@ -12186,7 +12190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8429455801657706633, guid: a972aa1189fa06e4fa94dd28b7cc07b6, type: 3}
       propertyPath: size
-      value: 60
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8429455801657706633, guid: a972aa1189fa06e4fa94dd28b7cc07b6, type: 3}
       propertyPath: hpHead
@@ -13036,15 +13040,15 @@ PrefabInstance:
       objectReference: {fileID: 317585453}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[0]
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[1]
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[2]
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[3]
@@ -13052,7 +13056,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[4]
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7035712564018689885, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: GlobalObjectIdHash

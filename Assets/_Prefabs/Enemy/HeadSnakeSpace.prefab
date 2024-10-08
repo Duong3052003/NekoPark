@@ -214,6 +214,8 @@ MonoBehaviour:
   bodyCanShoot: 0
   canMove: 0
   isFinishStep: 0
+  nPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
   listTargetObj: []
   posCurrent: {x: 0, y: 0, z: 0}
   nTargetPos:

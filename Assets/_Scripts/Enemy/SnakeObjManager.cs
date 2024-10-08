@@ -10,29 +10,33 @@ public class SnakeObjManager : Spawner, ISceneObserver
     [SerializeField] protected int size = 10;
     [SerializeField] protected int hpHead = 5;
     [SerializeField] protected int hpPart = 3;
-    [SerializeField] protected List<GameObject> bodyParts;
+    [SerializeField] public List<GameObject> bodyParts;
+
+    protected GameObject objSpawned;
 
     [ServerRpc(RequireOwnership = false)]
     protected virtual void GenerateObjsServerRPC()
     {
+        this.gameObject.GetComponent<ObjDeSpawnByHp>().SetHp(hpHead);
+
         for (int i = 0; i < size; i++)
         {
-            GameObject objSpawned = ObjIsSpawned();
+            objSpawned = ObjIsSpawned();
             bodyParts.Add(objSpawned);
 
-            if (i==0)
+            if (i == 0)
             {
                 bodyParts[i].GetComponent<EnemySnakeBody>().ChangeTarget(this.gameObject);
                 objSpawned.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y + distanceBetween);
-                this.gameObject.GetComponent<ObjDeSpawnByHp>().SetHp(hpHead);
             }
             else
             {
                 bodyParts[i].GetComponent<EnemySnakeBody>().ChangeTarget(bodyParts[i - 1].gameObject);
-                objSpawned.transform.position = new Vector3(bodyParts[i-1].transform.position.x, bodyParts[i - 1].transform.position.y + distanceBetween);
+                objSpawned.transform.position = new Vector3(bodyParts[i - 1].transform.position.x, bodyParts[i - 1].transform.position.y + distanceBetween);
             }
+
+
             bodyParts[i].GetComponent<EnemySnakeBody>().distanceBetween = distanceBetween;
-            //objSpawned.transform.SetParent(this.gameObject.transform);
             objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpPart);
         }
     }
