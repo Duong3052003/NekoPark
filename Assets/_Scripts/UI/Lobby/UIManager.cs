@@ -29,6 +29,7 @@ public class UIManager : NetworkBehaviour
 
     [Header("Menu screens")]
     [SerializeField] private GameObject mainMenuScreen;
+    [SerializeField] private GameObject backGroundmainMenuScreen;
     [SerializeField] private GameObject listLobbyScreen;
     [SerializeField] private GameObject hostBtnScreen;
     [SerializeField] private GameObject settingLobbyScreen;
@@ -562,12 +563,14 @@ public class UIManager : NetworkBehaviour
     {
         if (mainMenuScreen.activeInHierarchy)
         {
+            backGroundmainMenuScreen.SetActive(false);
             mainMenuScreen.SetActive(false);
             listLobbyScreen.SetActive(true);
             ListLobby();
         }
         else
         {
+            backGroundmainMenuScreen.SetActive(true);
             mainMenuScreen.SetActive(true);
             listLobbyScreen.SetActive(false);
         }
@@ -701,8 +704,6 @@ public class UIManager : NetworkBehaviour
         loadingScreen.SetActive(false);
     }
     #endregion
-
-
 
     public static List<GameObject> FindAllGameObjectsWithIObject()
     {

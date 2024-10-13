@@ -367,6 +367,20 @@ public class EnemyPatrol : EnemyBehaviour
         return RandomGameObjectFromList.GetRandomGameObject(validTargets);
     }
 
+    protected override void ReconcileTransform()
+    {
+        if (IsOwner)
+        {
+            nPosition.Value = transform.position;
+            nRotation.Value = transform.rotation;
+        }
+        else
+        {
+            transform.rotation = nRotation.Value;
+            transform.position = nPosition.Value;
+        }
+    }
+
     /*[ServerRpc]
     public void GetNewTarget()
     {

@@ -7,6 +7,13 @@ public class ShipMovement : PlayerMove
 {
     public float rotationSpeed = 10f;
 
+    void Start()
+    {
+        Cursor.visible = false;
+
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
     public void Move(Vector2 inputVector)
     {
         transform.position = Vector2.MoveTowards(transform.position, inputVector, speed * Time.deltaTime);

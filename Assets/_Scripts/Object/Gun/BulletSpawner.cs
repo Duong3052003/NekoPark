@@ -7,9 +7,28 @@ public class BulletSpawner : Spawner, ISceneObserver
 {
     public bool canSpawn;
 
-    public Transform headTransform;
-    public Transform positionTransform;
+    public Transform posTransform;
+    public Transform targetTranform;
     public float spawnCD;
+
+    public bool isSpin = false;
+    public bool isRight = false;
+    public bool isSpinRight = false;
+
+    [SerializeField] private bool inScene=true;
+
+    private void Update()
+    {
+        if(!isSpin)return;
+        if (isSpinRight)
+        {
+            transform.eulerAngles = new Vector3(0f, 0f, transform.eulerAngles.z + 1f);
+        }
+        else
+        {
+            transform.eulerAngles = new Vector3(0f, 0f, transform.eulerAngles.z - 1f);
+        }
+    }
 
     protected IEnumerator SpawnObjectCD()
     {
@@ -27,6 +46,12 @@ public class BulletSpawner : Spawner, ISceneObserver
         }
     }
 
+    /*[ClientRpc]
+    public void SettingGunPortClientRpc(bool boolen)
+    {
+        gunPort.Setting(boolen);
+    }*/
+
     public void StartCoroutineSpawn()
     {
         if (IsHost)
@@ -38,7 +63,10 @@ public class BulletSpawner : Spawner, ISceneObserver
     public void SpawnObj()
     {
         if (!IsHost) return;
-        SpawnObjClientRpc();
+        if((posTransform!=null && targetTranform.position != null) || isSpin)
+        {
+            SpawnObjClientRpc();
+        }
     }
 
     [ClientRpc]
@@ -51,7 +79,15 @@ public class BulletSpawner : Spawner, ISceneObserver
         }
         GameObject objSpawned = ObjIsSpawned();
         objSpawned.transform.SetParent(holder.transform, true);
-        objSpawned.GetComponent<Bullet>().SetTarget(positionTransform.position, headTransform.position, this);
+
+        if(isSpin)
+        {
+            objSpawned.GetComponent<Bullet>().SetRotate(this.transform.position, this.transform.rotation, isRight, this);
+        }
+        else
+        {
+            objSpawned.GetComponent<Bullet>().SetTarget(posTransform.position, targetTranform.position, this);
+        }
     }
 
     private void OnEnable()
@@ -84,7 +120,10 @@ public class BulletSpawner : Spawner, ISceneObserver
 
     public void OnResume()
     {
-        StartCoroutineSpawn();
+        if (inScene)
+        {
+            StartCoroutineSpawn();
+        }
     }
 
     public void OnLoadDone()

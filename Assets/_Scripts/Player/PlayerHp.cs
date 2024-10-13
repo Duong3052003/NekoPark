@@ -15,7 +15,7 @@ public abstract class PlayerHp : DeSpawnByHp, ITakeDamaged, IPlayerStatus
     [SerializeField] protected GameObject hpBarPrefab;
     [SerializeField] protected GameObject CanvasWorldSpacePrefab;
 
-    public float hpMax = 3;
+    public int hpMax = 3;
 
     protected virtual void Awake()
     {

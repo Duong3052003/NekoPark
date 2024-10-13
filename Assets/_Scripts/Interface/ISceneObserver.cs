@@ -15,5 +15,5 @@ public interface ISnakeObserver
 {
     void AddListSnakeObserver(ISnakeObserver observer);
     void RemoveListSnakeObserver(ISnakeObserver observer);
-    void OnSetting();
+    void OnSetting(float _distanceBetween, float _speed, bool targetFollow);
 }

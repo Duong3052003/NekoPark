@@ -9,7 +9,8 @@ using static Unity.Networking.Transport.NetworkDriver;
 public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
 {
     public GameObject target;
-    private Vector3 posCurrent;
+    private BulletSpawner spawner;
+    private Coroutine coroutine;
 
     public float distanceBetween;
 
@@ -22,6 +23,7 @@ public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
 
     protected override void Awake()
     {
+        spawner = GetComponent<BulletSpawner>();
         base.Awake();
     }
 
@@ -32,6 +34,14 @@ public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
         EnemySnake.Instance.GetPosition();
     }
 
+    public void GetGun()
+    {
+        spawner.posTransform = this.transform;
+        spawner.targetTranform = this.transform;
+
+        spawner.StartCoroutineSpawn();
+    }
+
     public void ChangeTarget(GameObject newTarget)
     {
         target = newTarget;
@@ -40,6 +50,8 @@ public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
 
     protected override void Update()
     {
+        ReconcileTransform();
+
         if (!canMove) return;
         if(target == null&&IsHost)
         {
@@ -71,6 +83,19 @@ public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
         }
     }
 
+    protected override void ReconcileTransform()
+    {
+        if (IsOwner)
+        {
+            nPosition.Value = transform.position;
+        }
+        else
+        {
+            float positionError = Vector3.Distance(nPosition.Value, transform.position);
+            transform.position = nPosition.Value;
+        }
+    }
+
     private void Start()
     {
         AddListSnakeObserver(this);
@@ -91,9 +116,30 @@ public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
         EnemySnake.Instance.RemoveListSnakeObserver(observer);
     }
 
-    public void OnSetting()
+    public void OnSetting(float _distanceBetween, float _speed, bool targetFollow)
     {
-        throw new System.NotImplementedException();
+        OnSettingClientRpc(_distanceBetween, _speed, targetFollow);
+    }
+
+    [ClientRpc]
+    private void OnSettingClientRpc(float _distanceBetween, float _speed, bool targetFollow)
+    {
+        if (targetFollow == true && spawner.posTransform!=null)
+        {
+            spawner.targetTranform = Target(PlayerManager.Instance.players).transform;
+        }
+        distanceBetween = _distanceBetween;
+        speed = _speed;
+    }
+
+    public GameObject Target(List<GameObject> validTargets)
+    {
+        if (validTargets.Count == 0)
+        {
+            Debug.LogWarning("Khong co muc tieu.");
+            return null;
+        }
+        return RandomGameObjectFromList.GetRandomGameObject(validTargets);
     }
     #endregion
 }

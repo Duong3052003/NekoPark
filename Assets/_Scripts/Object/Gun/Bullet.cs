@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Bullet : MonoBehaviour
 {
@@ -20,12 +21,36 @@ public class Bullet : MonoBehaviour
     {
         this.transform.position = position;
         spawner = _spawner;
-        vectorTarget = (position - newTarget).normalized;
+        vectorTarget = (newTarget - position).normalized;
         rb.velocity = vectorTarget * speed;
+        Invoke("DeSpawnObj", 10f);
+    }
+
+    public void SetRotate(Vector2 position, Quaternion rotate, bool isRight, Spawner _spawner)
+    {
+        this.transform.position = position;
+        this.transform.rotation = rotate;
+
+        spawner = _spawner;
+        if (isRight == false)
+        {
+            rb.velocity = -transform.right * speed;
+        }
+        else
+        {
+            rb.velocity = transform.right * speed;
+        }
+        Invoke("DeSpawnObj", 10f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        DeSpawnObj();
+    }
+
+    private void DeSpawnObj()
+    {
+        CancelInvoke();
         spawner.DeSpawn(this.gameObject);
     }
 }

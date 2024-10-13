@@ -8,17 +8,14 @@ public class SnakeObjManager : Spawner, ISceneObserver
 {
     [SerializeField] protected float distanceBetween = 2.5f;
     [SerializeField] protected int size = 10;
-    [SerializeField] protected int hpHead = 5;
     [SerializeField] protected int hpPart = 3;
     [SerializeField] public List<GameObject> bodyParts;
 
     protected GameObject objSpawned;
 
     [ServerRpc(RequireOwnership = false)]
-    protected virtual void GenerateObjsServerRPC()
+    public virtual void GenerateObjsServerRPC()
     {
-        this.gameObject.GetComponent<ObjDeSpawnByHp>().SetHp(hpHead);
-
         for (int i = 0; i < size; i++)
         {
             objSpawned = ObjIsSpawned();

@@ -48,7 +48,7 @@ public abstract class EnemyBehaviour : NetworkBehaviour, IObjectServerMovement, 
     protected abstract void Move(float _x, float _y);
     protected abstract void RotateShip(Vector3 targetVector);
 
-    private void SendMovementToServer()
+    protected virtual void SendMovementToServer()
     {
         if(this == null) return;
         ReconcileTransform();
@@ -80,7 +80,7 @@ public abstract class EnemyBehaviour : NetworkBehaviour, IObjectServerMovement, 
         return new Vector3(velocityX, velocityY, 0);
     }
 
-    private void ReconcileTransform()
+    protected virtual void ReconcileTransform()
     {
         if (IsOwner)
         {

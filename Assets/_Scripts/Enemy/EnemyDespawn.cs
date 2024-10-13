@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EnemyDespawn : ObjDeSpawnByHp
 {
-    private EnemyBehaviour enemyBehaviour;
-    private Collider2D col;
+    protected Animator animator;
+    protected Collider2D col;
 
-    private bool beingDetroyed=false;
+    protected bool beingDetroyed=false;
 
-    private void Awake()
+    protected void Awake()
     {
-        enemyBehaviour = GetComponent<EnemyBehaviour>();
+        animator = GetComponent<Animator>();
         col = GetComponent<Collider2D>();
     }
 
@@ -26,20 +26,20 @@ public class EnemyDespawn : ObjDeSpawnByHp
         
     }
 
-    public void CallDespawn()
+    public virtual void CallDespawn()
     {
         if (beingDetroyed == true) return;
         beingDetroyed = true;
         col.enabled = false;
-        enemyBehaviour.animator.SetTrigger("expl");
+        animator.SetTrigger("expl");
     }
 
     protected override void Despawn()
     {
-        if (beingDetroyed == true) return;
+        if (beingDetroyed == true || animator == null) return;
         beingDetroyed = true;
         col.enabled = false;
-        enemyBehaviour.animator.SetTrigger("expl");
+        animator.SetTrigger("expl");
     }
 
     protected void BeDestroyed()

@@ -10,6 +10,9 @@ public class LevelShipGenerator : LevelGenerator
 {
     public static LevelShipGenerator Instance { get; private set; }
 
+    [SerializeField] private int numberEnemyCurrent;
+    [SerializeField] private bool isEndAllWaves = false;
+
     [SerializeField] private float timeBetweenWave;
     [SerializeField] private float[] timeDelayPerWave;
     [SerializeField] private int[] numberEnemyPerWave;
@@ -37,6 +40,11 @@ public class LevelShipGenerator : LevelGenerator
         {
             Destroy(this.gameObject);
         }
+    }
+
+    protected virtual void Update()
+    {
+        CheckWin();
     }
 
     public override void OnNetworkSpawn()
@@ -117,12 +125,18 @@ public class LevelShipGenerator : LevelGenerator
     private void ExcuteTime(float newTime)
     {
         if (isPause || !IsHost) return;
-        if (waveCurrent >= numberEnemyPerWave.Length) return;
-        timer++;
-        if (timer - (timeBetweenWave + timeDelayPerWave[waveCurrent]) == 0)
+        if (waveCurrent < numberEnemyPerWave.Length)
         {
-            Wave(waveCurrent);
-            timer =0;
+            timer++;
+            if (timer - (timeBetweenWave + timeDelayPerWave[waveCurrent]) == 0)
+            {
+                Wave(waveCurrent);
+                timer = 0;
+            }
+        }
+        else
+        {
+            isEndAllWaves = true;
         }
     }
 
@@ -133,6 +147,25 @@ public class LevelShipGenerator : LevelGenerator
         waveCurrent++;
         Debug.Log("|=== Wave ===|" + waveCurrent);
     }
+
+    private void CheckWin()
+    {
+        if (!isEndAllWaves || !IsHost) return;
+        numberEnemyCurrent = 0;
+        for(int i=0; i < objSpawnedHolders.Length; i++)
+        {
+            numberEnemyCurrent = numberEnemyCurrent +objSpawnedHolders[i].transform.childCount;
+        }
+        if (numberEnemyCurrent != 0) return;
+        isEndAllWaves = false;
+        EnemySnake.Instance.GenerateObjsServerRPC();
+    }
+
+
+
+
+
+
 
     public override void OnPause(int time)
     {

@@ -37,7 +37,7 @@ public class Spawner : NetworkBehaviour
     {
         foreach (GameObject obj in poolObjs)
         {
-            if (obj.name == _prefab.name)
+            if (obj.name == _prefab.name && !obj.activeInHierarchy)
             {
                 this.poolObjs.Remove(obj);
                 obj.gameObject.SetActive(true);

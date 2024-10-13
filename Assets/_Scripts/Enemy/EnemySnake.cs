@@ -5,7 +5,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class EnemySnake : SnakeObjManager,IObjectServerMovement
 {
@@ -13,6 +13,9 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
     private List<ISnakeObserver> listSnakeObserver = new List<ISnakeObserver>();
 
     private Rigidbody2D rb;
+    [SerializeField] private bool isStarted = false;
+
+    [SerializeField] private GameObject[] machineGuns;
 
     [SerializeField] protected float velocityX = 0;
     [SerializeField] protected float velocityY = 0;
@@ -23,10 +26,16 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
     [SerializeField] private int styleCurrent;
     [SerializeField] private int comboCurrent;
     [SerializeField] private int stepComboCurrent;
+    [SerializeField] private bool isRotate=false;
 
     [SerializeField] private bool bodyCanShoot;
     [SerializeField] private bool canMove=false;
     [SerializeField] private bool isFinishStep=true;
+
+    [SerializeField] private int PHASE=1;
+    [SerializeField] private int maxCombo=2;
+    [SerializeField] private int minCombo=0;
+    [SerializeField] private float timer;
 
     private Coroutine coroutineCurrent;
 
@@ -45,9 +54,20 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
     public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0, 0, 0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public NetworkVariable<Quaternion> nRotation = new NetworkVariable<Quaternion>(Quaternion.identity, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+    [Header("Hp Setting")]
+    [SerializeField] private GameObject hpBar;
+    [SerializeField] private Slider hpSlider;
+    [SerializeField] private float hpMax;
+    public NetworkVariable<float> nHPValue = new NetworkVariable<float>(
+        0,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
     public int indexBody = 0;
 
     protected float reconciliationThreshold = 0.5f;
+
+    [SerializeField] private float distanceForChange = 2;
 
     public override void OnNetworkSpawn()
     {
@@ -69,21 +89,15 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
         rb = this.gameObject.GetComponent<Rigidbody2D>();
     }
 
-    private void Start()
-    {
-        if(!IsHost) return;
-        ChangeComboClientRpc(UnityEngine.Random.Range(0, 2));
-    }
-
     [ClientRpc]
-    private void SetupClientRpc()
+    private void SetupClientRpc(float _hpMax)
     {
-        VirtualCameraSetting.Instance.ChangeFieldOfView(25f);
-
+        VirtualCameraSetting.Instance.ChangeFieldOfView(18f);
         canMove = true;
         posCurrent = this.transform.position;
-
+        hpMax = _hpMax;
         comboCurrent = 0;
+        ChangeComboClientRpc(comboCurrent);
         styleCurrent = 0;
         isFinishStep = true;
     }
@@ -110,7 +124,16 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
 
     private void Move(float _x, float _y)
     {
-        rb.velocity = new Vector3(_x, _y) * speed;
+        if (isRotate == false)
+        {
+            rb.velocity = new Vector3(_x, _y) * speed;
+        }
+        else
+        {
+            this.transform.RotateAround(new Vector3(_x, _y), Vector3.forward, speed*4.5f * Time.deltaTime);
+            rb.velocity = Vector3.forward;
+
+        }
     }
 
     private void Rotate(Vector3 targetVector)
@@ -126,6 +149,12 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
             rb.rotation = 0;
         }
     }
+
+    [ClientRpc]
+    private void ChangeSpeedClientRpc(float newSpeed)
+    {
+        speed = newSpeed;
+    }
     #endregion
 
     #region Combo
@@ -139,6 +168,12 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
             case 1:
                 ComboOne();
                 break;
+            case 2:
+                ComboTwo();
+                break;
+            case 3:
+                ComboThree();
+                break;
             default:
                 ComboZero();
                 break;
@@ -148,19 +183,30 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
     [ClientRpc]
     public void ChangeComboClientRpc(int index)
     {
-        stepComboCurrent = 0;
-
         switch (index)
         {
             case 0:
+                stepComboCurrent = 0;
                 ComboZero();
                 comboCurrent = index;
                 break;
             case 1:
+                stepComboCurrent = 0;
                 ComboOne();
                 comboCurrent = index;
                 break;
+            case 2:
+                stepComboCurrent = 0;
+                ComboTwo();
+                comboCurrent = index;
+                break;
+            case 3:
+                stepComboCurrent = 0;
+                ComboThree();
+                comboCurrent = index;
+                break;
             default:
+                stepComboCurrent = 0;
                 ComboZero();
                 comboCurrent = index;
                 break;
@@ -174,29 +220,20 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
         switch (styleCurrent)
         {
             case 0:
-                StyleMove(false, 0);
+                StyleMoveZero(false, 0);
+                break;
+            case 1:
+                StyleMoveOne(false, 0);
+                break;
+            case 2:
+                StyleMoveTwo(false);
                 break;
             default:
-                StyleMove(false, 0);
+                StyleMoveZero(false, 0);
                 break;
         }
     }
 
-    /*[ClientRpc]
-    public void ChangeStyleClientRpc(int index, int model)
-    {
-        switch (index)
-        {
-            case 0:
-                StyleMove(true, 0);
-                styleCurrent = index;
-                break;
-            default:
-                StyleMove(true, 0);
-                styleCurrent = index;
-                break;
-        }
-    }*/
     #endregion
 
     #region ComboStyle
@@ -207,30 +244,30 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
         if (isFinishStep)
         {
             isFinishStep =false;
-
+            distanceForChange = 3;
             switch (stepComboCurrent)
             {
                 case 0:
-                    StyleMove(true, 4);
+                    StyleMoveZero(true, 7);
                     break;
                 case 1:
-                    StyleMove(true, 5);
+                    StyleMoveZero(true, 2);
                     break;
                 case 2:
-                    StyleMove(true, 1);
+                    StyleMoveZero(true, 8);
                     break;
                 case 3:
-                    StyleMove(true, 8);
+                    StyleMoveZero(true, 1);
                     break;
                 case 4:
-                    StyleMove(true, 2);
+                    StyleMoveZero(true, 5);
                     break;
                 case 5:
-                    StyleMove(true, 7);
+                    StyleMoveZero(true, 4);
                     break;
                 default:
                     if (!IsHost) return;
-                    ChangeComboClientRpc(UnityEngine.Random.Range(0,2));
+                    ChangeComboClientRpc(UnityEngine.Random.Range(minCombo, maxCombo));
                     break;
             }
             stepComboCurrent++;
@@ -250,36 +287,36 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
         if (isFinishStep)
         {
             isFinishStep = false;
-
+            distanceForChange = 2;
             switch (stepComboCurrent)
             {
                 case 0:
-                    StyleMove(true, 0);
+                    StyleMoveZero(true, 3);
                     break;
                 case 1:
-                    StyleMove(true, 7);
+                    StyleMoveZero(true, 5);
                     break;
                 case 2:
-                    StyleMove(true, 2);
+                    StyleMoveZero(true, 6);
                     break;
                 case 3:
-                    StyleMove(true, 8);
+                    StyleMoveZero(true, 1);
                     break;
                 case 4:
-                    StyleMove(true, 1);
+                    StyleMoveZero(true, 8);
                     break;
                 case 5:
-                    StyleMove(true, 6);
+                    StyleMoveZero(true, 2);
                     break;
                 case 6:
-                    StyleMove(true, 5);
+                    StyleMoveZero(true, 7);
                     break;
                 case 7:
-                    StyleMove(true, 3);
+                    StyleMoveZero(true, 0);
                     break;
                 default:
                     if (!IsHost) return;
-                    ChangeComboClientRpc(UnityEngine.Random.Range(0, 2));
+                    ChangeComboClientRpc(UnityEngine.Random.Range(minCombo, maxCombo));
                     break;
             }
             stepComboCurrent++;
@@ -293,68 +330,239 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
     }
 
     #endregion
+
+    #region ComboTwo
+    private void ComboTwo()
+    {
+        //Setting
+        if (isFinishStep)
+        {
+            isFinishStep = false;
+            distanceForChange = 0.5f;
+            switch (stepComboCurrent)
+            {
+                case 0:
+                    StyleMoveZero(true, 9);
+                    break;
+                case 1:
+                    StyleMoveOne(true, 4);
+                    break;
+                default:
+                    if (!IsHost) return;
+                    ChangeComboClientRpc(UnityEngine.Random.Range(minCombo, maxCombo));
+                    break;
+            }
+            stepComboCurrent++;
+        }
+
+        //Conditions
+        else
+        {
+            CheckConditions();
+        }
+    }
+    #endregion
+
+    #region ComboThree
+    private void ComboThree()
+    {
+        //Setting
+        if (isFinishStep)
+        {
+            isFinishStep = false;
+            distanceForChange = 2;
+            switch (stepComboCurrent)
+            {
+                case 0:
+                    StyleMoveZero(true, 4);
+                    break;
+                case 1:
+                    StyleMoveTwo(true);
+                    break;
+                default:
+                    if (!IsHost) return;
+                    UnityEngine.Random.Range(minCombo, maxCombo);
+                    break;
+            }
+            stepComboCurrent++;
+        }
+
+        //Conditions
+        else
+        {
+            CheckConditions();
+        }
+    }
+    #endregion
+
     #endregion
     #endregion
 
     #region StyleMove
-    private void StyleMove(bool isSetting, int index)
+    private void StyleMoveZero(bool isSetting, int index)
     {
         //Setting
         if (isSetting)
         {
+            styleCurrent = 0;
+            isRotate = false;
+            timer = 5f;
+
             if (IsHost)
             {
                 nTargetPos.Value = TargetPos(index);
             }
+
             Movement((nTargetPos.Value - posCurrent).normalized);
         }
         //Conditions
         else
         {
             float distance = (nTargetPos.Value - this.transform.position).magnitude;
-            if (distance < 1)
+            timer = timer - Time.deltaTime;
+
+            if (distance < distanceForChange || timer <= 0)
             {
-                posCurrent = nTargetPos.Value;
+                posCurrent = this.transform.position;
                 isFinishStep=true;
+            }
+
+        }
+    }
+
+    private void StyleMoveOne(bool isSetting, int index)
+    {
+        //Setting
+        if (isSetting)
+        {
+            rb.velocity = Vector3.zero;
+            styleCurrent = 1;
+
+            isRotate = true;
+            timer = 10f;
+            if (IsHost)
+            {
+                nTargetPos.Value = TargetPos(index);
+            }
+            Movement((nTargetPos.Value));
+        }
+        //Conditions
+        else
+        {
+            timer = timer - Time.deltaTime;
+            if (timer <= 0)
+            {
+                posCurrent = this.transform.position;
+                isFinishStep = true;
             }
         }
     }
 
-    /*public IEnumerator Chase(float _time)
+    private void StyleMoveTwo(bool isSetting)
     {
-        if (IsHost)
+        //Setting
+        if (isSetting)
         {
-            nTargetPos.Value = TargetPos(5);
-        }
-        Movement((nTargetPos.Value - posCurrent).normalized);
-        yield return new WaitForSeconds(_time);
-        if (IsHost)
-        {
-            nTargetPos.Value = TargetPos(7);
-        }
-        Movement((nTargetPos.Value - posCurrent).normalized);
-        yield return new WaitForSeconds(_time);
-        if (IsHost)
-        {
-            nTargetPos.Value = TargetPos(3);
-        }
-        Movement((nTargetPos.Value - posCurrent).normalized);
-        yield return new WaitForSeconds(_time);
-        if (IsHost)
-        {
-            nTargetPos.Value = TargetPos(4);
-        }
-        Movement((nTargetPos.Value - posCurrent).normalized);
-        yield return new WaitForSeconds(_time);
-        if (IsHost)
-        {
-            nTargetPos.Value = TargetPos(6);
-        }
-        Movement((nTargetPos.Value - posCurrent).normalized);
-        yield return new WaitForSeconds(_time);
-        ChangeStyleClientRpc(UnityEngine.Random.Range(0, 5));
-    }*/
+            rb.velocity = Vector3.zero;
+            rb.rotation = 0;
+            timer = 5f;
 
+            styleCurrent = 2;
+            isRotate = false;
+            canMove = false;
+
+            for (int j = 0; j < machineGuns.Length; j++)
+            {
+                machineGuns[j].GetComponent<BulletSpawner>().isSpin = true;
+                if (IsHost)
+                {
+                    machineGuns[j].GetComponent<BulletSpawner>().StartCoroutineSpawn();
+                }
+            }
+        }
+        //Conditions
+        else
+        {
+            timer = timer - Time.deltaTime;
+            if (timer <= 0)
+            {
+                canMove = true;
+                posCurrent = this.transform.position;
+                isFinishStep = true;
+            }
+        }
+    }
+    #endregion
+
+    #region HPSetting
+    [ServerRpc]
+    public void ChangeHpServerRpc(float hpValue)
+    {
+        if (!IsHost) return;
+        if(PHASE == 1 && (nHPValue.Value/hpMax <= 0.9f))
+        {
+            PHASE = 2;
+            minCombo = 0;
+            maxCombo = 2;
+
+            ChangeSpeedClientRpc(30f);
+            OnSettingServerRpc(30f, 31f, false);
+        }
+        else if(PHASE == 2 && (nHPValue.Value / hpMax <= 0.75f))
+        {
+            PHASE = 3;
+            minCombo = 0;
+            maxCombo = 2;
+
+            ChangeSpeedClientRpc(50f);
+            OnSettingServerRpc(2.5f, 51f, false);
+        }
+        else if(PHASE == 3 && (nHPValue.Value / hpMax <= 0.6f))
+        {
+            PHASE = 4;
+            minCombo = 0;
+            maxCombo = 3;
+
+            ChangeSpeedClientRpc(20f);
+            OnSettingServerRpc(3f, 21f, true);
+            ChangeComboClientRpc(2);
+        }
+        else if (PHASE == 4 && (nHPValue.Value / hpMax <= 0.40f))
+        {
+            PHASE = 5;
+            minCombo = 1;
+            maxCombo = 3;
+
+            ChangeSpeedClientRpc(30);
+            OnSettingServerRpc(50f, 32f, true);
+        }else if (PHASE == 5 && (nHPValue.Value / hpMax <= 0.25f))
+        {
+            this.gameObject.layer = 7;
+
+            PHASE = 6;
+            minCombo = 1;
+            maxCombo = 3;
+
+            ChangeSpeedClientRpc(40f);
+            OnSettingServerRpc(2.5f, 41f, true);
+            ChangeComboClientRpc(3);
+        }
+
+        nHPValue.Value = nHPValue.Value + hpValue;
+
+        UpdateHpBarClientRpc(nHPValue.Value);
+    }
+
+    [ClientRpc]
+    private void UpdateHpBarClientRpc(float hpValue)
+    {
+        hpBar.SetActive(true);
+        if (hpSlider == null)
+        {
+            hpSlider = hpBar.GetComponent<Slider>();
+        }
+        hpSlider.value = hpValue/ hpMax;
+    }
     #endregion
 
     #region Target
@@ -376,16 +584,46 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
 
     #region BodyFollow
     [ServerRpc(RequireOwnership = false)]
-    protected override void GenerateObjsServerRPC()
+    public override void GenerateObjsServerRPC()
     {
-        this.gameObject.GetComponent<ObjDeSpawnByHp>().SetHp(hpHead);
+        if (isStarted == true) return;
+        isStarted = true;
+        hpMax = 0;
 
         for (int i = 0; i < size; i++)
         {
             objSpawned = ObjIsSpawned();
 
-            objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpPart);
+            if (i <= 5)
+            {
+                hpMax = hpMax + hpPart * 4;
+                objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpPart * 5);
+            }
+            else if(i <= 15)
+            {
+                hpMax = hpMax + hpPart * 3;
+                objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpPart * 4);
+            }
+            else if(i <= 30)
+            {
+                hpMax = hpMax + hpPart * 2;
+                objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpPart * 3);
+            }
+            else if (i <= 50)
+            {
+                hpMax = hpMax + hpPart * 2;
+                objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpPart * 2);
+            }
+            else
+            {
+                hpMax = hpMax + hpPart;
+                objSpawned.GetComponent<ObjDeSpawnByHp>().SetHp(hpPart);
+            }
         }
+
+        SetupClientRpc(hpMax);
+
+        ChangeHpServerRpc(hpMax);
     }
 
     public void AddtoListBody(GameObject bodyPart)
@@ -404,6 +642,11 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
         {
             bodyParts[indexBody].GetComponent<EnemySnakeBody>().target = bodyParts[indexBody-1];
             bodyParts[indexBody].transform.position = new Vector3(bodyParts[indexBody - 1].transform.position.x, bodyParts[indexBody - 1].transform.position.y + distanceBetween);
+        }
+
+        if (indexBody % 5==0)
+        {
+            bodyParts[indexBody].GetComponent<EnemySnakeBody>().GetGun();
         }
         bodyParts[indexBody].GetComponent<EnemySnakeBody>().distanceBetween = distanceBetween;
 
@@ -425,9 +668,9 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void OnSettingServerRpc()
+    public void OnSettingServerRpc(float _distanceBetween, float _speed, bool targetFollow)
     {
-        listSnakeObserver.ForEach(observer => observer.OnSetting());
+        listSnakeObserver.ForEach(observer => observer.OnSetting(_distanceBetween, _speed, targetFollow));
     }
 
     public override void OnPause(int time)
@@ -437,8 +680,7 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
 
     public override void OnResume()
     {
-        GenerateObjsServerRPC();
-        SetupClientRpc();
+
     }
 
     public override void OnLoadDone()
@@ -457,9 +699,9 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
         }
         else
         {
-            float positionError = Vector3.Distance(nPosition.Value, transform.position);
+            //float positionError = Vector3.Distance(nPosition.Value, transform.position);
             transform.rotation = nRotation.Value;
-            if (positionError < reconciliationThreshold) return;
+            //if (positionError < reconciliationThreshold) return;
             transform.position = nPosition.Value;
         }
     }

@@ -14,10 +14,11 @@ GameObject:
   - component: {fileID: 5252210338392150557}
   - component: {fileID: 6168966269013517573}
   - component: {fileID: 5647189033224446995}
-  - component: {fileID: 7369273694034195315}
   - component: {fileID: -8638812901641679626}
   - component: {fileID: -5258535161269122305}
   - component: {fileID: -9027802166256770666}
+  - component: {fileID: 1427683877179736448}
+  - component: {fileID: -6943373505843751126}
   m_Layer: 14
   m_Name: BodySnakeSpace
   m_TagString: Untagged
@@ -35,7 +36,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -196,7 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e449c2acbf1f234fa75c344139d982a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 45
+  speed: 30
   rotationSpeed: 20
   canMove: 0
   velocityX: 0
@@ -205,21 +206,8 @@ MonoBehaviour:
     m_InternalValue: {x: 0, y: 0, z: 0}
   nRotation:
     m_InternalValue: {x: 0, y: 0, z: 0, w: 1}
+  target: {fileID: 0}
   distanceBetween: 0
---- !u!114 &7369273694034195315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3875190734681696993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a038bd7634c68ce4b9791ab738863373, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hpText: {fileID: 0}
-  setHpIfAlreadyInScene: 3
 --- !u!95 &-8638812901641679626
 Animator:
   serializedVersion: 5
@@ -270,3 +258,40 @@ MonoBehaviour:
   damage: 1
   collisionDame: 0
   triggerDame: 1
+--- !u!114 &1427683877179736448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875190734681696993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d49d84cd40fe6841abe1e45645ac3bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  holder: {fileID: 0}
+  prefab: {fileID: 1616980606662130335, guid: c4c2c93ab1e2c8041907bae920fe333a, type: 3}
+  poolObjs: []
+  canSpawn: 1
+  posTransform: {fileID: 0}
+  targetTranform: {fileID: 0}
+  spawnCD: 1.3
+  isSpin: 0
+  isRight: 0
+  isSpinRight: 0
+  inScene: 1
+--- !u!114 &-6943373505843751126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875190734681696993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6e2d81a0e5ee1c49969a1ba81c4da03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpText: {fileID: 0}
+  setHpIfAlreadyInScene: 3

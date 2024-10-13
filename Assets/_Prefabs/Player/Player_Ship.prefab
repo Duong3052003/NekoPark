@@ -508,6 +508,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6000644e0c957b04f989f238c0f67f96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skins: []
+  controllers: []
   playerHUDImg: {fileID: 1621966263145159938}
   startBtn: {fileID: 2308816010697726327}
   changedColorBtn: {fileID: 6145158799583591152}
@@ -552,7 +554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBarPrefab: {fileID: 5547387330414121776, guid: 247ae8b1a746b5041bd27d58ed57a3fc, type: 3}
   CanvasWorldSpacePrefab: {fileID: 2696021214243124683, guid: 40ab0425ac301764f8af8082022ac2f9, type: 3}
-  hpMax: 3
+  hpMax: 5
   IMMORTAL: 1
 --- !u!114 &2790736402166689405
 MonoBehaviour:
@@ -566,7 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e3131d767cffd479fa6ba1a36d7d29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
+  speed: 30
   CanMove: 1
   nPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
@@ -601,9 +603,13 @@ MonoBehaviour:
   prefab: {fileID: 5902818002419926489, guid: 1f66ae629868171499d9dc1dc9110a50, type: 3}
   poolObjs: []
   canSpawn: 1
-  headTransform: {fileID: 5307581328653838760}
-  positionTransform: {fileID: 1936816431470497130}
-  spawnCD: 0.5
+  posTransform: {fileID: 1936816431470497130}
+  targetTranform: {fileID: 5307581328653838760}
+  spawnCD: 0.3
+  isSpin: 0
+  isRight: 0
+  isSpinRight: 0
+  inScene: 1
 --- !u!1 &3286091562618086778
 GameObject:
   m_ObjectHideFlags: 0

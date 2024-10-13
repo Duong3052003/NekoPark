@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class ObjDeSpawnByHp : DeSpawnByHp, ITakeDamaged
 {
-    protected NetworkVariable<int> hpMax = new NetworkVariable<int>(
+    protected NetworkVariable<float> hpMax = new NetworkVariable<float>(
        0,
        NetworkVariableReadPermission.Everyone,
        NetworkVariableWritePermission.Server);
