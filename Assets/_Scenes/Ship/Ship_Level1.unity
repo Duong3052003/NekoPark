@@ -7176,6 +7176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuScreen: {fileID: 1807804647}
+  backGroundmainMenuScreen: {fileID: 0}
   listLobbyScreen: {fileID: 1850752824}
   hostBtnScreen: {fileID: 1392839260}
   settingLobbyScreen: {fileID: 925017594}

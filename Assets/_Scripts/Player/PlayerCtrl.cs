@@ -44,6 +44,7 @@ public class PlayerCtrl : MonoBehaviour
     {
         if (boolen == true)
         {
+            playerAnimator.SetActiveLayer();
             rb.bodyType = RigidbodyType2D.Dynamic;
             col.isTrigger = false;
         }

@@ -613,6 +613,7 @@ public class UIManager : NetworkBehaviour
 
     public void GameOverScreen()
     {
+        if (gameOverScreen.activeInHierarchy) return;
         GameOverScreenServerRpc(true);
     }
 

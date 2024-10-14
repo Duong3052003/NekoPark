@@ -406,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3887293421
+  GlobalObjectIdHash: 827045018
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -506,6 +506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6000644e0c957b04f989f238c0f67f96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skins: []
+  controllers: []
   playerHUDImg: {fileID: 1621966263145159938}
   startBtn: {fileID: 2308816010697726327}
   changedColorBtn: {fileID: 6145158799583591152}
@@ -551,6 +553,9 @@ MonoBehaviour:
   hpBarPrefab: {fileID: 5547387330414121776, guid: 247ae8b1a746b5041bd27d58ed57a3fc, type: 3}
   CanvasWorldSpacePrefab: {fileID: 2696021214243124683, guid: 40ab0425ac301764f8af8082022ac2f9, type: 3}
   hpMax: 3
+  IMMORTAL: 0
+  canRevive: 0
+  reviveObj: {fileID: 5341861927277042246, guid: 68a4864bfcc629b46a9df0a1e91688ea, type: 3}
 --- !u!114 &5305028086829766892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -584,6 +589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0942d839f6866634988c19ca9cd45035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberPlayerCanWin: 1
 --- !u!1 &3286091562618086778
 GameObject:
   m_ObjectHideFlags: 0

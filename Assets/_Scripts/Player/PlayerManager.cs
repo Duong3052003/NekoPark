@@ -171,9 +171,9 @@ public class PlayerManager : NetworkBehaviour
         players[numberPlayer].transform.position = pos;
     }
 
-    public bool CheckGameOver()
+    public bool CheckGameOver(int number)
     {
-        return players.Count(obj => obj.activeSelf) <= 1;
+        return players.Count(obj => obj.activeSelf) <= number;
     }
 
     [ServerRpc(RequireOwnership =false)]

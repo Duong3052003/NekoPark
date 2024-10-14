@@ -551,6 +551,9 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
         nHPValue.Value = nHPValue.Value + hpValue;
 
         UpdateHpBarClientRpc(nHPValue.Value);
+
+        if (nHPValue.Value > 0) return;
+        UIManager.Instance.GameOverScreen();
     }
 
     [ClientRpc]
@@ -624,6 +627,7 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
         SetupClientRpc(hpMax);
 
         ChangeHpServerRpc(hpMax);
+
     }
 
     public void AddtoListBody(GameObject bodyPart)

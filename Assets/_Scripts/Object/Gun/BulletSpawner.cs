@@ -93,11 +93,19 @@ public class BulletSpawner : Spawner, ISceneObserver
     private void OnEnable()
     {
         AddListObserver(this);
+        if (IsHost)
+        {
+            StartCoroutine(this.SpawnObjectCD());
+        }
     }
 
     private void OnDisable()
     {
         RemoveListObserver(this);
+        if (IsHost)
+        {
+            StopCoroutine(this.SpawnObjectCD());
+        }
     }
 
     public void AddListObserver(ISceneObserver observer)
@@ -112,10 +120,7 @@ public class BulletSpawner : Spawner, ISceneObserver
 
     public void OnPause(int time)
     {
-        if (IsHost)
-        {
-            StopCoroutine(this.SpawnObjectCD());
-        }
+        
     }
 
     public void OnResume()

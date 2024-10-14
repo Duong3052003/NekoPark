@@ -9,9 +9,9 @@ public class ShipMovement : PlayerMove
 
     void Start()
     {
-        Cursor.visible = false;
+     /*   Cursor.visible = false;
 
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Confined;*/
     }
 
     public void Move(Vector2 inputVector)

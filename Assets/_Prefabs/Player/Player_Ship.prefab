@@ -408,7 +408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3160323241
+  GlobalObjectIdHash: 3546163680
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -554,8 +554,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBarPrefab: {fileID: 5547387330414121776, guid: 247ae8b1a746b5041bd27d58ed57a3fc, type: 3}
   CanvasWorldSpacePrefab: {fileID: 2696021214243124683, guid: 40ab0425ac301764f8af8082022ac2f9, type: 3}
-  hpMax: 5
-  IMMORTAL: 1
+  hpMax: 3
+  IMMORTAL: 0
+  canRevive: 1
+  reviveObj: {fileID: 5341861927277042246, guid: 68a4864bfcc629b46a9df0a1e91688ea, type: 3}
 --- !u!114 &2790736402166689405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,6 +589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3061c0e8b97b5e64ca5b9fdc393ba4be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberPlayerCanWin: 0
 --- !u!114 &893574095334792151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,7 +608,7 @@ MonoBehaviour:
   canSpawn: 1
   posTransform: {fileID: 1936816431470497130}
   targetTranform: {fileID: 5307581328653838760}
-  spawnCD: 0.3
+  spawnCD: 0.5
   isSpin: 0
   isRight: 0
   isSpinRight: 0
@@ -1147,10 +1150,6 @@ PrefabInstance:
     - target: {fileID: 4890245354726086, guid: 7baa347ea8e001e48bb257a28057c6e8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 212665564748713932, guid: 7baa347ea8e001e48bb257a28057c6e8, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

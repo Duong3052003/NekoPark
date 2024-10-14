@@ -12,6 +12,8 @@ public abstract class PlayerAnimator : NetworkBehaviour
     private int trapLayer;
     private int enemyPlayer;
 
+    [SerializeField] private int numberPlayerCanWin;
+
     private void Awake()
     {
         playerCtrl = GetComponent<PlayerCtrl>();
@@ -21,8 +23,7 @@ public abstract class PlayerAnimator : NetworkBehaviour
 
     private void Start()
     {
-        playerCtrl.animator.SetLayerWeight(1, 0);
-        IgnorePhysicsLayerAllPlayer(false);
+        SetActiveLayer();
     }
 
     void Update()
@@ -32,6 +33,12 @@ public abstract class PlayerAnimator : NetworkBehaviour
     }
 
     protected abstract void Action();
+
+    public void SetActiveLayer()
+    {
+        playerCtrl.animator.SetLayerWeight(1, 0);
+        IgnorePhysicsLayerAllPlayer(false);
+    }
 
     public void Desappear()
     {
@@ -43,7 +50,7 @@ public abstract class PlayerAnimator : NetworkBehaviour
         StopAllCoroutines();
         this.gameObject.SetActive(false);
 
-        if (!PlayerManager.Instance.CheckGameOver()) return;
+        if (!PlayerManager.Instance.CheckGameOver(numberPlayerCanWin)) return;
         UIManager.Instance.GameOverScreen();
     }
 
