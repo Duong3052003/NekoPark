@@ -18,6 +18,8 @@ public class _ScenesManager : NetworkBehaviour
 
     private List<ISceneObserver> listObserver = new List<ISceneObserver>();
 
+    [SerializeField] private LayerMask layerNetworkCanReset;
+
     private void Awake()
     {
         if (Instance == null)
@@ -43,6 +45,26 @@ public class _ScenesManager : NetworkBehaviour
             Debug.Log("dang ki su kien network");
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnLoadEventCompleted;
         }
+    }
+
+    void DespawnAllNetworkObjects()
+    {
+        foreach (var networkObject in FindObjectsOfType<NetworkObject>())
+        {
+            if (((1 << networkObject.gameObject.layer) & layerNetworkCanReset) != 0)
+            {
+                if (networkObject.IsSpawned)
+                {
+                    networkObject.Despawn(true);
+                }
+            }
+        }
+    }
+
+    public void ResetScene()
+    {
+        DespawnAllNetworkObjects();
+        _ScenesManager.Instance.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void LoadScene(string sceneName)

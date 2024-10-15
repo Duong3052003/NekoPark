@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3519065852
+  GlobalObjectIdHash: 2943374314
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -229,6 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocityX: 0
   velocityY: -1
+  SoundEffect: {fileID: 8300000, guid: 41d7262b801c0410c9829ea15a595bc1, type: 3}
   valueHeal: 1
 --- !u!1 &6910657497911740577
 GameObject:

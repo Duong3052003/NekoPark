@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 75336842
+  GlobalObjectIdHash: 3699862814
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -177,6 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpText: {fileID: 0}
   setHpIfAlreadyInScene: 0
+  explEffect: {fileID: 8300000, guid: b9e28047bdaef4209b56840c71df8dc3, type: 3}
 --- !u!61 &2026282771547804296
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -274,6 +275,7 @@ MonoBehaviour:
   isRight: 0
   isSpinRight: 0
   inScene: 1
+  shootEffect: {fileID: 8300000, guid: 4310474905e266640852f43bd609a1a4, type: 3}
 --- !u!114 &-5354103794802068676
 MonoBehaviour:
   m_ObjectHideFlags: 0

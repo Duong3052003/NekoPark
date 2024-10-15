@@ -412,9 +412,17 @@ public class EnemyPatrol : EnemyBehaviour
         //Conditions
         else
         {
-            if (IsHost)
+            if (IsHost && nTargetTransform.Value != null)
             {
-                nTargetTransform.Value = Target().GetComponent<Transform>().position;
+                var targetPos = Target().GetComponent<Transform>().position;
+                if(targetPos != null)
+                {
+                    nTargetTransform.Value = targetPos;
+                }
+                else
+                {
+                    nTargetTransform.Value = transform.position;
+                }
             }
             Movement((nTargetTransform.Value - nPosCurrent.Value).normalized);
             if (!ExcuteTime() || !IsHost) return;

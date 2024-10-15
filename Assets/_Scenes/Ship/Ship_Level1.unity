@@ -7184,6 +7184,8 @@ MonoBehaviour:
   gameOverScreen: {fileID: 0}
   gameOverScreenClient: {fileID: 0}
   loadingScreen: {fileID: 0}
+  settingScreen: {fileID: 0}
+  pauseGameScreen: {fileID: 0}
   lobbyGameObj: {fileID: 1792007053115647195, guid: ca996bfe72beac64999935bbfd7e298a, type: 3}
   listLobby: {fileID: 1576169020}
   isPrivateTxt: {fileID: 1236963700}
@@ -12958,6 +12960,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8429455801657706633, guid: a972aa1189fa06e4fa94dd28b7cc07b6, type: 3}
+      propertyPath: hpPart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8429455801657706633, guid: a972aa1189fa06e4fa94dd28b7cc07b6, type: 3}
       propertyPath: machineGuns.Array.data[0]
       value: 
       objectReference: {fileID: 1561668313}
@@ -13755,7 +13761,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.size
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: posSpawnNeedToGo.Array.data[0]
@@ -13803,7 +13809,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: timeDelayPerWave.Array.data[1]
-      value: 500
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: timeDelayPerWave.Array.data[2]
@@ -13895,7 +13901,7 @@ PrefabInstance:
       objectReference: {fileID: 317585453}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[0]
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6535466918448979037, guid: b3790588531abf14089a53f8bacb315e, type: 3}
       propertyPath: numberEnemyPerWave.Array.data[1]

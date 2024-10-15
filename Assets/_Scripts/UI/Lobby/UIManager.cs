@@ -37,6 +37,8 @@ public class UIManager : NetworkBehaviour
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject gameOverScreenClient;
     [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private GameObject settingScreen;
+    [SerializeField] private GameObject pauseGameScreen;
 
     [Header("List Lobby")]
     [SerializeField] private GameObject lobbyGameObj;
@@ -346,6 +348,11 @@ public class UIManager : NetworkBehaviour
     {
         try
         {
+            if (IsHost && joinedLobby.Players.Count>=2)
+            {
+                MigrateLobbyHost(1);
+            }
+
             await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
             joinedLobby= null;
         }
@@ -635,12 +642,68 @@ public class UIManager : NetworkBehaviour
             gameOverScreenClient.SetActive(boolen);
         }
     }
+
+    public void SettingScreen()
+    {
+        if (settingScreen.activeInHierarchy)
+        {
+            settingScreen.SetActive(false);
+
+            if (!IsSpawned)
+            {
+                mainMenuScreen.SetActive(true);
+            }
+        }
+        else
+        {
+            settingScreen.SetActive(true);
+
+            if (!IsSpawned)
+            {
+                mainMenuScreen.SetActive(false);
+            }
+        }
+    }
+
+    public void PauseGameScreen()
+    {
+        if (pauseGameScreen.activeInHierarchy)
+        {
+            PauseGameServerRpc(false);
+        }
+        else
+        {
+            PauseGameServerRpc(true);
+        }
+    }
+
+    [ServerRpc]
+    public void PauseGameServerRpc(bool status)
+    {
+        PauseGameClientRpc(status);
+    }
+
+    [ClientRpc]
+    public void PauseGameClientRpc(bool status)
+    {
+        if (status == true)
+        {
+            Time.timeScale = 0;
+        }
+        if (status == false)
+        {
+            Time.timeScale = 1;
+        }
+
+        pauseGameScreen.SetActive(status);
+    }
+
     #endregion
 
     #region SettingMenuGame
     public void Restart()
     {
-        _ScenesManager.Instance.LoadScene(SceneManager.GetActiveScene().name);
+        _ScenesManager.Instance.ResetScene();
         PlayerManager.Instance.DesAndSpawnAllPlayerServerRpc();
         foreach(var obj in FindAllGameObjectsWithIObject())
         {
@@ -672,9 +735,12 @@ public class UIManager : NetworkBehaviour
 
     private void HandleInput()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (IsSpawned)
         {
-            GameOverScreen();
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                PauseGameScreen();
+            }
         }
     }
     #endregion

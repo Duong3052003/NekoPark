@@ -469,6 +469,7 @@ MonoBehaviour:
   size: 60
   hpPart: 6
   bodyParts: []
+  isStarted: 0
   machineGuns:
   - {fileID: 0}
   - {fileID: 0}
@@ -489,6 +490,7 @@ MonoBehaviour:
   maxCombo: 2
   minCombo: 0
   timer: 0
+  appearEffect: {fileID: 8300000, guid: 4a7be57b40aad47879f554791c9e7514, type: 3}
   listTargetObj:
   - {fileID: 0}
   - {fileID: 0}

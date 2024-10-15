@@ -36,6 +36,7 @@ public abstract class PlayerAnimator : NetworkBehaviour
 
     public void SetActiveLayer()
     {
+        if (playerCtrl == null) return;
         playerCtrl.animator.SetLayerWeight(1, 0);
         IgnorePhysicsLayerAllPlayer(false);
     }

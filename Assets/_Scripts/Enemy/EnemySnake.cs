@@ -37,6 +37,8 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
     [SerializeField] private int minCombo=0;
     [SerializeField] private float timer;
 
+    [SerializeField] private AudioClip appearEffect;
+
     private Coroutine coroutineCurrent;
 
     [SerializeField] private List<GameObject> listTargetObj;
@@ -92,6 +94,7 @@ public class EnemySnake : SnakeObjManager,IObjectServerMovement
     [ClientRpc]
     private void SetupClientRpc(float _hpMax)
     {
+        SoundManager.Instance.PlaySound(appearEffect);
         VirtualCameraSetting.Instance.ChangeFieldOfView(18f);
         canMove = true;
         posCurrent = this.transform.position;

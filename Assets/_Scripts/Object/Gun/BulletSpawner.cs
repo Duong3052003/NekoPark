@@ -16,6 +16,7 @@ public class BulletSpawner : Spawner, ISceneObserver
     public bool isSpinRight = false;
 
     [SerializeField] private bool inScene=true;
+    [SerializeField] private AudioClip shootEffect;
 
     private void Update()
     {
@@ -88,6 +89,8 @@ public class BulletSpawner : Spawner, ISceneObserver
         {
             objSpawned.GetComponent<Bullet>().SetTarget(posTransform.position, targetTranform.position, this);
         }
+
+        SoundManager.Instance.PlaySound(shootEffect);
     }
 
     private void OnEnable()

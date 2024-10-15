@@ -10,6 +10,8 @@ public abstract class ItemTrigger : DeSpawn, IItemTrigger, IObjectServerSpawn
     [SerializeField] protected float velocityY;
     protected Rigidbody2D rb;
 
+    [SerializeField] protected AudioClip SoundEffect;
+
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -18,6 +20,7 @@ public abstract class ItemTrigger : DeSpawn, IItemTrigger, IObjectServerSpawn
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.gameObject.CompareTag("Player") || !IsHost || Target(collision)== null) return;
+        SoundManager.Instance.PlaySound(SoundEffect);
         Effect(Target(collision));
         Despawn();
     }

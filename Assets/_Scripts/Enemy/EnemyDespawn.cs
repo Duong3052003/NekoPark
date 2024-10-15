@@ -7,6 +7,8 @@ public class EnemyDespawn : ObjDeSpawnByHp
     protected Animator animator;
     protected Collider2D col;
 
+    [SerializeField] private AudioClip explEffect;
+
     protected bool beingDetroyed=false;
 
     protected void Awake()
@@ -31,6 +33,7 @@ public class EnemyDespawn : ObjDeSpawnByHp
         if (beingDetroyed == true) return;
         beingDetroyed = true;
         col.enabled = false;
+        SoundManager.Instance.PlaySound(explEffect);
         animator.SetTrigger("expl");
     }
 
@@ -39,6 +42,7 @@ public class EnemyDespawn : ObjDeSpawnByHp
         if (beingDetroyed == true || animator == null) return;
         beingDetroyed = true;
         col.enabled = false;
+        SoundManager.Instance.PlaySound(explEffect);
         animator.SetTrigger("expl");
     }
 

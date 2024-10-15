@@ -158,6 +158,8 @@ public class LevelShipGenerator : LevelGenerator
         }
         if (numberEnemyCurrent != 0) return;
         isEndAllWaves = false;
+
+        if (EnemySnake.Instance == null) return;
         EnemySnake.Instance.GenerateObjsServerRPC();
     }
 

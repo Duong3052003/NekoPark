@@ -281,6 +281,7 @@ MonoBehaviour:
   isRight: 0
   isSpinRight: 0
   inScene: 1
+  shootEffect: {fileID: 8300000, guid: 4310474905e266640852f43bd609a1a4, type: 3}
 --- !u!114 &-6943373505843751126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,3 +296,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpText: {fileID: 0}
   setHpIfAlreadyInScene: 3
+  explEffect: {fileID: 8300000, guid: b9e28047bdaef4209b56840c71df8dc3, type: 3}

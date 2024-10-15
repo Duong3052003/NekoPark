@@ -20,6 +20,7 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,ISceneObserver, IObje
     public NetworkVariable<Vector3> nPosition = new NetworkVariable<Vector3>(new Vector3(0, 0, 0), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     
     private float reconciliationThreshold = 2.5f;
+    [SerializeField] private AudioClip colliderEffect;
 
     private void Awake()
     {
@@ -84,6 +85,7 @@ public class Ball : NetworkBehaviour,IObjectServerMovement,ISceneObserver, IObje
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        SoundManager.Instance.PlaySound(colliderEffect);
         if (!IsOwner) return;
         AddForceToServer(collision);
     }

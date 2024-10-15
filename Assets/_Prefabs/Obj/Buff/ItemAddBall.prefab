@@ -229,6 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocityX: 0
   velocityY: -1
+  SoundEffect: {fileID: 8300000, guid: 41d7262b801c0410c9829ea15a595bc1, type: 3}
 --- !u!1 &4883342711035927493
 GameObject:
   m_ObjectHideFlags: 0
