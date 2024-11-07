@@ -36,8 +36,8 @@ public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
 
     public void GetGun()
     {
-        spawner.posTransform = this.transform;
-        spawner.targetTranform = this.transform;
+        spawner.gunPort.positionTransform = this.transform;
+        spawner.gunPort.headTransform = this.transform;
 
         spawner.StartCoroutineSpawn();
     }
@@ -124,9 +124,9 @@ public class EnemySnakeBody : EnemyBehaviour, ISnakeObserver
     [ClientRpc]
     private void OnSettingClientRpc(float _distanceBetween, float _speed, bool targetFollow)
     {
-        if (targetFollow == true && spawner.posTransform!=null)
+        if (targetFollow == true && spawner.gunPort.positionTransform!=null)
         {
-            spawner.targetTranform = Target(PlayerManager.Instance.players).transform;
+            spawner.gunPort.headTransform = Target(PlayerManager.Instance.players).transform;
         }
         distanceBetween = _distanceBetween;
         speed = _speed;

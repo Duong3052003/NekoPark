@@ -7,8 +7,7 @@ public class BulletSpawner : Spawner, ISceneObserver
 {
     public bool canSpawn;
 
-    public Transform posTransform;
-    public Transform targetTranform;
+    public GunPort gunPort;
     public float spawnCD;
 
     public bool isSpin = false;
@@ -64,7 +63,7 @@ public class BulletSpawner : Spawner, ISceneObserver
     public void SpawnObj()
     {
         if (!IsHost) return;
-        if((posTransform!=null && targetTranform.position != null) || isSpin)
+        if((gunPort.positionTransform != null && gunPort.headTransform != null) || isSpin)
         {
             SpawnObjClientRpc();
         }
@@ -87,7 +86,7 @@ public class BulletSpawner : Spawner, ISceneObserver
         }
         else
         {
-            objSpawned.GetComponent<Bullet>().SetTarget(posTransform.position, targetTranform.position, this);
+            objSpawned.GetComponent<Bullet>().SetTarget(gunPort.positionTransform.position, gunPort.headTransform.position, this);
         }
 
         SoundManager.Instance.PlaySound(shootEffect);

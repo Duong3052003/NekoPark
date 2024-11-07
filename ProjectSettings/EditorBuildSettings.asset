@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Ship/Ship_Level1.unity
     guid: 21443abe3094b5e4388eab7b84fd8a5a
+  - enabled: 1
+    path: Assets/_Scenes/BattleRoyale/BattleRoyale_Level1.unity
+    guid: d31bb0babdd076242aa76f4f37e02fbf
   m_configObjects: {}

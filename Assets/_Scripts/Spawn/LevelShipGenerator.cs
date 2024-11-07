@@ -10,6 +10,7 @@ public class LevelShipGenerator : LevelGenerator
 {
     public static LevelShipGenerator Instance { get; private set; }
 
+    [Header("Wave")]
     [SerializeField] private int numberEnemyCurrent;
     [SerializeField] private bool isEndAllWaves = false;
 
@@ -18,16 +19,26 @@ public class LevelShipGenerator : LevelGenerator
     [SerializeField] private int[] numberEnemyPerWave;
     [SerializeField] private float[] firstStyle;
     [SerializeField] private bool[] inScene;
+    [SerializeField] private int waveCurrent = 0;
 
-    [SerializeField] private float timer;
-    [SerializeField] private bool isPause;
+    [Header("Event")]
+    [SerializeField] private int[] numberEvent;
+    [SerializeField] private int eventCurrent = 0;
 
-    [SerializeField] private int waveCurrent=0;
+    [Header("Meteorite Rain")]
+    [SerializeField] private GroupSpawner meteoriteSpawner;
+    [SerializeField] private int meteoriteNumber;
+    [SerializeField] private float meteoriteSpeed;
 
+    [Header("Enemy")]
     [SerializeField] private List<GameObject> enemyShip;
     private int enemyShipCurrent;
     [SerializeField] private List<GameObject> posSpawnNeedToGo;
     [SerializeField] private GameObject posSpawnNeedToGoCurrent;
+
+    [Header("Other")]
+    [SerializeField] private float timer;
+    [SerializeField] private bool isPause;
 
     protected override void Awake()
     {
@@ -163,12 +174,6 @@ public class LevelShipGenerator : LevelGenerator
         EnemySnake.Instance.GenerateObjsServerRPC();
     }
 
-
-
-
-
-
-
     public override void OnPause(int time)
     {
         if (!IsHost) return;
@@ -184,4 +189,32 @@ public class LevelShipGenerator : LevelGenerator
         SetUpLevelServerRPC();
         PlayerManager.Instance.GetSettingStatusPlayer();
     }
+
+    #region Event
+    private void Evemt(int i)
+    {
+        TypeEvent(numberEvent[eventCurrent]);
+        eventCurrent++;
+        Debug.Log("|=== Evemt ===|" + waveCurrent);
+    }
+
+    private void TypeEvent(int typeEvent)
+    {
+        switch (typeEvent)
+        {
+            case 0:
+                MeteoriteRain();
+                break;
+            case 1:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void MeteoriteRain()
+    {
+        meteoriteSpawner.StartCoroutineSpawn(meteoriteNumber);
+    }
+    #endregion
 }

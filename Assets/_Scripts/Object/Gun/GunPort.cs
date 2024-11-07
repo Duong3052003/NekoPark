@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class GunPort : MonoBehaviour
 {
-    //[SerializeField] private float rotationSpeed = 10;
-    //[SerializeField] private bool canRotate=false;
-    //[SerializeField] private Transform targetTransform;
+    [SerializeField] public Transform headTransform;
+    [SerializeField] public Transform positionTransform;
 
-    public Transform headTransform;
-    public Transform positionTransform;
     //private Rigidbody2D rb;
 
     /*private void Awake()

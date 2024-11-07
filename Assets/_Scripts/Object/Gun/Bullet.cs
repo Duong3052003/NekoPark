@@ -5,13 +5,13 @@ using UnityEngine.UIElements;
 
 public class Bullet : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private Collider2D col;
-    [SerializeField] private float speed = 5f;
-    private Vector2 vectorTarget;
-    private Spawner spawner;
+    protected Rigidbody2D rb;
+    protected Collider2D col;
+    [SerializeField] protected float speed = 5f;
+    protected Vector2 vectorTarget;
+    protected Spawner spawner;
 
-    private void Awake()
+    protected void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
@@ -43,12 +43,12 @@ public class Bullet : MonoBehaviour
         Invoke("DeSpawnObj", 10f);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
         DeSpawnObj();
     }
 
-    private void DeSpawnObj()
+    protected void DeSpawnObj()
     {
         CancelInvoke();
         spawner.DeSpawn(this.gameObject);
